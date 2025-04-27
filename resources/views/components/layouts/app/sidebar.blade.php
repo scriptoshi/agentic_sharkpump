@@ -61,6 +61,7 @@
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        <flux:menu.item :href="route('settings.billing')" iconVariant="outline" icon="credit-card" wire:navigate>{{ __('Billing') }}</flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -111,6 +112,7 @@
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        <flux:menu.item :href="route('settings.billing')" iconVariant="outline" icon="credit-card" wire:navigate>{{ __('Billing') }}</flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />

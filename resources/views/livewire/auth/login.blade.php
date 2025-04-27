@@ -29,7 +29,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -48,7 +48,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -69,7 +69,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }; ?>
 
@@ -81,26 +81,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     <form wire:submit="login" class="flex flex-col gap-6">
         <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
-            required
-            autofocus
-            autocomplete="email"
-            placeholder="email@example.com"
-        />
+        <flux:input wire:model="email" :label="__('Email address')" type="email" required autofocus autocomplete="email"
+            placeholder="email@example.com" />
 
         <!-- Password -->
         <div class="relative">
-            <flux:input
-                wire:model="password"
-                :label="__('Password')"
-                type="password"
-                required
-                autocomplete="current-password"
-                :placeholder="__('Password')"
-            />
+            <flux:input wire:model="password" :label="__('Password')" type="password" required
+                autocomplete="current-password" :placeholder="__('Password')" />
 
             @if (Route::has('password.request'))
                 <flux:link class="absolute end-0 top-0 text-sm" :href="route('password.request')" wire:navigate>
@@ -116,25 +103,27 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <flux:button variant="primary" type="submit" class="w-full">{{ __('Log in') }}</flux:button>
         </div>
     </form>
-
-    <div class="relative">
-        <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-zinc-300 dark:border-zinc-700"></div>
+    @if (!empty(config('services.google.client_id')) || !empty(config('services.github.client_id')))
+        <flux:separator text="OR" />
+    @endif
+    @if (!empty(config('services.google.client_id')))
+        <div class="flex items-center justify-center">
+            <a href="{{ route('provider.login', 'google') }}"
+                class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 dark:focus:ring-offset-zinc-800">
+                <x-si-google class="w-5 h-5 mr-2" />
+                {{ __('Sign in with Google') }}
+            </a>
         </div>
-        <div class="relative flex justify-center text-sm">
-            <span class="bg-white dark:bg-zinc-900 px-2 text-zinc-600 dark:text-zinc-400">{{ __('Or continue with') }}</span>
+    @endif
+    @if (!empty(config('services.github.client_id')))
+        <div class="flex items-center justify-center">
+            <a href="{{ route('provider.login', 'github') }}"
+                class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 dark:focus:ring-offset-zinc-800">
+                <x-si-github class="w-5 h-5 mr-2" />
+                {{ __('Sign in with Github') }}
+            </a>
         </div>
-    </div>
-
-    <div class="flex items-center justify-center">
-        <a href="{{ route('google.login') }}" class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 dark:focus:ring-offset-zinc-800">
-            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
-            </svg>
-            {{ __('Sign in with Google') }}
-        </a>
-    </div>
-
+    @endif
     @if (Route::has('register'))
         <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
             {{ __('Don\'t have an account?') }}

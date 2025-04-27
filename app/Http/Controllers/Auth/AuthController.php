@@ -8,23 +8,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
-class GoogleController extends Controller
+class AuthController extends Controller
 {
-    public function redirectToGoogle()
+    public function redirectToProvider($provider)
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
-    public function handleGoogleCallback()
+    public function handleProviderCallback($provider)
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $providerUser = Socialite::driver($provider)->user();
 
             $user = User::updateOrCreate(
-                ['email' => $googleUser->email],
+                ['email' => $providerUser->email],
                 [
-                    'name' => $googleUser->name,
-                    'google_id' => $googleUser->id,
+                    'name' => $providerUser->name,
+                    'provider_id' => $providerUser->id,
+                    'provider_name' => $provider,
                     'password' => bcrypt(Str::random(24))
                 ]
             );

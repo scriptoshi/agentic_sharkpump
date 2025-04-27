@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -19,8 +19,8 @@ Route::middleware('guest')->group(function () {
         ->name('password.reset');
 
     // Google OAuth Routes
-    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
-    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+    Route::get('auth/{provider}', [AuthController::class, 'redirectToProvider'])->name('provider.login');
+    Route::get('auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('provider.callback');
 });
 
 Route::middleware('auth')->group(function () {
