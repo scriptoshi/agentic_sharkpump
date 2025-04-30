@@ -1,0 +1,137 @@
+/* Headings */
+.markup h1 {
+    @apply text-3xl font-semibold text-gray-900 mb-8 mt-6;
+}
+
+.markup h2 {
+    @apply text-2xl font-semibold text-gray-800 mb-4 mt-8;
+}
+
+.markup h3 {
+    @apply text-xl font-semibold text-gray-800 mb-3 mt-6;
+}
+
+.markup h4 {
+    @apply text-lg font-semibold text-gray-800 mb-2 mt-4;
+}
+
+/* Paragraphs */
+.markup p {
+    @apply text-base text-gray-700 leading-relaxed;
+}
+
+/* Lists */
+.markup ul {
+    @apply list-disc pl-6 mb-4 space-y-2;
+}
+
+.markup ol {
+    @apply list-decimal pl-6 mb-4 space-y-2;
+}
+
+.markup li {
+    @apply text-sm text-gray-700;
+}
+
+/* Nested lists */
+.markup ul ul,
+.markup ol ol,
+.markup ul ol,
+.markup ol ul {
+    @apply mt-2 mb-2;
+}
+
+/* Links */
+.markup a {
+    @apply text-blue-600 hover:text-blue-800 underline;
+}
+
+/* Blockquotes */
+.markup blockquote {
+    @apply pl-4 border-l-4 border-gray-300 italic my-4 text-gray-600;
+}
+
+/* Code blocks */
+.markup pre {
+    @apply bg-gray-50 p-4 rounded-lg mb-4 overflow-x-auto;
+}
+
+.markup code {
+    @apply bg-gray-50 px-1 py-0.5 rounded text-sm font-mono;
+}
+
+/* Tables */
+.markup table {
+    @apply mb-4 border-collapse block overflow-x-auto;
+}
+
+.markup th {
+    @apply px-4 py-2 border border-gray-300 bg-gray-50 font-semibold text-left;
+}
+
+.markup td {
+    @apply px-4 py-2 border border-gray-300;
+}
+
+/* Images */
+.markup img {
+    @apply max-w-full h-auto rounded-lg my-4;
+}
+
+/* Horizontal rule */
+.markup hr {
+    @apply my-8 border-t border-gray-300;
+}
+
+/* Strong and emphasis */
+.markup strong {
+    @apply font-semibold;
+}
+
+.markup em {
+    @apply italic;
+}
+
+/* Description lists */
+.markup dl {
+    @apply mb-4;
+}
+
+.markup dt {
+    @apply font-semibold mb-1;
+}
+
+.markup dd {
+    @apply pl-4 mb-4;
+}
+
+/* Small text */
+.markup small {
+    @apply text-sm text-gray-600;
+}
+
+/* Custom spacing for consecutive elements */
+.markup h1 + p,
+.markup h2 + p,
+.markup h3 + p {
+    @apply mt-4;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .markup {
+        @apply text-base;
+    }
+
+    .markup h1 {
+        @apply text-3xl;
+    }
+
+    .markup h2 {
+        @apply text-xl;
+    }
+
+    .markup h3 {
+        @apply text-lg;
+    }
+}

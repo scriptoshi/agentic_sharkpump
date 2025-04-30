@@ -3,17 +3,20 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+    <body class="min-h-screen bg-gray-50 dark:bg-zinc-900">
+        <flux:header container class="border-b border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
-            <a href="{{ route('dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
-                <x-app-logo />
+            <a href="{{ route('admin.dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
+                <x-app-logo :appName="__('Larasaas Admin')" />
             </a>
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                <flux:navbar.item icon="layout-grid" class="data-current:text-primary-dark data-current:dark:text-primary data-current:dark:bg-zinc-750 data-current:bg-zinc-100 data-current:after:!h-0"  :href="route('admin.dashboard')"  wire:navigate>
                     {{ __('Dashboard') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="users"  class="data-current:text-primary-dark data-current:dark:text-primary data-current:dark:bg-zinc-750  data-current:bg-zinc-100 data-current:after:!h-0" :href="route('admin.users.index')"  wire:navigate>
+                    {{ __('Users') }}
                 </flux:navbar.item>
             </flux:navbar>
 
@@ -32,14 +35,9 @@
                         :label="__('Repository')"
                     />
                 </flux:tooltip>
-                <flux:tooltip :content="__('Documentation')" position="bottom">
-                    <flux:navbar.item
-                        class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="book-open-text"
-                        href="https://laravel.com/docs/starter-kits"
-                        target="_blank"
-                        label="Documentation"
-                    />
+                
+                <flux:tooltip :content="__('Theme')" position="bottom">
+                     <livewire:dark-switch />
                 </flux:tooltip>
             </flux:navbar>
 
@@ -74,7 +72,6 @@
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
-                        <flux:menu.item :href="route('settings.billing')" icon="credit-card" wire:navigate>{{ __('Billing') }}</flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -117,8 +114,8 @@
                 </flux:navlist.item>
             </flux:navlist>
         </flux:sidebar>
-
-        {{ $slot }}
+      {{ $slot }}
+      
 
         @fluxScripts
     </body>

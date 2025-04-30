@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@sharktitl.es',
             'password' => '*sharkTitles123#',
-
+            'is_admin' => true,
         ]);
     }
 }

@@ -126,6 +126,18 @@
                 </flux:menu>
             </flux:dropdown>
         </flux:header>
+        <flux:header class="hidden lg:flex lg:justify-end">
+             <flux:navbar>
+                <flux:tooltip :content="__('Theme')" position="bottom">
+                    <livewire:dark-switch />
+                </flux:tooltip>
+               <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    @csrf
+                    <flux:navbar.item as="button" type="submit" icon="power" class="rounded-full cursor-pointer"/>
+                  
+                </form>
+             </flux:navbar>
+        </flux:header>
 
         {{ $slot }}
 
