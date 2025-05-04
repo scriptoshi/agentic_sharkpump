@@ -21,6 +21,9 @@
                 <flux:navbar.item icon="link"  class="data-current:text-primary-dark data-current:dark:text-primary data-current:dark:bg-zinc-750  data-current:bg-zinc-100 data-current:after:!h-0" :current="request()->routeIs('admin.apis.*')"  :href="route('admin.apis.index')"  wire:navigate>
                     {{ __('API Tools') }}
                 </flux:navbar.item>
+                <flux:navbar.item icon="bolt"  class="data-current:text-primary-dark data-current:dark:text-primary data-current:dark:bg-zinc-750  data-current:bg-zinc-100 data-current:after:!h-0" :current="request()->routeIs('admin.bots.*')"  :href="route('admin.bots.index')"  wire:navigate>
+                    {{ __('Bots') }}
+                </flux:navbar.item>
             </flux:navbar>
 
             <flux:spacer />
@@ -99,8 +102,17 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')">
-                    <flux:navlist.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                    <flux:navlist.item icon="layout-grid" class="data-current:text-primary-dark data-current:dark:text-primary" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="users" class="data-current:text-primary-dark data-current:dark:text-primary" :href="route('admin.users.index')" :current="request()->routeIs('users.index')" wire:navigate>
+                    {{ __('Users') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="link" class="data-current:text-primary-dark data-current:dark:text-primary" :href="route('admin.apis.index')" :current="request()->routeIs('admin.apis.index')" wire:navigate>
+                    {{ __('API Tools') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="bolt" class="data-current:text-primary-dark data-current:dark:text-primary" :href="route('admin.bots.index')" :current="request()->routeIs('admin.bots.index')" wire:navigate>
+                    {{ __('Bots') }}
                     </flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>

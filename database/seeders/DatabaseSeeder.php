@@ -21,10 +21,11 @@ class DatabaseSeeder extends Seeder
             'password' => '*sharkTitles123#',
             'is_admin' => true,
         ]);
-        
+
         // Call the API seeder to generate API-related dummy data
         $this->call([
             ApiSeeder::class,
+            BotCommandSeeder::class,
         ]);
     }
 }

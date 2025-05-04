@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class ApiTool extends Model
 {
@@ -72,5 +73,21 @@ class ApiTool extends Model
     public function logs(): HasMany
     {
         return $this->hasMany(ApiLog::class);
+    }
+
+    /**
+     * Get the bots using this tool
+     */
+    public function bots(): MorphToMany
+    {
+        return $this->morphedByMany(Bot::class, 'toolable');
+    }
+
+    /**
+     * get the commands using this tool
+     */
+    public function commands(): MorphToMany
+    {
+        return $this->morphedByMany(Command::class, 'toolable');
     }
 }

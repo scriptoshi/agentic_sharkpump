@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Models\Bot;
+use App\Models\Command;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +28,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('apis/edit/{api}', 'apis.edit')->name('apis.edit');
     Volt::route('apis/tools/edit/{api}/{tool}', 'apis.tools.edit')->name('apis.tools.edit');
     Volt::route('apis/tools/create/{api}', 'apis.tools.create')->name('apis.tools.create');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Volt::route('bots', 'bots.index')->name('bots.index');
+    Volt::route('bots/create', 'bots.create')->name('bots.create');
+    Volt::route('bot/{bot:uuid}', 'bots.edit')->name('bots.edit');
+    Route::get('bot/{bot:uuid}/tools', function (Bot $bot) {
+        return view('bot-tools', compact('bot'));
+    })->name('bots.tools');
+    Route::get('command/{command:uuid}/tools', function (Command $command) {
+        return view('command-tools', compact('command'));
+    })->name('commands.tools');
 });
 
 require __DIR__ . '/auth.php';

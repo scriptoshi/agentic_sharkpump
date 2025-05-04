@@ -16,6 +16,7 @@ return new class extends Migration
         // Telegram Bots table
         Schema::create('bots', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('username')->unique();
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->text('system_prompt')->nullable();
             $table->boolean('is_active')->default(true);
             $table->json('settings')->nullable();
+            $table->integer('credits_per_message')->default(1);
             $table->timestamp('last_active_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -33,8 +35,11 @@ return new class extends Migration
         // Bot Commands table
         Schema::create('commands', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('bot_id')->constrained()->cascadeOnDelete();
             $table->string('command');  // e.g., /weather, /help
+            $table->string('name')->nullable();  // e.g., /weather, /help
             $table->string('description');
             $table->text('system_prompt_override')->nullable();
             $table->boolean('is_active')->default(true);

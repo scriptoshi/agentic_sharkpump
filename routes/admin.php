@@ -13,3 +13,7 @@ Volt::route('/users/edit/{user}', 'admin.users.edit')->name('users.edit');
 Volt::route('/apis', 'admin.apis.index')->name('apis.index');
 Volt::route('/apis/edit/{api}', 'admin.apis.edit')->name('apis.edit');
 Volt::route('/apis/tools/edit/{api}/{tool}', 'admin.apis.tools.edit')->name('apis.tools.edit');
+
+// Bots management routes
+Volt::route('/bots', 'admin.bots.index')->name('bots.index');
+Volt::route('/bots/edit/{bot}', 'admin.bots.edit')->name('bots.edit');
