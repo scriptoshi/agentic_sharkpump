@@ -106,6 +106,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     @if (!empty(config('services.google.client_id')) || !empty(config('services.github.client_id')))
         <flux:separator text="OR" />
     @endif
+    @if (!empty(config('services.telegram.telegramBotToken')))
+        <livewire:telegram-login />
+    @endif
     @if (!empty(config('services.google.client_id')))
         <div class="flex items-center justify-center">
             <a href="{{ route('provider.login', 'google') }}"
@@ -115,6 +118,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             </a>
         </div>
     @endif
+   
     @if (!empty(config('services.github.client_id')))
         <div class="flex items-center justify-center">
             <a href="{{ route('provider.login', 'github') }}"

@@ -90,7 +90,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     </form>
 
-   @if (!empty(config('services.google.client_id')) || !empty(config('services.github.client_id')))
+   @if (
+   !empty(config('services.google.client_id')) 
+   || !empty(config('services.github.client_id'))
+   || !empty(config('services.telegram.telegramBotToken')))
         <flux:separator text="OR" />
     @endif
     @if (!empty(config('services.google.client_id')))

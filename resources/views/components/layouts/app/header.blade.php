@@ -8,7 +8,7 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <a href="{{ route('admin.dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
-                <x-app-logo :appName="__('Larasaas Admin')" />
+                <x-app-logo :appName="__('Aibots Admin')" />
             </a>
 
             <flux:navbar class="-mb-px max-lg:hidden">
@@ -17,6 +17,9 @@
                 </flux:navbar.item>
                 <flux:navbar.item icon="users"  class="data-current:text-primary-dark data-current:dark:text-primary data-current:dark:bg-zinc-750  data-current:bg-zinc-100 data-current:after:!h-0" :href="route('admin.users.index')"  wire:navigate>
                     {{ __('Users') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="link"  class="data-current:text-primary-dark data-current:dark:text-primary data-current:dark:bg-zinc-750  data-current:bg-zinc-100 data-current:after:!h-0" :current="request()->routeIs('admin.apis.*')"  :href="route('admin.apis.index')"  wire:navigate>
+                    {{ __('API Tools') }}
                 </flux:navbar.item>
             </flux:navbar>
 

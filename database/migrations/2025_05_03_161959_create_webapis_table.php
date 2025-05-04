@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\ApiType;
 
 return new class extends Migration
 {
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('auth_query_value', 1024)->nullable();
             $table->boolean('active')->default(true);
             $table->text('description')->nullable();
+            $table->string('type')->default(ApiType::USER->value);
             $table->timestamps();
             $table->index('user_id');
             $table->index('active');
@@ -38,20 +40,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('api_logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('api_id')->constrained()->onDelete('cascade');
-            $table->timestamp('triggered_at')->useCurrent();
-            $table->unsignedInteger('response_code')->nullable();
-            $table->text('response_body')->nullable();
-            $table->float('execution_time')->nullable()->comment('Time in seconds');
-            $table->boolean('success')->nullable();
-            $table->text('error_message')->nullable();
-            $table->index('triggered_at');
-        });
 
         Schema::create('api_tools', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('api_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description');
@@ -63,6 +55,20 @@ return new class extends Migration
             $table->json('tool_config')->nullable();
             $table->timestamps();
             $table->index('api_id', 2048)->nullable();
+        });
+
+
+        Schema::create('api_logs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('api_id')->constrained()->onDelete('cascade');
+            $table->foreignId('api_tool_id')->constrained()->onDelete('cascade');
+            $table->timestamp('triggered_at')->useCurrent();
+            $table->unsignedInteger('response_code')->nullable();
+            $table->text('response_body')->nullable();
+            $table->float('execution_time')->nullable()->comment('Time in seconds');
+            $table->boolean('success')->nullable();
+            $table->text('error_message')->nullable();
+            $table->index('triggered_at');
         });
     }
 

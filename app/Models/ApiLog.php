@@ -17,6 +17,7 @@ class ApiLog extends Model
      */
     protected $fillable = [
         'api_id',
+        'api_tool_id',
         'triggered_at',
         'response_code',
         'response_body',
@@ -51,5 +52,13 @@ class ApiLog extends Model
     public function api(): BelongsTo
     {
         return $this->belongsTo(Api::class);
+    }
+
+    /**
+     * Get the tool that owns the log.
+     */
+    public function apiTool(): BelongsTo
+    {
+        return $this->belongsTo(ApiTool::class);
     }
 }
