@@ -75,4 +75,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(ApiTool::class);
     }
+
+    /**
+     * Get the balances for the user.
+     */
+    public function balances()
+    {
+        return $this->hasMany(Balance::class);
+    }
+
+    /**
+     * Get the payments made by the user.
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Get the refunds received by the user.
+     */
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
+
+    /**
+     * Get the bots owned by the user.
+     */
+    public function bots()
+    {
+        return $this->hasMany(Bot::class);
+    }
 }

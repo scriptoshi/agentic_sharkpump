@@ -6,6 +6,8 @@ use Livewire\WithPagination;
 use Livewire\Volt\Component;
 use Illuminate\Support\Carbon;
 use Livewire\Attributes\Computed;
+use Illuminate\Validation\Rules\Enum;
+use App\Enums\BotProvider;
 
 new #[Layout('components.layouts.admin')] class extends Component {
     use WithPagination;
@@ -17,10 +19,12 @@ new #[Layout('components.layouts.admin')] class extends Component {
     public string $username = '';
     public string $bot_token = '';
     public bool $is_active = true; // Changed from 'active' to 'is_active'
-    public string $bot_provider = ''; // Added since it's in the schema
+    public BotProvider $bot_provider = BotProvider::ANTHROPIC; // Added since it's in the schema
     public ?string $api_key = null; // Added since it's in the schema
     public ?string $system_prompt = null; // Added since it's in the schema
     public ?array $settings = null; // Added since it's in the schema
+    public ?float $credits_per_message = 0;
+    public ?int $credits_per_star = 0;
 
     // Commands Management
     public string $commandsSearchQuery = '';
@@ -34,10 +38,11 @@ new #[Layout('components.layouts.admin')] class extends Component {
         $this->username = $bot->username;
         $this->bot_token = $bot->bot_token;
         $this->is_active = $bot->is_active; // Changed from 'active' to 'is_active'
-        $this->bot_provider = $bot->bot_provider->value; // Added
         $this->api_key = $bot->api_key; // Added
         $this->system_prompt = $bot->system_prompt; // Added
         $this->settings = $bot->settings; // Added
+        $this->credits_per_message = $bot->credits_per_message;
+        $this->credits_per_star = $bot->credits_per_star;
     }
 
     // Validation rules for updating Bot data
@@ -48,10 +53,12 @@ new #[Layout('components.layouts.admin')] class extends Component {
             'username' => ['required', 'string', 'max:255'],
             'bot_token' => ['required', 'string', 'max:255'],
             'is_active' => ['boolean'], // Changed from 'active' to 'is_active'
-            'bot_provider' => ['required', 'string'], // Added
+            'bot_provider' => ['required', new Enum(BotProvider::class)], // Added
             'api_key' => ['nullable', 'string'], // Added
             'system_prompt' => ['nullable', 'string'], // Added
             'settings' => ['nullable', 'array'], // Added
+            'credits_per_message' => ['required', 'numeric'],
+            'credits_per_star' => ['required', 'integer'],
         ];
     }
 
@@ -118,16 +125,35 @@ new #[Layout('components.layouts.admin')] class extends Component {
             </div>
             
             <div class="grid sm:grid-cols-2 gap-4">
-                <flux:input label="{{ __('API Key') }}" placeholder="{{ __('AI Provider API Key') }}"
-                    wire:model="api_key" />
-                <flux:error name="api_key" />
-                
-                <flux:select label="{{ __('Bot Provider') }}" wire:model="bot_provider" required>
-                    <option value="anthropic">{{ __('Anthropic Claude') }}</option>
-                    <option value="openai">{{ __('OpenAI GPT') }}</option>
-                    <!-- Add other providers as needed -->
-                </flux:select>
-                <flux:error name="bot_provider" />
+
+                <flux:field>
+                    <flux:select label="{{ __('Bot Provider') }}" wire:model="bot_provider" required>
+                        @foreach (BotProvider::cases() as $provider)
+                            <option value="{{ $provider->value }}">{{ $provider->description() }}</option>
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="bot_provider" />
+                </flux:field>
+                <flux:field>
+                    <flux:input label="{{ __('API Key') }}" placeholder="{{ __('AI Provider API Key') }}"
+                        wire:model="api_key" />
+                    <flux:error name="api_key" />
+                </flux:field>
+            </div>
+            <flux:heading size="md">{{ __('Payments') }}</flux:heading>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <flux:field>
+                    <flux:input label="{{ __('Credits per Message') }}" placeholder="{{ __('Credits per Message') }}"
+                        wire:model="credits_per_message" />
+                    <flux:error name="credits_per_message" />
+                    <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
+                </flux:field>
+                <flux:field>
+                    <flux:input label="{{ __('Credits per Star') }}" placeholder="{{ __('Credits per Star') }}"
+                        wire:model="credits_per_star" />
+                    <flux:error name="credits_per_star" />
+                    <flux:text>{{ __('The price users pay for credit topups in telegram stars.') }}</flux:text>
+                </flux:field>
             </div>
 
             <div class="grid sm:grid-cols-1 gap-4">

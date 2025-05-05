@@ -112,7 +112,12 @@ new #[Layout('components.layouts.app')] class extends Component {
         return $date ? $date->format('M d, Y') : 'N/A';
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>Bots</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <div>
@@ -268,11 +273,11 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
-                                <flux:button href="{{ route('bots.tools', $bot) }}" size="sm" variant="ghost">
-                                    {{ __('Tools') }}
+                                <flux:button href="{{ route('bots.billing', $bot) }}" size="sm" variant="ghost">
+                                    {{ __('Billing') }}
                                 </flux:button>
                                 <flux:button href="{{ route('bots.edit', $bot) }}" size="sm" variant="ghost">
-                                    {{ __('Edit') }}
+                                    {{ __('Manage') }}
                                 </flux:button>
                             </div>
                         </td>

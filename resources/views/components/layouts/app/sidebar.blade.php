@@ -129,7 +129,10 @@
                 </flux:menu>
             </flux:dropdown>
         </flux:header>
-        <flux:header class="hidden lg:flex lg:justify-end">
+        <flux:header class="hidden lg:flex lg:justify-between">
+            <div>
+                {{$breadcrumbs??null}}
+            </div>
              <flux:navbar>
                 <flux:tooltip :content="__('Theme')" position="bottom">
                     <livewire:dark-switch />

@@ -24,6 +24,8 @@ new class extends Component {
     // Add delete confirmation modal properties
     public bool $showDeleteModal = false;
     public ?int $command_to_delete = null;
+    public ?float $credits_per_message = 0;
+
 
     // Mount the component and load data
     public function mount(Bot $bot): void
@@ -54,6 +56,7 @@ new class extends Component {
             'command_text' => 'required|string|max:255',
             'command_name' => 'required|string|max:255',
             'command_description' => 'required|string|max:255',
+            'credits_per_message' => 'nullable|numeric',
             'system_prompt_override' => 'nullable|string',
             'is_active' => 'boolean',
         ]);
@@ -67,6 +70,7 @@ new class extends Component {
                     'command' => $this->command_text,
                     'name' => $this->command_name,
                     'description' => $this->command_description,
+                    'credits_per_message' => $this->credits_per_message,
                     'system_prompt_override' => $this->system_prompt_override,
                     'is_active' => $this->is_active,
                 ]);
@@ -78,6 +82,7 @@ new class extends Component {
                 'command' => $this->command_text,
                 'name' => $this->command_name,
                 'description' => $this->command_description,
+                'credits_per_message' => $this->credits_per_message,
                 'system_prompt_override' => $this->system_prompt_override,
                 'is_active' => $this->is_active,
                 'user_id' => auth()->id(), // Add user_id based on your requirements
@@ -98,6 +103,7 @@ new class extends Component {
             $this->command_text = $command->command;
             $this->command_name = $command->name;
             $this->command_description = $command->description;
+            $this->credits_per_message = $command->credits_per_message;
             $this->system_prompt_override = $command->system_prompt_override;
             $this->is_active = $command->is_active;
         }
@@ -137,6 +143,7 @@ new class extends Component {
         $this->command_text = '';
         $this->command_name = '';
         $this->command_description = '';
+        $this->credits_per_message = 0;
         $this->system_prompt_override = '';
         $this->is_active = true;
         $this->showCommandModal = false;
@@ -147,7 +154,10 @@ new class extends Component {
 <div class="mt-12 mb-4" >
     <!-- Add Command Button -->
     <div class="mb-4 flex justify-between items-center">
-         <flux:heading size="xl">{{ __('Commands') }}</flux:heading>
+         <div>
+             <flux:heading size="xl">{{ __('Commands') }}</flux:heading>
+             <flux:text>{{ __('The commands this bots reponds to') }}</flux:text>
+         </div>
         <flux:button wire:click="openAddModal" size="sm">
             <flux:icon name="plus" class="-ml-1 inline-flex" />
             {{ __('Add New Command') }}
@@ -172,7 +182,12 @@ new class extends Component {
                         <flux:error name="command_name" />
                     </div>
                 </div>
-                
+                <div>
+                    <flux:input label="{{ __('Cost (Credits per Message)') }}" placeholder="{{ __('Credits per Message') }}"
+                        wire:model="credits_per_message" />
+                    <flux:error name="credits_per_message" />
+                    <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
+                </div>
                 <div>
                     <flux:input label="{{ __('Description') }}" placeholder="{{ __('Get current weather forecast, Show help menu, etc.') }}"
                         wire:model="command_description" required />
@@ -234,7 +249,12 @@ new class extends Component {
                         <flux:error name="command_name" />
                     </div>
                 </div>
-                
+                <div>
+                <flux:input label="{{ __('Cost (Credits per Message)') }}" placeholder="{{ __('Credits per Message') }}"
+                        wire:model="credits_per_message" />
+                    <flux:error name="credits_per_message" />
+                    <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
+                </div>
                 <div>
                     <flux:input label="{{ __('Description') }}" placeholder="{{ __('Get current weather forecast, Show help menu, etc.') }}"
                         wire:model="command_description" required />
@@ -314,6 +334,10 @@ new class extends Component {
                     </th>
                     <th scope="col"
                         class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                        {{ __('Cost') }}
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         {{ __('Description') }}
                     </th>
                     <th scope="col"
@@ -337,6 +361,11 @@ new class extends Component {
                         <td class="px-6 py-4 whitespace-nowrap">
                             <flux:text class="text-sm font-medium text-gray-900 dark:text-white">
                                 {{ $command->name }}
+                            </flux:text>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <flux:text size="sm" class="max-w-xs truncate">
+                                {{ $command->credits_per_message??0 }}
                             </flux:text>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">

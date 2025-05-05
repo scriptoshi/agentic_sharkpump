@@ -182,7 +182,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <livewire:apis.headers.index :headerable="$api" />
     
     <div class="mt-12 mb-4 flex items-center justify-between">
-        <flux:heading  size="xl">{{ __('Tools') }}</flux:heading>
+        <flux:heading  size="xl">{{ __('Endpoints (Tools)') }}</flux:heading>
         <flux:button href="{{ route('apis.tools.create', $api) }}" icon="plus">
             {{ __('Create New Tool') }}
         </flux:button>

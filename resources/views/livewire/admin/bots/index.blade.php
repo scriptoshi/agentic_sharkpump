@@ -105,6 +105,13 @@ new #[Layout('components.layouts.admin')] class extends Component {
     {
         return $date ? $date->format('M d, Y') : 'N/A';
     }
+
+    public function toggleCloneable($botId): void
+    {
+        $bot = Bot::findOrFail($botId);
+        $bot->is_cloneable = !$bot->is_cloneable;
+        $bot->save();
+    }
 }; ?>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -158,7 +165,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         <button wire:click="sortBy('name')" class="group inline-flex cursor-pointer items-center">
                             {{ __('Name') }}
-                            @if($sortField === 'name')
+                             @if($sortField === 'username')
                                 <span class="ml-2">
                                     @if($sortDirection === 'asc')
                                         <flux:icon name="arrow-up" class="w-4 h-4" />
@@ -169,20 +176,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
                             @endif
                         </button>
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                        <button wire:click="sortBy('username')" class="group inline-flex cursor-pointer items-center">
-                            {{ __('Username') }}
-                            @if($sortField === 'username')
-                                <span class="ml-2">
-                                    @if($sortDirection === 'asc')
-                                        <flux:icon name="arrow-up" class="w-4 h-4" />
-                                    @else
-                                        <flux:icon name="arrow-down" class="w-4 h-4" />
-                                    @endif
-                                </span>
-                            @endif
-                        </button>
-                    </th>
+                    
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         <button wire:click="sortBy('bot_token')" class="group inline-flex cursor-pointer items-center"> <!-- Changed from 'token' to 'bot_token' -->
                             {{ __('Token') }}
@@ -236,23 +230,24 @@ new #[Layout('components.layouts.admin')] class extends Component {
                                     {{-- Replaced div with flux:text and added flux:badge for admin status --}}
                                     <flux:text class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-500">
                                         {{ $bot->user->name }}
-                                        @if($bot->user->is_admin)
-                                            <flux:badge color="purple" size="sm" class="ml-2">{{ __('Admin') }}</flux:badge>
-                                        @endif
                                     </flux:text>
+                                    @if($bot->user->is_admin)
+                                        <flux:badge color="purple" size="sm" class="!py-0.5">{{ __('Admin') }}</flux:badge>
+                                    @endif
                                 </div>
                             </a>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <flux:text class="text-sm font-medium text-gray-900 dark:text-white">
-                                    {{ $bot->name }}
-                                </flux:text>
+                                <div>
+                                    <flux:text class="text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ $bot->name }}
+                                    </flux:text>
+                                    <flux:text size="sm" class="max-w-xs truncate">{{ $bot->username }}</flux:text>
+                                </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <flux:text size="sm" class="max-w-xs truncate">{{ $bot->username }}</flux:text>
-                        </td>
+                       
                         <td class="px-6 py-4 whitespace-nowrap">
                             <flux:text size="sm" class="max-w-xs truncate">{{ substr($bot->bot_token, 0, 10) }}...</flux:text>
                         </td>
@@ -272,8 +267,11 @@ new #[Layout('components.layouts.admin')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
+                                <flux:button wire:click="toggleCloneable({{ $bot->id }})" size="sm" :variant="$bot->is_cloneable ? 'primary' : 'outline'">
+                                    {{ $bot->is_cloneable ? __('Disable Cloning') : __('Enable Cloning') }}
+                                </flux:button>
                                 <flux:button href="{{ route('admin.bots.edit', $bot) }}" size="sm" variant="ghost">
-                                    {{ __('Edit') }}
+                                    {{ __('Manage') }}
                                 </flux:button>
                             </div>
                         </td>

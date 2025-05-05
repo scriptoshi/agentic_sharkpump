@@ -29,21 +29,28 @@ class Bot extends Model
         'api_key',
         'system_prompt',
         'is_active',
+        'is_cloneable',
         'settings',
+        'credits_per_message',
+        'credits_per_star',
         'last_active_at',
     ];
 
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'bot_provider' => BotProvider::class,
-        'is_active' => 'boolean',
-        'settings' => 'array',
-        'last_active_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'bot_provider' => BotProvider::class,
+            'is_active' => 'boolean',
+            'is_cloneable' => 'boolean',
+            'settings' => 'array',
+            'last_active_at' => 'datetime',
+        ];
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -87,5 +94,29 @@ class Bot extends Model
     public function tools(): MorphToMany
     {
         return $this->morphToMany(ApiTool::class, 'toolable', 'toolables', 'toolable_id', 'api_tool_id');
+    }
+
+    /**
+     * Get the balances for the bot.
+     */
+    public function balances(): HasMany
+    {
+        return $this->hasMany(Balance::class);
+    }
+
+    /**
+     * Get the payments for the bot.
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Get the refunds for the bot.
+     */
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class);
     }
 }

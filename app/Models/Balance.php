@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class Command extends Model
+class Balance extends Model
 {
     use HasFactory, HasUuids;
 
@@ -20,13 +19,7 @@ class Command extends Model
     protected $fillable = [
         'user_id',
         'bot_id',
-        'command',
-        'name',
-        'description',
-        'system_prompt_override',
-        'is_active',
-        'credits_per_message',
-        'priority',
+        'balance',
     ];
 
     /**
@@ -35,8 +28,7 @@ class Command extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'is_active' => 'boolean',
-        'priority' => 'integer',
+        'balance' => 'decimal:2',
     ];
 
     /**
@@ -50,7 +42,7 @@ class Command extends Model
     }
 
     /**
-     * Get the user that owns the command.
+     * Get the user that owns the balance.
      */
     public function user(): BelongsTo
     {
@@ -58,18 +50,10 @@ class Command extends Model
     }
 
     /**
-     * Get the bot that owns the command.
+     * Get the bot associated with the balance.
      */
     public function bot(): BelongsTo
     {
         return $this->belongsTo(Bot::class);
-    }
-
-    /**
-     * Get all of the tools for the command.
-     */
-    public function tools(): MorphToMany
-    {
-        return $this->morphToMany(ApiTool::class, 'toolable', 'toolables', 'toolable_id', 'api_tool_id');
     }
 }

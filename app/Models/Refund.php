@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class Command extends Model
+class Refund extends Model
 {
     use HasFactory, HasUuids;
 
@@ -19,14 +18,13 @@ class Command extends Model
      */
     protected $fillable = [
         'user_id',
+        'payment_id',
         'bot_id',
-        'command',
-        'name',
-        'description',
-        'system_prompt_override',
-        'is_active',
-        'credits_per_message',
-        'priority',
+        'telegram_payment_charge_id',
+        'refunded_amount',
+        'currency',
+        'reason',
+        'refunded_at',
     ];
 
     /**
@@ -35,8 +33,8 @@ class Command extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'is_active' => 'boolean',
-        'priority' => 'integer',
+        'refunded_amount' => 'integer',
+        'refunded_at' => 'datetime',
     ];
 
     /**
@@ -50,7 +48,7 @@ class Command extends Model
     }
 
     /**
-     * Get the user that owns the command.
+     * Get the user associated with the refund.
      */
     public function user(): BelongsTo
     {
@@ -58,18 +56,18 @@ class Command extends Model
     }
 
     /**
-     * Get the bot that owns the command.
+     * Get the payment associated with the refund.
+     */
+    public function payment(): BelongsTo
+    {
+        return $this->belongsTo(Payment::class);
+    }
+
+    /**
+     * Get the bot associated with the refund.
      */
     public function bot(): BelongsTo
     {
         return $this->belongsTo(Bot::class);
-    }
-
-    /**
-     * Get all of the tools for the command.
-     */
-    public function tools(): MorphToMany
-    {
-        return $this->morphToMany(ApiTool::class, 'toolable', 'toolables', 'toolable_id', 'api_tool_id');
     }
 }

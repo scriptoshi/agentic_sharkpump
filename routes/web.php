@@ -34,6 +34,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('bots', 'bots.index')->name('bots.index');
     Volt::route('bots/create', 'bots.create')->name('bots.create');
     Volt::route('bot/{bot:uuid}', 'bots.edit')->name('bots.edit');
+    Volt::route('bot/billing/{bot:uuid}', 'bots.billing.index')->name('bots.billing');
+    Volt::route('balance/{balance:uuid}/transactions', 'bots.billing.transactions')->name('balance.transactions');
     Route::get('bot/{bot:uuid}/tools', function (Bot $bot) {
         return view('bot-tools', compact('bot'));
     })->name('bots.tools');

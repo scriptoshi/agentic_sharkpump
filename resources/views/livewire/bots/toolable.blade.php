@@ -42,21 +42,21 @@ new class extends Component {
         $this->toolable->tools()->sync($this->selectedTools);
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('bots.edit', $bot) }}">Bot</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>Tools</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <flux:heading size="xl">{{ __('Manage Tools for ' . $toolableType . ': ' . $toolable->name) }}
         </flux:heading>
         <div>
-            @if ($toolableType === 'Bot')
-                <flux:button href="{{ route('bots.index') }}" icon="arrow-left">
-                    {{ __('Back to List') }}
-                </flux:button>
-            @else
-                <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
-                    {{ __('Back to Bot') }}
-                </flux:button>
-            @endif
+            <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
+                {{ __('Back to Bot') }}
+            </flux:button>
         </div>
     </div>
 
@@ -103,7 +103,8 @@ new class extends Component {
                                             <flux:checkbox id="tool-{{ $tool['id'] }}"
                                                 class="focus-visible:outline-none peer" wire:model="selectedTools"
                                                 value="{{ $tool['id'] }}" />
-                                            <div class="peer-data-[checked]:text-primary text-zinc-600 dark:text-zinc-100">
+                                            <div
+                                                class="peer-data-[checked]:text-primary text-zinc-600 dark:text-zinc-100">
                                                 {{ $tool['name'] }}
                                                 <div class="text-xs text-zinc-500 dark:text-zinc-400">
                                                     {{ $tool['description'] ? $tool['description'] : __('No description') }}
@@ -121,7 +122,10 @@ new class extends Component {
                 </flux:checkbox.group>
             @endforeach
 
-            <div class="flex justify-end">
+            <div class="flex justify-end space-x-4">
+                <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
+                    {{ __('Back to Bot') }}
+                </flux:button>
                 <flux:button type="submit" variant="primary">
                     {{ __('Save Tool Selections') }}
                 </flux:button>

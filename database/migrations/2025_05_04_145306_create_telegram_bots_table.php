@@ -25,8 +25,10 @@ return new class extends Migration
             $table->text('api_key')->nullable();
             $table->text('system_prompt')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_cloneable')->default(false);
             $table->json('settings')->nullable();
-            $table->integer('credits_per_message')->default(1);
+            $table->integer('credits_per_star')->default(0);
+            $table->decimal('credits_per_message', 10, 2)->default(0);
             $table->timestamp('last_active_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -43,6 +45,7 @@ return new class extends Migration
             $table->string('description');
             $table->text('system_prompt_override')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->decimal('credits_per_message', 10, 2)->nullable();
             $table->integer('priority')->default(0);
             $table->timestamps();
         });

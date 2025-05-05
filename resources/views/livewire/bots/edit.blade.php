@@ -22,6 +22,8 @@ new #[Layout('components.layouts.app')] class extends Component {
     public ?string $api_key = null; // Added since it's in the schema
     public ?string $system_prompt = null; // Added since it's in the schema
     public ?array $settings = null; // Added since it's in the schema
+    public ?float $credits_per_message = 0;
+    public ?int $credits_per_star = 0;
 
     // Commands Management
     public string $commandsSearchQuery = '';
@@ -50,10 +52,12 @@ new #[Layout('components.layouts.app')] class extends Component {
             'username' => ['required', 'string', 'max:255'],
             'bot_token' => ['required', 'string', 'max:255'],
             'is_active' => ['boolean'], // Changed from 'active' to 'is_active'
-            'bot_provider' => ['required', 'string', new Enum(BotProvider::class)], // Added
+            'bot_provider' => ['required', new Enum(BotProvider::class)], // Added
             'api_key' => ['nullable', 'string'],
             'system_prompt' => ['nullable', 'string'],
             'settings' => ['nullable', 'array'],
+            'credits_per_message' => ['required', 'numeric'],
+            'credits_per_star' => ['required', 'integer'],
         ];
     }
 
@@ -95,10 +99,16 @@ new #[Layout('components.layouts.app')] class extends Component {
         return $date ? $date->format('M d, Y') : 'N/A';
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('bots.index') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item >Manage</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="xl">{{ __('Edit Bot') }}: {{ $bot->name }}</flux:heading>
+        <flux:heading size="xl">{{ __('Configure Bot') }}: {{ $bot->name }}</flux:heading>
         <div>
             <flux:button href="{{ route('bots.index') }}" icon="arrow-left">
                 {{ __('Back to List') }}
@@ -129,7 +139,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <div class="grid sm:grid-cols-2 gap-4">
 
                 <flux:field>
-                    <flux:select label="{{ __('Bot Provider') }}" wire:model="bot_provider" required>
+                    <flux:select label="{{ __('AI Provider') }}" wire:model="bot_provider" required>
                         @foreach (BotProvider::cases() as $provider)
                             <option value="{{ $provider->value }}">{{ $provider->description() }}</option>
                         @endforeach
@@ -140,6 +150,21 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <flux:input label="{{ __('API Key') }}" placeholder="{{ __('AI Provider API Key') }}"
                         wire:model="api_key" />
                     <flux:error name="api_key" />
+                </flux:field>
+            </div>
+            <flux:heading size="md">{{ __('Payments') }}</flux:heading>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <flux:field>
+                    <flux:input label="{{ __('Credits per Message') }}" placeholder="{{ __('Credits per Message') }}"
+                        wire:model="credits_per_message" />
+                    <flux:error name="credits_per_message" />
+                    <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
+                </flux:field>
+                <flux:field>
+                    <flux:input label="{{ __('Credits per Star') }}" placeholder="{{ __('Credits per Star') }}"
+                        wire:model="credits_per_star" />
+                    <flux:error name="credits_per_star" />
+                    <flux:text>{{ __('The price users pay for credit topups in telegram stars.') }}</flux:text>
                 </flux:field>
             </div>
 
@@ -164,4 +189,5 @@ new #[Layout('components.layouts.app')] class extends Component {
         </form>
     </div>
     <livewire:bots.commands.index :bot="$bot" />
+    <livewire:bots.tools-list :toolable="$bot" />
 </div>

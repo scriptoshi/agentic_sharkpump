@@ -16,6 +16,8 @@ new #[Layout('components.layouts.app')] class extends Component {
     public ?string $api_key = null;
     public ?string $system_prompt = null;
     public ?array $settings = null;
+    public ?float $credits_per_message = 0;
+    public ?int $credits_per_star = 0;
 
     // Validation rules for creating Bot data
     public function rules(): array
@@ -29,6 +31,8 @@ new #[Layout('components.layouts.app')] class extends Component {
             'api_key' => ['nullable', 'string'],
             'system_prompt' => ['nullable', 'string'],
             'settings' => ['nullable', 'array'],
+            'credits_per_message' => ['nullable', 'numeric'],
+            'credits_per_star' => ['nullable', 'integer'],
         ];
     }
 
@@ -51,7 +55,13 @@ new #[Layout('components.layouts.app')] class extends Component {
         $this->redirect(route('bots.edit', $bot));
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('bots.index') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item >Create</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <flux:heading size="xl">{{ __('Create New Bot') }}</flux:heading>
@@ -84,7 +94,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
             <div class="grid sm:grid-cols-2 gap-4">
                 <flux:field>
-                    <flux:select label="{{ __('Bot Provider') }}" wire:model="bot_provider" required>
+                    <flux:select label="{{ __('AI Provider') }}" wire:model="bot_provider" required>
                         @foreach (BotProvider::cases() as $provider)
                             <option value="{{ $provider->value }}">{{ $provider->description() }}</option>
                         @endforeach
@@ -97,7 +107,21 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <flux:error name="api_key" />
                 </flux:field>
             </div>
-
+            <flux:heading size="md">{{ __('Payments') }}</flux:heading>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <flux:field>
+                    <flux:input label="{{ __('Credits per Message') }}" placeholder="{{ __('Credits per Message') }}"
+                        wire:model="credits_per_message" />
+                    <flux:error name="credits_per_message" />
+                    <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
+                </flux:field>
+                <flux:field>
+                    <flux:input label="{{ __('Credits per Star') }}" placeholder="{{ __('Credits per Star') }}"
+                        wire:model="credits_per_star" />
+                    <flux:error name="credits_per_star" />
+                    <flux:text>{{ __('The price users pay for credit topups in telegram stars.') }}</flux:text>
+                </flux:field>
+            </div>
             <div class="grid sm:grid-cols-1 gap-4">
                 <flux:textarea label="{{ __('System Prompt') }}"
                     placeholder="{{ __('Default system prompt for the bot') }}" wire:model="system_prompt"
