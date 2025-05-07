@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+    push:
+        branches:
+            - main
+
+# Define environment variables for easier configuration
+env:
+    SITE_DIR: ${{ vars.SITE_DIR || 'aibotsfortelegram.com' }}
+    REPO_NAME: ${{ vars.REPO_NAME || 'aibotsfortelegram' }}
+    GIT_REMOTE: ${{ vars.GIT_REMOTE || 'github-aibotsfortelegramio:scriptoshi/aibotsfortelegram.git' }}
+    ENV_SOURCE: ${{ vars.ENV_SOURCE || 'envs/.aibotsfortelegram' }}
+    WWW_DIR: ${{ vars.WWW_DIR || '/var/www' }}
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Deploy to server
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  port: ${{ secrets.PORT }}
+                  key: ${{ secrets.SSHKEY }}
+                  envs: SITE_DIR,REPO_NAME,GIT_REMOTE,ENV_SOURCE,WWW_DIR
+                  script: |
+                      echo "Deployment started ..."
+                      rm -rf ${{ env.WWW_DIR }}/${{ env.REPO_NAME }}
+                      cd ${{ env.WWW_DIR }} && git clone ${{ env.GIT_REMOTE }} ${{ env.REPO_NAME }}
+                      cp ${{ env.WWW_DIR }}/${{ env.ENV_SOURCE }} ${{ env.WWW_DIR }}/${{ env.REPO_NAME }}/.env
+                      cd ${{ env.WWW_DIR }}/${{ env.REPO_NAME }} && chmod u+r+x ./.scripts/deploy.sh
+                      echo "Running Deployment"
+                      SITE_DIR="${{ env.SITE_DIR }}" \
+                      REPO_NAME="${{ env.REPO_NAME }}" \
+                      WWW_DIR="${{ env.WWW_DIR }}" \
+                      ./.scripts/deploy.sh
