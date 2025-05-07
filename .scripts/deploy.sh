@@ -5,7 +5,8 @@ set -e
 SITE_DIR=${SITE_DIR:-"aibotsfortelegram.com"}
 REPO_NAME=${REPO_NAME:-"aibotsfortelegram"}
 WWW_DIR=${WWW_DIR:-"/var/www"}
-
+# allow composer to run as root
+export COMPOSER_ALLOW_SUPERUSER=1
 echo "Deployment started ..."
 echo "Deploying to site directory: $SITE_DIR"
 
