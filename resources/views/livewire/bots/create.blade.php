@@ -5,6 +5,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use App\Enums\BotProvider;
 use Illuminate\Validation\Rules\Enum;
+use Livewire\Attributes\Computed;
 
 new #[Layout('components.layouts.app')] class extends Component {
     // Bot Properties
@@ -18,6 +19,10 @@ new #[Layout('components.layouts.app')] class extends Component {
     public ?array $settings = null;
     public ?float $credits_per_message = 0;
     public ?int $credits_per_star = 0;
+    public ?string $ai_model = null;
+    public ?float $ai_temperature = 0.7;
+    public ?int $ai_max_tokens = 2048;
+    public ?bool $ai_store = false;
 
     // Validation rules for creating Bot data
     public function rules(): array
@@ -33,6 +38,10 @@ new #[Layout('components.layouts.app')] class extends Component {
             'settings' => ['nullable', 'array'],
             'credits_per_message' => ['nullable', 'numeric'],
             'credits_per_star' => ['nullable', 'integer'],
+            'ai_model' => ['nullable', 'string'],
+            'ai_temperature' => ['nullable', 'numeric'],
+            'ai_max_tokens' => ['nullable', 'integer'],
+            'ai_store' => ['nullable', 'boolean'],
         ];
     }
 
@@ -54,6 +63,12 @@ new #[Layout('components.layouts.app')] class extends Component {
         // Redirect to the edit page for the newly created bot
         $this->redirect(route('bots.edit', $bot));
     }
+
+    #[Computed]
+    public function aiModels()
+    {
+        return config('models.' . $this->bot_provider->value);
+    }
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
@@ -64,7 +79,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="xl">{{ __('Create New Bot') }}</flux:heading>
+        <flux:heading size="lg">{{ __('Create New Bot') }}</flux:heading>
         <div>
             <flux:button href="{{ route('bots.index') }}" icon="arrow-left">
                 {{ __('Back to List') }}
@@ -75,7 +90,7 @@ new #[Layout('components.layouts.app')] class extends Component {
         <form wire:submit="createBot" class="space-y-6">
             <div class="grid sm:grid-cols-3 gap-4">
                 <flux:field>
-                    <flux:input label="{{ __('Name') }}" placeholder="{{ __('Bot Name') }}" wire:model="name" required />
+                    <flux:input label="{{ __('Name (For Internal use)') }}" placeholder="{{ __('Bot Name') }}" wire:model="name" required />
                     <flux:error name="name" />
                 </flux:field>
 
@@ -92,21 +107,58 @@ new #[Layout('components.layouts.app')] class extends Component {
                 </flux:field>
             </div>
 
-            <div class="grid sm:grid-cols-2 gap-4">
+            <div class="grid sm:grid-cols-3 gap-4">
                 <flux:field>
-                    <flux:select label="{{ __('AI Provider') }}" wire:model="bot_provider" required>
+                    <flux:select label="{{ __('AI Provider') }}" wire:model.live="bot_provider" required>
+                        <option value="">Select a provider</option>
                         @foreach (BotProvider::cases() as $provider)
                             <option value="{{ $provider->value }}">{{ $provider->description() }}</option>
                         @endforeach
                     </flux:select>
                     <flux:error name="bot_provider" />
                 </flux:field>
-                <flux:field>
-                    <flux:input label="{{ __('API Key') }}" placeholder="{{ __('AI Provider API Key') }}"
-                        wire:model="api_key" />
-                    <flux:error name="api_key" />
+                <flux:field class="sm:col-span-2">
+                    <flux:select label="{{ __('AI Model') }}" wire:model.live="ai_model" required>
+                        <option value="">Select a model</option>
+                        @foreach ($this->aiModels as $model)
+                            <option value="{{ $model['id'] }}">{{ $model['name'] }} | input
+                                {{ $model['input_token'] }} | output {{ $model['output_token'] }}</option>
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="ai_model" />
                 </flux:field>
             </div>
+            <div class="grid sm:grid-cols-3 gap-4">
+                @if ($this->bot_provider == BotProvider::OPENAI || $this->bot_provider == BotProvider::GEMINI)
+                    <flux:field>
+                        <flux:input label="{{ __('Openai Temperature') }}" placeholder="{{ __('AI Temperature') }}"
+                            wire:model="ai_temperature" />
+                        <flux:error name="ai_temperature" />
+                    </flux:field>
+                @endif
+                <flux:field>
+                    <flux:input label="{{ __('Max Output Tokens') }}" placeholder="{{ __('AI Max Output Tokens') }}"
+                        wire:model="ai_max_tokens" />
+                    <flux:error name="ai_max_tokens" />
+                </flux:field>
+                @if ($this->bot_provider == BotProvider::OPENAI)
+                    <div class="self-end">
+                        <flux:field variant="inline">
+                            <flux:switch wire:model="ai_store" />
+                            <flux:label>{{ __('AI Store') }}</flux:label>
+                            <flux:error name="ai_store" />
+                    </flux:field>
+                    <flux:text>
+                        {{__('Whether to store the ai response at OpenAI.')}}
+                    </flux:text>
+                </div>
+                @endif
+            </div>
+            <flux:field>
+                <flux:input label="{{ __('API Key') }}" placeholder="{{ __('AI Provider API Key') }}"
+                    wire:model="api_key" />
+                <flux:error name="api_key" />
+            </flux:field>
             <flux:heading size="md">{{ __('Payments') }}</flux:heading>
             <div class="grid sm:grid-cols-2 gap-4">
                 <flux:field>

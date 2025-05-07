@@ -4,7 +4,6 @@ namespace App\Enums;
 
 enum ApiType: string
 {
-    case USER = 'user';
-    case SYSTEM = 'system';
-    case GEMINI = 'gemini';
+    case USER = 'user'; // user defined api
+    case SYSTEM = 'system'; // system defined api
 }

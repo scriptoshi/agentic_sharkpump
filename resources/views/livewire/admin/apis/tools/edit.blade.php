@@ -196,7 +196,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-6 flex items-center justify-between">
             <div>
-                <flux:heading size="xl">{{ __('Edit Tool') }}: {{ $tool->name }}</flux:heading>
+                <flux:heading size="lg">{{ __('Edit Tool') }}: {{ $tool->name }}</flux:heading>
                 <flux:subheading>{{ __('API') }}: {{ $api->name }}</flux:subheading>
             </div>
             <div>

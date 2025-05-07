@@ -17,11 +17,13 @@ return new class extends Migration
         Schema::create('bots', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->ulid('webhook_secret')->unique();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('username')->unique();
             $table->string('bot_token')->unique();
             $table->string('bot_provider')->default(BotProvider::ANTHROPIC->value);
+            $table->string('ai_model')->nullable();
             $table->text('api_key')->nullable();
             $table->text('system_prompt')->nullable();
             $table->boolean('is_active')->default(true);
@@ -30,6 +32,9 @@ return new class extends Migration
             $table->integer('credits_per_star')->default(0);
             $table->decimal('credits_per_message', 10, 2)->default(0);
             $table->timestamp('last_active_at')->nullable();
+            $table->decimal('ai_temperature', 10, 2)->default(1);
+            $table->integer('ai_max_tokens')->default(2048);
+            $table->boolean('ai_store')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

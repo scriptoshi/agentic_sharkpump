@@ -116,7 +116,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 ">
-        <flux:heading size="xl">{{ __('Telegram Bots Management') }}</flux:heading>
+        <flux:heading size="lg">{{ __('Telegram Bots Management') }}</flux:heading>
         <flux:subheading>{{ __('Manage Telegram bots registered in the system.') }}</flux:subheading>
     </div>
    

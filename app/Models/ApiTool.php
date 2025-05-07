@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use \Illuminate\Http\Client\Response;
+use Illuminate\Support\Str;
+use Hidehalo\Nanoid\Client;
 
 class ApiTool extends Model
 {
@@ -29,7 +32,21 @@ class ApiTool extends Model
         'path',
         'query_params',
         'tool_config',
+        'output_transformer',
+        'strict',
+        'is_public'
     ];
+
+    /**
+     * add slug on create
+     */
+    protected static function booted(): void
+    {
+        static::creating(function ($model) {
+            $slug = Str::slug($model->name) . '_';
+            $model->slug = static::generateId(prefix: $slug);
+        });
+    }
 
     /**
      * The attributes that should be cast.
@@ -39,6 +56,8 @@ class ApiTool extends Model
     {
         return [
             'shouldQueue' => 'boolean',
+            'strict' => 'boolean',
+            'is_public' => 'boolean',
             'tool_config' => 'array',
         ];
     }
@@ -89,5 +108,34 @@ class ApiTool extends Model
     public function commands(): MorphToMany
     {
         return $this->morphedByMany(Command::class, 'toolable');
+    }
+
+    public function toolCalls(): HasMany
+    {
+        return $this->hasMany(ToolCall::class);
+    }
+
+    /**
+     * Transform the output using the specified transformer class
+     *
+     * @param mixed $output
+     * @return mixed
+     */
+    public function transformResponse(Response $response)
+    {
+        //chekc if class exists
+        if (!class_exists($this->output_transformer)) return  $response->json() ?? $response->body();
+        $transformer = app()->make($this->output_transformer);
+        return $transformer->transformResponse($response);
+    }
+
+    protected static function generateId($length = 16, $prefix = '', $lowercase = false)
+    {
+        $client = new Client();
+        $customAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $uid = $client->formattedId($customAlphabet,  $length);
+        $generated = $prefix ? $prefix . $uid : $uid;
+        $finalStr = $lowercase == true ? strtolower($generated) : $generated;
+        return (string) $finalStr;
     }
 }

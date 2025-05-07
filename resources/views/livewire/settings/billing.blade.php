@@ -131,7 +131,7 @@ new class extends Component {
         <div>
             <div class="">
                 <div class="max-w-full mx-auto">
-                    <flux:heading size="xl" class="mb-6 dark:text-white"></flux:heading>
+                    <flux:heading size="lg" class="mb-6 dark:text-white"></flux:heading>
                     @if ($subscription)
                         <div class="bg-white dark:bg-zinc-800 rounded-lg mb-6">
                             <div class="p-6">

@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Bot extends Model
 {
@@ -26,6 +28,7 @@ class Bot extends Model
         'username',
         'bot_token',
         'bot_provider',
+        'ai_model',
         'api_key',
         'system_prompt',
         'is_active',
@@ -34,6 +37,9 @@ class Bot extends Model
         'credits_per_message',
         'credits_per_star',
         'last_active_at',
+        'ai_temperature',
+        'ai_max_tokens',
+        'ai_store',
     ];
 
     /**
@@ -49,6 +55,7 @@ class Bot extends Model
             'is_cloneable' => 'boolean',
             'settings' => 'array',
             'last_active_at' => 'datetime',
+            'ai_store' => 'boolean',
         ];
     }
 
@@ -59,6 +66,7 @@ class Bot extends Model
      */
     protected $hidden = [
         'bot_token',
+        'webhook_secret',
         'api_key',
     ];
 
@@ -70,6 +78,17 @@ class Bot extends Model
     public function uniqueIds()
     {
         return ['uuid'];
+    }
+
+
+    /**
+     * create webhook_secret ulids on boot
+     */
+    protected static function booted(): void
+    {
+        static::creating(function ($model) {
+            $model->webhook_secret = Str::ulid();
+        });
     }
 
     /**
@@ -118,5 +137,46 @@ class Bot extends Model
     public function refunds(): HasMany
     {
         return $this->hasMany(Refund::class);
+    }
+
+    /**
+     * Get the chats for the bot.
+     */
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class);
+    }
+
+    /**
+     * Get the messages for the bot.
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    /**
+     * Get the tool calls for the bot.
+     */
+    public function toolCalls(): HasMany
+    {
+        return $this->hasMany(ToolCall::class);
+    }
+
+
+    /**
+     * Get the telegram updates for the bot.
+     */
+    public function telegramUpdates(): HasMany
+    {
+        return $this->hasMany(TelegramUpdate::class);
+    }
+
+    /**
+     * Get the bot users for the bot.
+     */
+    public function botUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'bot_user', 'bot_id', 'user_id');
     }
 }

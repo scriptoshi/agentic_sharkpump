@@ -102,7 +102,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="xl">{{ __('Edit Bot') }}: {{ $bot->name }}</flux:heading>
+        <flux:heading size="lg">{{ __('Edit Bot') }}: {{ $bot->name }}</flux:heading>
         <div>
             <flux:button href="{{ route('admin.bots.index') }}" icon="arrow-left">
                 {{ __('Back to List') }}

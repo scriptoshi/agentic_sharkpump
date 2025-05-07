@@ -180,7 +180,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
     {{-- Replaced div with flux:header --}}
     <div class="mb-6 flex items-center justify-between">
         {{-- Replaced h1 with flux:heading --}}
-        <flux:heading size="xl">{{ __('Users Management') }}</flux:heading>
+        <flux:heading size="lg">{{ __('Users Management') }}</flux:heading>
         {{-- Replaced a with flux:button --}}
        
     </div>

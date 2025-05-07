@@ -155,7 +155,7 @@ new class extends Component {
     <!-- Add Command Button -->
     <div class="mb-4 flex justify-between items-center">
          <div>
-             <flux:heading size="xl">{{ __('Commands') }}</flux:heading>
+             <flux:heading size="lg">{{ __('Commands') }}</flux:heading>
              <flux:text>{{ __('The commands this bots reponds to') }}</flux:text>
          </div>
         <flux:button wire:click="openAddModal" size="sm">

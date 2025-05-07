@@ -109,10 +109,16 @@ new #[Layout('components.layouts.app')] class extends Component {
         return round($time, 2) . 's';
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.index') }}">APIs</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>{{ $api->name }}</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="xl">{{ __('Edit API') }}: {{ $api->name }}</flux:heading>
+        <flux:heading size="lg">{{ __('Edit API') }}: {{ $api->name }}</flux:heading>
         <div>
             <flux:button href="{{ route('apis.index') }}" icon="arrow-left">
                 {{ __('Back to List') }}
@@ -182,13 +188,13 @@ new #[Layout('components.layouts.app')] class extends Component {
     <livewire:apis.headers.index :headerable="$api" />
     
     <div class="mt-12 mb-4 flex items-center justify-between">
-        <flux:heading  size="xl">{{ __('Endpoints (Tools)') }}</flux:heading>
+        <flux:heading  size="lg">{{ __('Endpoints (Tools)') }}</flux:heading>
         <flux:button href="{{ route('apis.tools.create', $api) }}" icon="plus">
             {{ __('Create New Tool') }}
         </flux:button>
     </div>
     <livewire:apis.tools.index :api="$api" />
 
-    <flux:heading class="mt-12 mb-4" size="xl">{{ __('Logs') }}</flux:heading>
+    <flux:heading class="mt-12 mb-4" size="lg">{{ __('Logs') }}</flux:heading>
     <livewire:apis.logs.index :api="$api" />
 </div>

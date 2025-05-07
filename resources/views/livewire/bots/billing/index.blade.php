@@ -43,7 +43,8 @@ new #[Layout('components.layouts.app')] class extends Component {
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
         <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('bots.index') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>{{ __('Billing') }}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -51,13 +52,15 @@ new #[Layout('components.layouts.app')] class extends Component {
     <!-- Header -->
     <div class="mb-8 flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('Bot Billing Management') }}</flux:heading>
+            <flux:heading size="lg">{{ __('Bot Billing Management') }}</flux:heading>
             <flux:text>{{ __('Manage credits for users of') }} <strong>{{ $bot->name }}</strong></flux:text>
         </div>
         <div class="flex items-center space-x-2">
             <flux:button size="sm" wire:click="setPage('balances')" :variant="$page === 'balances' ? 'primary' : 'outline'">{{ __('Balances') }}</flux:button>
             <flux:button size="sm" wire:click="setPage('payments')" :variant="$page === 'payments' ? 'primary' : 'outline'">{{ __('Payments') }}</flux:button>
             <flux:button size="sm" wire:click="setPage('refunds')" :variant="$page === 'refunds' ? 'primary' : 'outline'">{{ __('Refunds') }}</flux:button>
+            <flux:button icon="cog" size="sm" href="{{ route('bots.edit', $bot) }}" variant="filled">{{ __('Manage') }}</flux:button>
+
         </div>
     </div>
 

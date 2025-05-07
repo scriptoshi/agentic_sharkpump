@@ -89,7 +89,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 <div class="max-w-4xl mx-auto">
     {{-- Page Heading --}}
     <div class="mb-6">
-        <flux:heading size="xl">{{ __('Edit User') }}: {{ $user->name }}</flux:heading>
+        <flux:heading size="lg">{{ __('Edit User') }}: {{ $user->name }}</flux:heading>
     </div>
 
     {{-- User Edit Form --}}

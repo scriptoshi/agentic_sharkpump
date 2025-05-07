@@ -64,6 +64,7 @@ class ApiSeeder extends Seeder
             'auth_query_key' => 'key',
             'auth_query_value' => 'abc123weatherapikey',
             'active' => true,
+            'is_public' => true,
             'description' => 'Weather API for getting current weather and forecasts',
         ]);
 
@@ -186,6 +187,7 @@ class ApiSeeder extends Seeder
             'auth_type' => 'bearer',
             'auth_token' => 'sk-sample1234567890abcdefghijklmnopqrstuvwxyz',
             'active' => true,
+            'is_public' => true,
             'description' => 'OpenAI API for AI completions and embeddings',
         ]);
 
@@ -318,6 +320,7 @@ class ApiSeeder extends Seeder
             'auth_query_key' => 'apiKey',
             'auth_query_value' => 'newsapi123456789abcdefg',
             'active' => true,
+            'is_public' => true,
             'description' => 'News API for headlines and articles from various sources',
         ]);
 
@@ -470,6 +473,7 @@ class ApiSeeder extends Seeder
             'auth_type' => 'bearer',
             'auth_token' => 'github_pat_fake12345abcdefghijklmnopqrstuvwxyz',
             'active' => true,
+            'is_public' => true,
             'description' => 'GitHub API for accessing repository information',
         ]);
 
@@ -588,6 +592,7 @@ class ApiSeeder extends Seeder
         // Successful logs
         for ($i = 0; $i < 5; $i++) {
             $tool1->logs()->create([
+                'user_id' => $tool1->user_id,
                 'api_id' => $api->id,
                 'triggered_at' => now()->subDays(rand(0, 30))->subHours(rand(0, 24)),
                 'response_code' => 200,
@@ -597,6 +602,7 @@ class ApiSeeder extends Seeder
             ]);
             $tool2->logs()->create([
                 'api_id' => $api->id,
+                'user_id' => $tool2->user_id,
                 'triggered_at' => now()->subDays(rand(0, 30))->subHours(rand(0, 24)),
                 'response_code' => 200,
                 'response_body' => json_encode(['status' => 'success', 'data' => ['sample' => 'response data']]),
@@ -621,6 +627,7 @@ class ApiSeeder extends Seeder
             $errorIndex = rand(0, count($errorCodes) - 1);
             $tool1->logs()->create([
                 'api_id' => $api->id,
+                'user_id' => $tool1->user_id,
                 'triggered_at' => now()->subDays(rand(0, 30))->subHours(rand(0, 24)),
                 'response_code' => $errorCodes[$errorIndex],
                 'response_body' => json_encode(['error' => $errorMessages[$errorIndex]]),
@@ -630,6 +637,7 @@ class ApiSeeder extends Seeder
             ]);
             $tool2->logs()->create([
                 'api_id' => $api->id,
+                'user_id' => $tool2->user_id,
                 'triggered_at' => now()->subDays(rand(0, 30))->subHours(rand(0, 24)),
                 'response_code' => $errorCodes[$errorIndex],
                 'response_body' => json_encode(['error' => $errorMessages[$errorIndex]]),

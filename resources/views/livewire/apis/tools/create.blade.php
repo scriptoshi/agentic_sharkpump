@@ -111,11 +111,18 @@
             }
         }
     }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.index') }}">APIs</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.edit', $api) }}">{{ $api->name }}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>Create Tool</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-6 flex items-center justify-between">
             <div>
-                <flux:heading size="xl">{{ __('Create New Tool') }}</flux:heading>
+                <flux:heading size="lg">{{ __('Create New Tool') }}</flux:heading>
                 <flux:subheading>{{ __('API') }}: {{ $api->name }}</flux:subheading>
             </div>
             <div>

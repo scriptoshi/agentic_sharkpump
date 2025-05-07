@@ -3,7 +3,8 @@
 use App\Models\Api;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
-
+use App\Enums\ApiAuthType;
+use Illuminate\Validation\Rules\Enum;
 new #[Layout('components.layouts.app')] class extends Component {
     // API Properties
     public string $name = '';
@@ -25,7 +26,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             'name' => ['required', 'string', 'max:255'],
             'url' => ['required', 'string', 'max:2048'],
             'content_type' => ['required', 'string', 'max:100'],
-            'auth_type' => ['required', 'string', 'in:none,basic,bearer,api_key,query_param'],
+            'auth_type' => ['required', 'string', new Enum(ApiAuthType::class)],
             'auth_username' => ['nullable', 'string', 'max:255'],
             'auth_password' => ['nullable', 'string', 'max:255'],
             'auth_token' => ['nullable', 'string', 'max:1024'],
@@ -54,10 +55,16 @@ new #[Layout('components.layouts.app')] class extends Component {
         $this->redirect(route('apis.edit', $api));
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.index') }}">APIs</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item >Create</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="xl">{{ __('Create New API') }}</flux:heading>
+        <flux:heading size="lg">{{ __('Create New API') }}</flux:heading>
         <div>
             <flux:button href="{{ route('apis.index') }}" icon="arrow-left">
                 {{ __('Back to List') }}
@@ -80,25 +87,23 @@ new #[Layout('components.layouts.app')] class extends Component {
             </div>
             <div class="grid sm:grid-cols-2 gap-4">
                 <flux:select label="{{ __('Authentication Type') }}" wire:model.live="auth_type" required>
-                    <option value="none">{{ __('None') }}</option>
-                    <option value="basic">{{ __('Basic Auth') }}</option>
-                    <option value="bearer">{{ __('Bearer Token') }}</option>
-                    <option value="api_key">{{ __('API Key') }}</option>
-                    <option value="query_param">{{ __('Query Parameter') }}</option>
+                    @foreach (ApiAuthType::cases() as $type)
+                        <option value="{{ $type->value }}">{{ $type->label() }}</option>
+                    @endforeach
                 </flux:select>
                 <flux:error name="auth_type" />
 
-                @if ($auth_type === 'basic')
+                @if ($auth_type === ApiAuthType::BASIC->value)
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <flux:input label="{{ __('Username') }}" placeholder="{{ __('Username') }}"
                             wire:model="auth_username" />
                         <flux:input label="{{ __('Password') }}" placeholder="{{ __('Password') }}"
                             wire:model="auth_password" type="password" viewable />
                     </div>
-                @elseif($auth_type === 'bearer')
+                @elseif($auth_type === ApiAuthType::BEARER->value)
                     <flux:input label="{{ __('Token') }}" placeholder="{{ __('Bearer token') }}"
                         wire:model="auth_token" />
-                @elseif($auth_type === 'api_key' || $auth_type === 'query_param')
+                @elseif($auth_type === ApiAuthType::API_KEY->value || $auth_type === ApiAuthType::QUERY_PARAM->value)
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <flux:input label="{{ __('Key Name') }}" placeholder="{{ __('api_key, x-api-key, etc.') }}"
                             wire:model="auth_query_key" />

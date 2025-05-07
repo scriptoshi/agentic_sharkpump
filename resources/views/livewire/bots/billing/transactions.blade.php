@@ -71,13 +71,20 @@ new #[Layout('components.layouts.app')] class extends Component {
         $this->loadTransactions();
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">{{__('Dashboard')}}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">{{__('Bots')}}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>{{ __('Transactions') }}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="mt-12 mb-4">
     <!-- Header -->
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <flux:heading size="xl">{{ __('Transaction History') }}</flux:heading>
+                <flux:heading size="lg">{{ __('Transaction History') }}</flux:heading>
                 <flux:text>{{ __('For') }} <strong>{{ $balance->user->name }}</strong> - {{ __('Current Balance') }}: <strong>{{ number_format($balance->balance, 2) }} {{ __('Credits') }}</strong></flux:text>
             </div>
             <flux:button href="{{ route('bots.billing',  $balance->bot) }}" variant="ghost" size="sm">

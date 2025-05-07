@@ -110,7 +110,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="xl">{{ __('Edit API') }}: {{ $api->name }}</flux:heading>
+        <flux:heading size="lg">{{ __('Edit API') }}: {{ $api->name }}</flux:heading>
         <div>
             <flux:button href="{{ route('admin.apis.index') }}" icon="arrow-left">
                 {{ __('Back to List') }}
@@ -179,9 +179,9 @@ new #[Layout('components.layouts.admin')] class extends Component {
     </div>
     <livewire:admin.apis.headers.index :headerable="$api" />
     
-    <flux:heading class="mt-12 mb-4" size="xl">{{ __('Tools') }}</flux:heading>
+    <flux:heading class="mt-12 mb-4" size="lg">{{ __('Tools') }}</flux:heading>
     <livewire:admin.apis.tools.index :api="$api" />
 
-    <flux:heading class="mt-12 mb-4" size="xl">{{ __('Logs') }}</flux:heading>
+    <flux:heading class="mt-12 mb-4" size="lg">{{ __('Logs') }}</flux:heading>
     <livewire:admin.apis.logs.index :api="$api" />
 </div>

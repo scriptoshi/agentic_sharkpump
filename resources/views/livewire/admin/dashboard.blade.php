@@ -117,7 +117,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             <flux:heading size="lg">{{ __('Total Users') }}</flux:heading>
             <div class="mt-2 flex items-baseline">
                 {{-- Replaced span with flux:heading for the count and flux:text for the label --}}
-                <flux:heading size="xl" class="text-3xl font-bold">{{ $totalUsers }}</flux:heading>
+                <flux:heading size="lg" class="text-3xl font-bold">{{ $totalUsers }}</flux:heading>
                 <flux:text size="sm" class="ml-2">{{ __('users') }}</flux:text>
             </div>
         </div>
@@ -152,7 +152,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             <flux:heading size="lg">{{ __('Monthly Revenue') }}</flux:heading>
             <div class="mt-2 flex items-baseline">
                 {{-- Replaced span with flux:heading for the amount and flux:text for the label --}}
-                <flux:heading size="xl" class="text-3xl font-bold">${{ number_format($monthlyRevenue) }}</flux:heading>
+                <flux:heading size="lg" class="text-3xl font-bold">${{ number_format($monthlyRevenue) }}</flux:heading>
                 <flux:text size="sm" class="ml-2">/ {{ __('month') }}</flux:text>
             </div>
         </div>
@@ -161,7 +161,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
     <div class="flex-1 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
         <div class="mb-4 flex items-center justify-between">
             {{-- Replaced h2 with flux:heading --}}
-            <flux:heading size="xl">{{ __('Users & Subscriptions') }}</flux:heading>
+            <flux:heading size="lg">{{ __('Users & Subscriptions') }}</flux:heading>
             <div class="flex space-x-2">
                 <div class="relative">
                     {{-- Replaced input with flux:input and added icon --}}

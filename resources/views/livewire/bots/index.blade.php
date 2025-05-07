@@ -121,7 +121,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('Telegram Bots Management') }}</flux:heading>
+            <flux:heading size="lg">{{ __('Telegram Bots Management') }}</flux:heading>
             <flux:subheading>{{ __('Manage Telegram bots registered in the system.') }}</flux:subheading>
         </div>
         <div>
@@ -252,7 +252,10 @@ new #[Layout('components.layouts.app')] class extends Component {
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <flux:text size="sm" class="max-w-xs truncate">{{ $bot->username }}</flux:text>
+                            <div>
+                                <flux:text size="sm" class="max-w-xs truncate">{{ $bot->username }}</flux:text>
+                                <flux:text size="sm" class="max-w-xs truncate text-primary-500">{{ $bot->ai_model?? 'no model' }}</flux:text>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <flux:text size="sm" class="max-w-xs truncate">{{ substr($bot->bot_token, 0, 10) }}...</flux:text>

@@ -46,7 +46,7 @@ new class extends Component {
 
 <div class="mt-12">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="xl">{{ __('Active Tools for ' . $toolableType . ': ' . $toolable->name) }}
+        <flux:heading size="lg">{{ __('Active Tools for ' . $toolableType . ': ' . $toolable->name) }}
         </flux:heading>
         <div>
             @if ($toolableType === 'Bot')

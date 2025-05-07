@@ -74,6 +74,14 @@ new #[Layout('components.layouts.admin')] class extends Component {
         $this->dispatch('apis-deleted');
     }
 
+
+    public function toggleIsPublic($apiId): void
+    {
+        $api = Api::findOrFail($apiId);
+        $api->is_public = !$api->is_public;
+        $api->save();
+    }
+
     public function cancelDelete(): void
     {
         $this->showDeleteModal = false;
@@ -121,7 +129,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 ">
-        <flux:heading size="xl">{{ __('API Tools Management') }}</flux:heading>
+        <flux:heading size="lg">{{ __('API Tools Management') }}</flux:heading>
          <flux:subheading>{{ __('Api tools allow bots to access external API via the MCP tools protocol.') }}</flux:subheading>
     </div>
    
@@ -273,6 +281,9 @@ new #[Layout('components.layouts.admin')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
+                                <flux:button wire:click="toggleIsPublic({{ $api->id }})" size="sm" :variant="$api->is_public ? 'primary' : 'ghost'">
+                                    {{ $api->is_public ? __('Make Private') : __('Make Public') }}
+                                </flux:button>
                                 <flux:button href="{{ route('admin.apis.edit', $api) }}" size="sm" variant="ghost">
                                     {{ __('Edit') }}
                                 </flux:button>

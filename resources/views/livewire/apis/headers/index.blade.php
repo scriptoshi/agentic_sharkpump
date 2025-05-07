@@ -124,7 +124,7 @@ new class extends Component {
 <div  class="mt-12 mb-4" >
     <!-- Add Header Button -->
     <div class="mb-4 flex justify-between items-center">
-         <flux:heading size="xl">{{ __('Headers') }}</flux:heading>
+         <flux:heading size="lg">{{ __('Headers') }}</flux:heading>
         <flux:button wire:click="openAddModal" size="sm">
             <flux:icon name="plus" class="-ml-1 inline-flex" />
             {{ __('Add New Header') }}

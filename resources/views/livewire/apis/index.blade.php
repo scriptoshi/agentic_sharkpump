@@ -124,11 +124,16 @@ new #[Layout('components.layouts.app')] class extends Component {
         return $date ? $date->format('M d, Y') : 'N/A';
     }
 }; ?>
-
+<x-slot:breadcrumbs>
+    <flux:breadcrumbs>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>APIs</flux:breadcrumbs.item>
+    </flux:breadcrumbs>
+</x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <flux:heading size="xl">{{ __('Custom API Tools') }}</flux:heading>
+            <flux:heading size="lg">{{ __('Custom API Tools') }}</flux:heading>
             <flux:subheading>{{ __('Custom APIs allow your bots to connect to an external API via the MCP (Model context protocol) system.') }}</flux:subheading>
         </div>
         <flux:button href="{{ route('apis.create') }}" icon="plus">

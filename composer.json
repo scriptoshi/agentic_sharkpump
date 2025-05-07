@@ -7,11 +7,18 @@
         "laravel",
         "framework"
     ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/momostafa/openai-client"
+        }
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "codeat3/blade-simple-icons": "^6.12",
         "codeat3/blade-unicons": "^1.9",
+        "hidehalo/nanoid-php": "^2.0",
         "laravel/cashier": "^15.6",
         "laravel/framework": "^12.0",
         "laravel/socialite": "^5.20",
@@ -19,7 +26,10 @@
         "livewire/flux": "^2.1.1",
         "livewire/volt": "^1.7.0",
         "mallardduck/blade-lucide-icons": "^1.23",
-        "scriptoshi/livewire-telegram-auth": "^1.0"
+        "mozex/anthropic-php": "^1.1",
+        "openai-php/client": "dev-dev",
+        "scriptoshi/livewire-telegram-auth": "^1.0",
+        "telegram-bot-sdk/telegram-bot-sdk": "^4.0@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -79,9 +89,10 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "thecodingmachine/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

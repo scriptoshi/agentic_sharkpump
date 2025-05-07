@@ -1,0 +1,268 @@
+{
+    "name": "sendTelegramMessage",
+    "description": "Sends a text message via Telegram Bot API. Can optionally include an inline keyboard, a custom reply keyboard, instructions to remove the current reply keyboard, or force a reply from the user. On success, the sent Message is returned.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "chat_id": {
+                "type": [
+                    "integer",
+                    "string"
+                ],
+                "description": "Required. Unique identifier for the target chat or username of the target channel (in the format @channelusername)."
+            },
+            "text": {
+                "type": "string",
+                "description": "Required. Text of the message to be sent, 1-4096 characters after entities parsing."
+            },
+            "parse_mode": {
+                "type": "string",
+                "enum": [
+                    "MarkdownV2",
+                    "HTML",
+                    "Markdown"
+                ],
+                "description": "Optional. Mode for parsing entities in the message text. See formatting options for more details."
+            },
+            "entities": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Type of the entity. Can be mention, hashtag, cashtag, bot_command, url, email, phone_number, bold, italic, underline, strikethrough, spoiler, blockquote, expandable_blockquote, code, pre, text_link, text_mention, or custom_emoji."
+                        },
+                        "offset": {
+                            "type": "integer",
+                            "description": "Offset in UTF-16 code units to the start of the entity."
+                        },
+                        "length": {
+                            "type": "integer",
+                            "description": "Length of the entity in UTF-16 code units."
+                        },
+                        "url": {
+                            "type": "string",
+                            "description": "Optional. For 'text_link' only, URL that will be opened after user taps on the text."
+                        },
+                        "user": {
+                            "type": "object",
+                            "description": "Optional. For 'text_mention' only, the mentioned user object.",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "Unique identifier for this user or bot."
+                                },
+                                "is_bot": {
+                                    "type": "boolean",
+                                    "description": "True, if this user is a bot."
+                                },
+                                "first_name": {
+                                    "type": "string",
+                                    "description": "User's or bot's first name."
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "is_bot",
+                                "first_name"
+                            ]
+                        },
+                        "language": {
+                            "type": "string",
+                            "description": "Optional. For 'pre' only, the programming language of the entity text."
+                        },
+                        "custom_emoji_id": {
+                            "type": "string",
+                            "description": "Optional. For 'custom_emoji' only, unique identifier of the custom emoji."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "offset",
+                        "length"
+                    ]
+                },
+                "description": "Optional. A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode."
+            },
+            "link_preview_options": {
+                "type": "object",
+                "properties": {
+                    "is_disabled": {
+                        "type": "boolean",
+                        "description": "Optional. True, if the link preview is disabled."
+                    },
+                    "url": {
+                        "type": "string",
+                        "description": "Optional. URL to use for the link preview. If empty, then the first URL found in the message text will be used."
+                    },
+                    "prefer_small_media": {
+                        "type": "boolean",
+                        "description": "Optional. True, if the media in the link preview is supposed to be shrunk."
+                    },
+                    "prefer_large_media": {
+                        "type": "boolean",
+                        "description": "Optional. True, if the media in the link preview is supposed to be enlarged."
+                    },
+                    "show_above_text": {
+                        "type": "boolean",
+                        "description": "Optional. True, if the link preview must be shown above the message text."
+                    }
+                },
+                "description": "Optional. Link preview generation options for the message."
+            },
+            "reply_markup": {
+                "description": "Optional. Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "title": "InlineKeyboardMarkup",
+                        "description": "An inline keyboard attached to the message. Interactive buttons that don't take up space in the chat.",
+                        "properties": {
+                            "inline_keyboard": {
+                                "type": "array",
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "description": "This object represents one button of an inline keyboard.",
+                                        "properties": {
+                                            "text": {
+                                                "type": "string",
+                                                "description": "Label text on the button."
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "description": "Optional. HTTP or tg:// URL to be opened when the button is pressed."
+                                            },
+                                            "callback_data": {
+                                                "type": "string",
+                                                "description": "Optional. Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes."
+                                            },
+                                            "switch_inline_query": {
+                                                "type": "string",
+                                                "description": "Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field."
+                                            },
+                                            "switch_inline_query_current_chat": {
+                                                "type": "string",
+                                                "description": "Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field."
+                                            }
+                                        },
+                                        "required": [
+                                            "text"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "required": [
+                            "inline_keyboard"
+                        ]
+                    },
+                    {
+                        "type": "object",
+                        "title": "ReplyKeyboardMarkup",
+                        "description": "A standard custom reply keyboard to offer a set of predefined replies.",
+                        "properties": {
+                            "keyboard": {
+                                "type": "array",
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "text": {
+                                                "type": "string",
+                                                "description": "Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed."
+                                            },
+                                            "request_contact": {
+                                                "type": "boolean",
+                                                "description": "Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only."
+                                            },
+                                            "request_location": {
+                                                "type": "boolean",
+                                                "description": "Optional. If True, the user's current location will be sent when the button is pressed. Available in private chats only."
+                                            }
+                                        },
+                                        "required": [
+                                            "text"
+                                        ]
+                                    }
+                                }
+                            },
+                            "is_persistent": {
+                                "type": "boolean",
+                                "description": "Optional. Requests clients to always show the keyboard when the bot wants this. Defaults to false."
+                            },
+                            "resize_keyboard": {
+                                "type": "boolean",
+                                "description": "Optional. Requests clients to resize the keyboard vertically for smaller size. Defaults to false."
+                            },
+                            "one_time_keyboard": {
+                                "type": "boolean",
+                                "description": "Optional. Requests clients to hide the keyboard as soon as it's used. Defaults to false."
+                            },
+                            "input_field_placeholder": {
+                                "type": "string",
+                                "description": "Optional. The placeholder to be shown in the input field when the keyboard is active; 1-64 characters."
+                            },
+                            "selective": {
+                                "type": "boolean",
+                                "description": "Optional. Use this parameter if you want to show the keyboard to specific users only."
+                            }
+                        },
+                        "required": [
+                            "keyboard"
+                        ]
+                    },
+                    {
+                        "type": "object",
+                        "title": "ReplyKeyboardRemove",
+                        "description": "Instructs Telegram clients to remove the current custom keyboard.",
+                        "properties": {
+                            "remove_keyboard": {
+                                "type": "boolean",
+                                "const": true,
+                                "description": "Required. Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)."
+                            },
+                            "selective": {
+                                "type": "boolean",
+                                "description": "Optional. Use this parameter if you want to remove the keyboard for specific users only."
+                            }
+                        },
+                        "required": [
+                            "remove_keyboard"
+                        ]
+                    },
+                    {
+                        "type": "object",
+                        "title": "ForceReply",
+                        "description": "Instructs Telegram clients to display a reply interface to the user (as if they manually selected the bot's message and tapped 'Reply').",
+                        "properties": {
+                            "force_reply": {
+                                "type": "boolean",
+                                "const": true,
+                                "description": "Required. Shows reply interface to the user."
+                            },
+                            "input_field_placeholder": {
+                                "type": "string",
+                                "description": "Optional. The placeholder to be shown in the input field when the reply is active; 1-64 characters."
+                            },
+                            "selective": {
+                                "type": "boolean",
+                                "description": "Optional. Use this parameter if you want to force reply from specific users only."
+                            }
+                        },
+                        "required": [
+                            "force_reply"
+                        ]
+                    }
+                ]
+            }
+        },
+        "required": [
+            "chat_id",
+            "text"
+        ]
+    }
+}

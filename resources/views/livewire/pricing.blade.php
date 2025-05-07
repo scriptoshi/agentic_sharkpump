@@ -58,17 +58,17 @@ new class extends Component
     
     public function getPrice($package)
     {
-        return $package['yearly_price'];
+        return $package['monthly_price'];
     }
     
     public function getPriceId($package)
     {
-        return $package['stripe_yearly_price_id'];
+        return $package['stripe_monthly_price_id'];
     }
     
     public function getSavingsAmount($package)
     {
-        // Calculate how much they save by paying yearly instead of monthly
+        // Calculate how much they save by paying monthly instead of monthly
         return ($package['monthly_price'] * 12) - $package['yearly_price'];
     }
 }; ?>
@@ -101,12 +101,12 @@ new class extends Component
                         
                         <div class="flex gap-2 items-baseline">
                             <div class="text-3xl md:text-4xl font-semibold text-zinc-800 dark:text-white">${{ $this->getPrice($package) }}</div>
-                            <div class="text-zinc-400 dark:text-zinc-300 font-medium text-base">/year</div>
+                            <div class="text-zinc-400 dark:text-zinc-300 font-medium text-base">/month</div>
                         </div>
                         
                         @if ($id !== 'free' && $this->getSavingsAmount($package) > 0)
                             <div class="text-sm text-primary-500 font-bold">
-                                Get ${{ $this->getSavingsAmount($package) }} off
+                                Save ${{ $this->getSavingsAmount($package) }} when on yearly plan
                             </div>
                         @endif
                         

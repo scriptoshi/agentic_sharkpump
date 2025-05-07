@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Models\Bot;
 use App\Models\Command;
+use App\Http\Controllers\WebhooksController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,5 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('command-tools', compact('command'));
     })->name('commands.tools');
 });
+
+Route::post('/telegram/webhook/{bot:webhook_secret}', WebhooksController::class)->name('telegram.webhook');
 
 require __DIR__ . '/auth.php';
