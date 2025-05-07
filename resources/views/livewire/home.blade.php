@@ -9,18 +9,10 @@ new class extends Component {
     public $showMobileMenu = false;
 
     // Features data remains the same as it wasn't linked to the subscriptions config
-    public $features = [
-        ['title' => 'Zero code', 'description' => 'Get a bot token, connect your ai service, choose a data provider and boom! You have an expert bot', 'icon' => 'rocket-launch'],
-        ['title' => 'Intelligient', 'description' => 'The chat bot utilizes chatgpt / gemini / claude to understand users. No more boring menus and keyboards.', 'icon' => 'shield-check'],
-        ['title' => 'Inbuilt Billing', 'description' => 'Sell message credits via Telegram stars from within the the bot. Set price per message, users are billed as they chat.', 'icon' => 'credit-card'],
-        ['title' => 'Admin Dashboard', 'description' => 'Simple , extremely extendible admin panel with inbuilt user management integrated', 'icon' => 'chart-bar']
-    ];
+    public $features = [['title' => 'Zero code', 'description' => 'Get a bot token, connect your ai service, choose a data provider and boom! You have an expert bot', 'icon' => 'rocket-launch'], ['title' => 'Intelligient', 'description' => 'The chat bot utilizes chatgpt / gemini / claude to understand users. No more boring menus and keyboards.', 'icon' => 'shield-check'], ['title' => 'Inbuilt Billing', 'description' => 'Sell message credits via Telegram stars from within the the bot. Set price per message, users are billed as they chat.', 'icon' => 'credit-card'], ['title' => 'Admin Dashboard', 'description' => 'Simple , extremely extendible admin panel with inbuilt user management integrated', 'icon' => 'chart-bar']];
 
     // Initialize pricingTiers as an empty array
     public $pricingTiers = [];
-
-  
-    
 
     // Define methods as public functions
     public function toggleMobileMenu()
@@ -31,7 +23,6 @@ new class extends Component {
     // Use the mount method to load data when the component is initialized
     public function mount()
     {
-       
         // Dynamically load pricing packages from the subscriptions config file
         $packages = Config::get('subscriptions.packages', []);
         $this->pricingTiers = collect($packages)
@@ -60,6 +51,9 @@ new class extends Component {
     <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
+                <span class="flex h-7 w-7 mr-4 items-center justify-center rounded-md">
+                    <x-app-logo-icon class="size-7 fill-current text-black dark:text-white" />
+                </span>
                 <div class="flex-shrink-0">
                     <span class="text-xl font-bricolage font-bold text-primary-500">AiBotsForTelegram</span>
                 </div>
@@ -162,9 +156,9 @@ new class extends Component {
                         <div class="flex mt-5 sm:mt-8 items-center space-x-3">
                             <flux:avatar tooltip="Openai GPT" name="Openai GPT" src="/openai.webp" />
                             <flux:avatar tooltip="Google Gemini" name="Google Gemini" src="/gemini.png" />
-                            <flux:avatar tooltip="Anthropic Claude"  name="Anthropic Claude" src="/claude.png" />
+                            <flux:avatar tooltip="Anthropic Claude" name="Anthropic Claude" src="/claude.png" />
                             <flux:text size="lg" class="text-base text-zinc-500">
-                               Deepseek Comming soon!
+                                Deepseek Comming soon!
                             </flux:text>
                         </div>
                         <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
@@ -198,7 +192,7 @@ new class extends Component {
                     Features
                 </flux:heading>
                 <flux:text size="lg" class="mt-4 max-w-3xl mx-auto text-center text-xl text-zinc-500">
-                   Zero code Intelligent bots. Simply plug and play.
+                    Zero code Intelligent bots. Simply plug and play.
                 </flux:text>
             </div>
 
@@ -250,7 +244,7 @@ new class extends Component {
         </div>
     </div>
 
-    
+
 
     <div class="bg-primary-500">
         <div class="max-w-2xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
