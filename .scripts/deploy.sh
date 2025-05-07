@@ -23,7 +23,7 @@ echo "Build complete!"
 
 echo "# Run fresh database migrations"
 #php artisan migrate --force
-php artisan migrate:fresh --seed --force
+php artisan migrate:fresh  --force
 echo "# seeding the database"
 php artisan db:seed
 
