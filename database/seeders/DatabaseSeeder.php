@@ -14,13 +14,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@sharktitl.es',
-            'password' => '*sharkTitles123#',
-            'is_admin' => true,
-        ]);
+        $user = User::where('email', 'admin@sharktitl.es')->first();
+        if (!$user) {
+            $user = User::create([
+                'name' => 'Admin',
+                'email' => 'admin@sharktitl.es',
+                'password' => '*sharkTitles123#',
+                'is_admin' => true,
+            ]);
+        }
 
         // Call the API seeder to generate API-related dummy data
         $this->call([
