@@ -13,6 +13,7 @@ echo "# Checkout main version of the app"
 cd $WWW_DIR/$REPO_NAME && git checkout main
 
 echo "# Install composer dependencies"
+composer config --no-interaction allow-plugins.composer/installers true
 composer update --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 echo "# Install & Compile npm assets"

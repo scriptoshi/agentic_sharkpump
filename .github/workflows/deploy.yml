@@ -9,7 +9,7 @@ on:
 env:
     SITE_DIR: ${{ vars.SITE_DIR || 'aibotsfortelegram.com' }}
     REPO_NAME: ${{ vars.REPO_NAME || 'aibotsfortelegram' }}
-    GIT_REMOTE: ${{ vars.GIT_REMOTE || 'github-aibotsfortelegramio:scriptoshi/aibotsfortelegram.git' }}
+    GIT_REMOTE: ${{ vars.GIT_REMOTE || 'github-aibotsfortelegram:scriptoshi/aibotsfortelegram.git' }}
     ENV_SOURCE: ${{ vars.ENV_SOURCE || 'envs/.aibotsfortelegram' }}
     WWW_DIR: ${{ vars.WWW_DIR || '/var/www' }}
 
