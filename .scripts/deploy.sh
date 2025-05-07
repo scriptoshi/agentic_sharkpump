@@ -22,7 +22,8 @@ npm i && npm run build
 echo "Build complete!"
 
 echo "# Run fresh database migrations"
-php artisan migrate --force
+#php artisan migrate --force
+php artisan migrate:fresh --seed --force
 echo "# seeding the database"
 php artisan db:seed
 

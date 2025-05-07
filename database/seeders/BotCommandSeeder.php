@@ -20,7 +20,7 @@ class BotCommandSeeder extends Seeder
         $admin = User::where('email', 'admin@example.com')->first();
 
         if (!$admin) {
-            $admin = User::factory()->create([
+            $admin = User::create([
                 'name' => 'Admin',
                 'email' => 'admin@example.com',
                 'password' => bcrypt('password'),
