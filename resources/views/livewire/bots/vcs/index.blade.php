@@ -377,7 +377,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <div>
                 <flux:heading size="lg">{{ __('Create New Knowledge Base Storage') }}</flux:heading>
                 <flux:text class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    {{ __('Create a new knowledge base storage in OpenAI.') }}
+                    {{ __('Create a new knowledge base storage.') }}
                 </flux:text>
             </div>
             <form wire:submit.prevent="createVectorStorage">
@@ -449,7 +449,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <flux:callout.heading>{{ _('Knowledge Base is currently supported only for OpenAI') }}
             </flux:callout.heading>
             <flux:callout.text>
-                {{ _('Knowledge base uses OpenAI Vector Storage to store and retrieve knowledge from files. To use this switch your bot to an OpenAI model') }}
+                {{ _('Knowledge base uses ai to store and retrieve knowledge from  files. To use this switch your bot to an OpenAI model') }}
             </flux:callout.text>
         </flux:callout>
     </div>
