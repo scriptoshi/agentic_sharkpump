@@ -137,6 +137,9 @@ new #[Layout('components.layouts.app')] class extends Component {
             <flux:button size="sm" href="{{ route('bots.billing', $bot) }}" icon="wallet">
                 {{ __('Billing') }}
             </flux:button>
+            <flux:button size="sm" href="{{ route('bots.vcs', $bot) }}" icon="book-open">
+                {{ __('Knowledge base') }}
+            </flux:button>
         </div>
     </div>
     <div class="bg-white dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700 shadow overflow-hidden rounded-lg p-6">

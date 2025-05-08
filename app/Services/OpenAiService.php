@@ -27,9 +27,12 @@ class OpenAiService
      */
     public function __construct(public TelegramUpdate $telegramUpdate)
     {
+
         $this->bot  = $telegramUpdate->bot;
+        $this->bot->load(['vcs', 'apiTools', 'commands']);
         $this->chat = $telegramUpdate->chat;
         $this->command = $telegramUpdate->command;
+        $this->command->load(['vc']);
         $this->client = OpenAI::client($this->bot->api_key);
     }
 
@@ -157,6 +160,16 @@ class OpenAiService
                 'description' => $apiTool->description,
                 'parameters' => $toolConfig['inputSchema'],
                 'strict' => $apiTool->strict
+            ];
+        }
+        // search knowledge base
+        $overide = $this->command?->vc;
+        $vector_storage = $overide ?? $this->bot->vcs->first();
+        if ($vector_storage) {
+            $tools["file_search"] = [
+                "type" => "file_search",
+                "vector_store_ids" => [$vector_storage->vector_id],
+                "max_num_results" => $vector_storage->max_num_results
             ];
         }
         return array_values($tools);

@@ -38,23 +38,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        // Bot Commands table
-        Schema::create('commands', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid');
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('bot_id')->constrained()->cascadeOnDelete();
-            $table->string('command');  // e.g., /weather, /help
-            $table->string('name')->nullable();  // e.g., /weather, /help
-            $table->string('description');
-            $table->text('system_prompt_override')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->decimal('credits_per_message', 10, 2)->nullable();
-            $table->integer('priority')->default(0);
-            $table->timestamps();
-        });
-
         // link bots / commands to tools polymorphic table
         Schema::create('toolables', function (Blueprint $table) {
             $table->id();
@@ -69,7 +52,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('toolables');
-        Schema::dropIfExists('commands');
         Schema::dropIfExists('bots');
     }
 };

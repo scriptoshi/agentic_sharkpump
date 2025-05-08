@@ -24,10 +24,12 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Call the API seeder to generate API-related dummy data
+        // Call the seeders to generate dummy data
         $this->call([
             ApiSeeder::class,
             BotCommandSeeder::class,
+            VcSeeder::class,
+            FileSeeder::class,
         ]);
     }
 }

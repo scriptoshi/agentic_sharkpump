@@ -6,6 +6,7 @@ use Livewire\Volt\Component;
 use App\Enums\BotProvider;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Attributes\Computed;
+use App\Services\Subscription;
 
 new #[Layout('components.layouts.app')] class extends Component {
     // Bot Properties
@@ -27,22 +28,28 @@ new #[Layout('components.layouts.app')] class extends Component {
     // Validation rules for creating Bot data
     public function rules(): array
     {
-        return [
+        $subscription = app()->make(Subscription::class);
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
             'bot_token' => ['required', 'string', 'max:255'],
             'is_active' => ['boolean'],
-            'bot_provider' => ['required', 'string', new Enum(BotProvider::class)],
-            'api_key' => ['nullable', 'string'],
             'system_prompt' => ['nullable', 'string'],
             'settings' => ['nullable', 'array'],
-            'credits_per_message' => ['nullable', 'numeric'],
-            'credits_per_star' => ['nullable', 'integer'],
-            'ai_model' => ['nullable', 'string'],
-            'ai_temperature' => ['nullable', 'numeric'],
-            'ai_max_tokens' => ['nullable', 'integer'],
-            'ai_store' => ['nullable', 'boolean'],
         ];
+        if ($subscription->aiProviderIsUser()) {
+            $rules['bot_provider'] = ['required', 'string', new Enum(BotProvider::class)];
+            $rules['api_key'] = ['nullable', 'string'];
+            $rules['ai_model'] = ['nullable', 'string'];
+            $rules['ai_temperature'] = ['nullable', 'numeric'];
+            $rules['ai_max_tokens'] = ['nullable', 'integer'];
+            $rules['ai_store'] = ['nullable', 'boolean'];
+        }
+        if ($subscription->supportsBotBilling()) {
+            $rules['credits_per_message'] = ['nullable', 'numeric'];
+            $rules['credits_per_star'] = ['nullable', 'integer'];
+        }
+        return $rules;
     }
 
     // Create the Bot
@@ -50,18 +57,35 @@ new #[Layout('components.layouts.app')] class extends Component {
     {
         $this->authorize('create', Bot::class);
         $validatedData = $this->validate();
-        
-        // Add the authenticated user's ID
-        $validatedData['user_id'] = auth()->id();
-        
         // Create the new bot
-        $bot = Bot::create($validatedData);
-        
+        $subscription = app()->make(Subscription::class);
+        $bot = new Bot();
+        $bot->user_id = auth()->id();
+        $bot->name = $this->name;
+        $bot->username = $this->username;
+        $bot->bot_token = $this->bot_token;
+        if ($subscription->aiProviderIsUser()) {
+            $bot->bot_provider = $this->bot_provider;
+            $bot->ai_model = $this->ai_model;
+            $bot->api_key = $this->api_key;
+            $bot->ai_temperature = $this->ai_temperature;
+            $bot->ai_max_tokens = $this->ai_max_tokens;
+            $bot->ai_store = $this->ai_store;
+        }
+        $bot->system_prompt = $this->system_prompt;
+        $bot->is_active = $this->is_active;
+        $bot->is_cloneable = $this->is_cloneable;
+        $bot->settings = $this->settings;
+        if ($subscription->supportsBotBilling()) {
+            $bot->credits_per_message = $this->credits_per_message;
+            $bot->credits_per_star = $this->credits_per_star;
+        }
+        $bot->last_active_at = $this->last_active_at;
+        $bot->save();
         // Dispatch an event
-        $this->dispatch('bot-created', name: $bot->name);
-        
+        $this->dispatch('bot-created', name: $this->name);
         // Redirect to the edit page for the newly created bot
-        $this->redirect(route('bots.edit', $bot));
+        $this->redirect(route('bots.edit', $this->bot));
     }
 
     #[Computed]
@@ -70,95 +94,102 @@ new #[Layout('components.layouts.app')] class extends Component {
         return config('models.' . $this->bot_provider->value);
     }
 }; ?>
+@php
+    $subscription = app()->make(Subscription::class);
+@endphp
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
         <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('bots.index') }}">Bots</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item >Create</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>Create</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <flux:heading size="lg">{{ __('Create New Bot') }}</flux:heading>
         <div>
-            <flux:button href="{{ route('bots.index') }}" icon="arrow-left">
+            <flux:button href="{{ route('dashboard') }}" icon="arrow-left">
                 {{ __('Back to List') }}
             </flux:button>
         </div>
     </div>
-    <div class="bg-white dark:bg-neutral-800 shadow overflow-hidden rounded-lg p-6">
+    <div class="bg-white dark:bg-neutral-800 b shadow overflow-hidden rounded-lg p-6">
         <form wire:submit="createBot" class="space-y-6">
             <div class="grid sm:grid-cols-3 gap-4">
                 <flux:field>
-                    <flux:input label="{{ __('Name (For Internal use)') }}" placeholder="{{ __('Bot Name') }}" wire:model="name" required />
+                    <flux:input label="{{ __('Name (For Internal use)') }}" placeholder="{{ __('Bot Name') }}"
+                        wire:model="name" required />
                     <flux:error name="name" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:input label="{{ __('Username') }}" placeholder="{{ __('@bot_username') }}" wire:model="username"
-                        required />
+                    <flux:input label="{{ __('Username') }}" placeholder="{{ __('@bot_username') }}"
+                        wire:model="username" required />
                     <flux:error name="username" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:input label="{{ __('Token') }}" placeholder="{{ __('Telegram Bot Token') }}" wire:model="bot_token"
-                        required />
+                    <flux:input label="{{ __('Token') }}" placeholder="{{ __('Telegram Bot Token') }}"
+                        wire:model="bot_token" required />
                     <flux:error name="bot_token" />
                 </flux:field>
             </div>
-
-            <div class="grid sm:grid-cols-3 gap-4">
-                <flux:field>
-                    <flux:select label="{{ __('AI Provider') }}" wire:model.live="bot_provider" required>
-                        <option value="">Select a provider</option>
-                        @foreach (BotProvider::cases() as $provider)
-                            <option value="{{ $provider->value }}">{{ $provider->description() }}</option>
-                        @endforeach
-                    </flux:select>
-                    <flux:error name="bot_provider" />
-                </flux:field>
-                <flux:field class="sm:col-span-2">
-                    <flux:select label="{{ __('AI Model') }}" wire:model.live="ai_model" required>
-                        <option value="">Select a model</option>
-                        @foreach ($this->aiModels as $model)
-                            <option value="{{ $model['id'] }}">{{ $model['name'] }} | input
-                                {{ $model['input_token'] }} | output {{ $model['output_token'] }}</option>
-                        @endforeach
-                    </flux:select>
-                    <flux:error name="ai_model" />
-                </flux:field>
-            </div>
-            <div class="grid sm:grid-cols-3 gap-4">
-                @if ($this->bot_provider == BotProvider::OPENAI || $this->bot_provider == BotProvider::GEMINI)
+            @if ($subscription->aiProviderIsUser())
+                <div class="grid sm:grid-cols-3 gap-4">
                     <flux:field>
-                        <flux:input label="{{ __('Openai Temperature') }}" placeholder="{{ __('AI Temperature') }}"
-                            wire:model="ai_temperature" />
-                        <flux:error name="ai_temperature" />
+                        <flux:select label="{{ __('AI Provider') }}" wire:model.live="bot_provider" required>
+                            <option value="">Select a provider</option>
+                            @foreach (BotProvider::cases() as $provider)
+                                <option value="{{ $provider->value }}">{{ $provider->description() }}</option>
+                            @endforeach
+                        </flux:select>
+                        <flux:error name="bot_provider" />
                     </flux:field>
-                @endif
-                <flux:field>
-                    <flux:input label="{{ __('Max Output Tokens') }}" placeholder="{{ __('AI Max Output Tokens') }}"
-                        wire:model="ai_max_tokens" />
-                    <flux:error name="ai_max_tokens" />
-                </flux:field>
-                @if ($this->bot_provider == BotProvider::OPENAI)
-                    <div class="self-end">
-                        <flux:field variant="inline">
-                            <flux:switch wire:model="ai_store" />
-                            <flux:label>{{ __('AI Store') }}</flux:label>
-                            <flux:error name="ai_store" />
+                    <flux:field class="sm:col-span-2">
+                        <flux:select label="{{ __('AI Model') }}" wire:model.live="ai_model" required>
+                            <option value="">Select a model</option>
+                            @foreach ($this->aiModels as $model)
+                                <option value="{{ $model['id'] }}">{{ $model['name'] }} | input
+                                    {{ $model['input_token'] }} | output {{ $model['output_token'] }}</option>
+                            @endforeach
+                        </flux:select>
+                        <flux:error name="ai_model" />
                     </flux:field>
-                    <flux:text>
-                        {{__('Whether to store the ai response at OpenAI.')}}
-                    </flux:text>
                 </div>
-                @endif
-            </div>
-            <flux:field>
-                <flux:input label="{{ __('API Key') }}" placeholder="{{ __('AI Provider API Key') }}"
-                    wire:model="api_key" />
-                <flux:error name="api_key" />
-            </flux:field>
+
+                <div class="grid sm:grid-cols-3 gap-4">
+                    @if ($this->bot_provider == BotProvider::OPENAI || $this->bot_provider == BotProvider::GEMINI)
+                        <flux:field>
+                            <flux:input label="{{ __('Openai Temperature') }}"
+                                placeholder="{{ __('AI Temperature') }}" wire:model="ai_temperature" />
+                            <flux:error name="ai_temperature" />
+                        </flux:field>
+                    @endif
+                    <flux:field>
+                        <flux:input label="{{ __('Max Output Tokens') }}"
+                            placeholder="{{ __('AI Max Output Tokens') }}" wire:model="ai_max_tokens" />
+                        <flux:error name="ai_max_tokens" />
+                    </flux:field>
+                    @if ($this->bot_provider == BotProvider::OPENAI)
+                        <div class="self-end">
+                            <flux:field variant="inline">
+                                <flux:switch wire:model="ai_store" />
+                                <flux:label>{{ __('AI Store') }}</flux:label>
+                                <flux:error name="ai_store" />
+                            </flux:field>
+                            <flux:text>
+                                {{ __('Whether to store the ai response at OpenAI.') }}
+                            </flux:text>
+                        </div>
+                    @endif
+                </div>
+                <flux:field>
+                    <flux:input label="{{ __('API Key') }}" placeholder="{{ __('AI Provider API Key') }}"
+                        wire:model="api_key" />
+                    <flux:error name="api_key" />
+                </flux:field>
+            @endif
+            @if ($subscription->supportsBotBilling())
             <flux:heading size="md">{{ __('Payments') }}</flux:heading>
             <div class="grid sm:grid-cols-2 gap-4">
                 <flux:field>
@@ -174,6 +205,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <flux:text>{{ __('The price users pay for credit topups in telegram stars.') }}</flux:text>
                 </flux:field>
             </div>
+            @endif
             <div class="grid sm:grid-cols-1 gap-4">
                 <flux:textarea label="{{ __('System Prompt') }}"
                     placeholder="{{ __('Default system prompt for the bot') }}" wire:model="system_prompt"

@@ -199,20 +199,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                             @endif
                         </button>
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                        <button wire:click="sortBy('bot_token')" class="group inline-flex cursor-pointer items-center"> <!-- Changed from 'token' to 'bot_token' -->
-                            {{ __('Token') }}
-                            @if($sortField === 'bot_token') <!-- Changed from 'token' to 'bot_token' -->
-                                <span class="ml-2">
-                                    @if($sortDirection === 'asc')
-                                        <flux:icon name="arrow-up" class="w-4 h-4" />
-                                    @else
-                                        <flux:icon name="arrow-down" class="w-4 h-4" />
-                                    @endif
-                                </span>
-                            @endif
-                        </button>
-                    </th>
+                    
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         {{ __('Status') }}
                     </th>
@@ -245,21 +232,21 @@ new #[Layout('components.layouts.app')] class extends Component {
                             />
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
+                            <div class="">
                                 <flux:text class="text-sm font-medium text-gray-900 dark:text-white">
                                     {{ $bot->name }}
                                 </flux:text>
+                                <flux:text size="sm" class="max-w-xs truncate text-primary-500">{{ $bot->ai_model?? 'no model' }}</flux:text>
+                                
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div>
-                                <flux:text size="sm" class="max-w-xs truncate">{{ $bot->username }}</flux:text>
-                                <flux:text size="sm" class="max-w-xs truncate text-primary-500">{{ $bot->ai_model?? 'no model' }}</flux:text>
+                                <flux:text size="sm" class="max-w-xs truncate"><span>@</span>{{ $bot->username }}</flux:text>
+                                <flux:text size="sm" class="max-w-xs truncate">{{ substr($bot->bot_token, 0, 10) }}...</flux:text>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <flux:text size="sm" class="max-w-xs truncate">{{ substr($bot->bot_token, 0, 10) }}...</flux:text>
-                        </td>
+                       
                         <td class="px-6 py-4 whitespace-nowrap">
                             @if($bot->is_active) <!-- Changed from 'active' to 'is_active' -->
                                 <flux:badge color="green" size="sm">
@@ -276,6 +263,9 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
+                                <flux:button href="{{ route('bots.vcs', $bot) }}" size="sm" variant="subtle">
+                                    {{ __('Knowledge Base') }}
+                                </flux:button>
                                 <flux:button href="{{ route('bots.billing', $bot) }}" size="sm" variant="ghost">
                                     {{ __('Billing') }}
                                 </flux:button>

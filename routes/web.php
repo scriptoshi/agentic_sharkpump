@@ -43,6 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('command/{command:uuid}/tools', function (Command $command) {
         return view('command-tools', compact('command'));
     })->name('commands.tools');
+    Volt::route('bot/{bot:uuid}/knowledge-base', 'bots.vcs.index')->name('bots.vcs');
+    Volt::route('bot/{bot:uuid}/knowledge-base/{vc:vector_id}/files', 'bots.vcs.files')->name('bots.vcs.files');
 });
 
 Route::post('/telegram/webhook/{bot:webhook_secret}', WebhooksController::class)->name('telegram.webhook');

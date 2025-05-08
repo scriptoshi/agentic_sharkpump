@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Command extends Model
 {
@@ -20,6 +21,7 @@ class Command extends Model
     protected $fillable = [
         'user_id',
         'bot_id',
+        'vc_id',
         'command',
         'name',
         'description',
@@ -63,6 +65,11 @@ class Command extends Model
     public function bot(): BelongsTo
     {
         return $this->belongsTo(Bot::class);
+    }
+
+    public function vc(): BelongsTo
+    {
+        return $this->belongsTo(Vc::class);
     }
 
     /**
