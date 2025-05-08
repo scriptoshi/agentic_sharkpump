@@ -29,6 +29,7 @@ class ApiTool extends Model
         'shouldQueue',
         'version',
         'method',
+        'add_user_to_request',
         'path',
         'query_params',
         'tool_config',

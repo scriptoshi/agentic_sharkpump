@@ -18,6 +18,7 @@
         public ?string $path = null;
         public ?string $query_params = null;
         public ?array $tool_config = null;
+        public ?string $add_user_to_request = null;
         
         // JSON Editor State
         public string $jsonEditorContent = '';
@@ -48,6 +49,7 @@
                 'path' => ['nullable', 'string', 'max:2048'],
                 'query_params' => ['nullable', 'string', 'max:2048'],
                 'tool_config' => ['nullable', 'array'],
+                'add_user_to_request' => ['nullable', 'string', 'max:255'],
             ];
         }
         

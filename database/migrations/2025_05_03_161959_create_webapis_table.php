@@ -51,6 +51,7 @@ return new class extends Migration
             $table->text('description');
             $table->boolean('shouldQueue')->default(false);
             $table->string('version')->default('1.0.0');
+            $table->string('add_user_to_request')->nullable();
             $table->enum('method', ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])->default('POST');
             $table->string('path', 2048)->nullable();
             $table->string('query_params', 2048)->nullable();

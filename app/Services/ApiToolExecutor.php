@@ -25,7 +25,7 @@ class ApiToolExecutor
 
         try {
             // First, load relationships to get API configuration
-            $toolCall->load(['apiTool.api', 'apiTool.headers', 'apiTool.api.headers', 'bot']);
+            $toolCall->load(['apiTool.api', 'apiTool.headers', 'apiTool.api.headers', 'bot', 'chat.user']);
             $apiTool = $toolCall->apiTool;
             $api = $apiTool->api;
             if (!$api->active) {
@@ -51,6 +51,10 @@ class ApiToolExecutor
             $queryParams = $this->prepareQueryParams($toolConfig, $input);
             // Prepare the request body
             $body = $this->prepareRequestBody($toolConfig, $input);
+            // Add user to the request if set in the tool
+            if (!is_null($apiTool->add_user_to_request)) {
+                $body = $this->addUserToRequest($toolCall, $body);
+            }
             // Execute the HTTP request based on the method
             $response = $this->executeRequest($request, $apiTool->method, $url, $queryParams, $body);
             // Calculate execution time
@@ -75,6 +79,30 @@ class ApiToolExecutor
             $toolCall->save();
             return $toolCall;
         }
+    }
+
+    /**
+     * Add user to the request if set in the tool
+     *
+     * @param ToolCall $toolCall
+     * @return void
+     */
+    protected function addUserToRequest(ToolCall $toolCall, array $body)
+    {
+        $chat = $toolCall->chat;
+        $user_data = [
+            'aibotsfortelegram_id' => $chat->user->id,
+            'name' => $chat->user->name,
+            'telegram_id' => $chat->user->telegramId,
+            'username' => $chat->user->username,
+        ];
+        $secret = $toolCall->apiTool->add_user_to_request;
+        // create a hash of the sorted user data
+        ksort($user_data);
+        $hash = hash_hmac('sha256', json_encode($user_data), $secret);
+        $body['user'] = $user_data;
+        $body['user_hash'] = $hash;
+        return $body;
     }
 
     /**
@@ -157,6 +185,8 @@ class ApiToolExecutor
         }
         return $body;
     }
+
+
 
     /**
      * Execute the HTTP request with the appropriate method
