@@ -159,7 +159,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                 @endif
                 @if ($api->is_public !== 'private')
                     <flux:field class="max-w-lg">
-                    <flux:input label="{{ __('Website Url where user can get API key') }}" placeholder="{{ __('https://example.com/') }}"
+                    <flux:input label="{{ __('Website Url where users can get API key') }}" placeholder="{{ __('https://example.com/') }}"
                             wire:model="website" />
                         <flux:error name="website" />
                     </flux:field>

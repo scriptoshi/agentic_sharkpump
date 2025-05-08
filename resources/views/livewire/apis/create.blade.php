@@ -19,6 +19,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     public bool $active = true;
     public ?string $description = null;
     public string $is_public = 'private';
+    public ?string $website = null;
 
     // Validation rules for creating API data
     public function rules(): array
@@ -36,6 +37,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             'active' => ['boolean'],
             'description' => ['nullable', 'string'],
             'is_public' => ['string', 'in:public,private'],
+            'website' => ['nullable', 'string', 'max:2048'],
         ];
     }
 
@@ -89,6 +91,13 @@ new #[Layout('components.layouts.app')] class extends Component {
                 <flux:text class="max-w-lg">
                     {{ __('Public apis are accessible to all bot creators and will need review to go live. Private apis are accessible only to you and will not need review.') }}
                 </flux:text>
+                 @if ($is_public !== 'private')
+                    <flux:field class="max-w-lg">
+                    <flux:input label="{{ __('Website Url where users can get API key') }}" placeholder="{{ __('https://example.com/') }}"
+                            wire:model="website" />
+                        <flux:error name="website" />
+                    </flux:field>
+                @endif
             </div>
             <div class="grid sm:grid-cols-3 gap-4">
                 <flux:input label="{{ __('Name') }}" placeholder="{{ __('API Name') }}" wire:model="name" required />
