@@ -51,7 +51,7 @@ new class extends Component {
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="lg">{{ __('Manage Tools for ' . $toolableType . ': ' . $toolable->name) }}
+        <flux:heading size="lg">{{ __('Manage Api Services for ' . $toolableType . ': ' . $toolable->name) }}
         </flux:heading>
         <div>
             <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
@@ -127,7 +127,7 @@ new class extends Component {
                     {{ __('Back to Bot') }}
                 </flux:button>
                 <flux:button type="submit" variant="primary">
-                    {{ __('Save Tool Selections') }}
+                    {{ __('Save Service Selections') }}
                 </flux:button>
             </div>
         @endif

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('url', 2048);
+            $table->string('website', 2048)->nullable();
             $table->string('content_type', 100)->default('application/json');
             $table->enum('auth_type', ['none', 'basic', 'bearer', 'api_key', 'query_param'])->default('none');
             $table->string('auth_username')->nullable();
@@ -83,7 +84,6 @@ return new class extends Migration
             $table->string('auth_username')->nullable();
             $table->string('auth_password')->nullable();
             $table->string('auth_token', 1024)->nullable();
-            $table->string('auth_query_key', 1024)->nullable();
             $table->string('auth_query_value', 1024)->nullable();
             $table->timestamps();
         });

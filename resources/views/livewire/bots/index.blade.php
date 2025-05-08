@@ -155,23 +155,23 @@ new #[Layout('components.layouts.app')] class extends Component {
                     {{ __('Delete Selected') }} ({{ count($selectedBots) }})
                 </flux:button>
             @else
-                <flux:text size="sm" class="text-gray-500 dark:text-gray-400">
+                <flux:text size="sm" class="text-zinc-500 dark:text-zinc-400">
                     {{ $paginatedBots->total() }} {{ __('Bots total') }}
                 </flux:text>
             @endif
         </div>
     </div>
 
-    <div class="overflow-hidden rounded-lg border border-gray-200 shadow dark:border-neutral-700">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-            <thead class="bg-gray-50 dark:bg-neutral-800">
+    <div class="overflow-hidden rounded-lg border border-zinc-200 shadow dark:border-zinc-700">
+        <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700">
+            <thead class="bg-zinc-50 dark:bg-zinc-850">
                 <tr>
                     <th scope="col" class="w-12 px-6 py-3">
                         <flux:checkbox
                             wire:model.live="selectAll"
                         />
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                         <button wire:click="sortBy('name')" class="group inline-flex cursor-pointer items-center">
                             {{ __('Name') }}
                             @if($sortField === 'name')
@@ -185,7 +185,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                             @endif
                         </button>
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                         <button wire:click="sortBy('username')" class="group inline-flex cursor-pointer items-center">
                             {{ __('Username') }}
                             @if($sortField === 'username')
@@ -200,10 +200,10 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </button>
                     </th>
                     
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                         {{ __('Status') }}
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                         <button wire:click="sortBy('created_at')" class="group inline-flex cursor-pointer items-center">
                             {{ __('Created') }}
                             @if($sortField === 'created_at')
@@ -217,14 +217,14 @@ new #[Layout('components.layouts.app')] class extends Component {
                             @endif
                         </button>
                     </th>
-                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                         {{ __('Actions') }}
                     </th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 bg-white dark:divide-neutral-700 dark:bg-neutral-800">
+            <tbody class="divide-y divide-zinc-200 bg-white dark:divide-zinc-700 dark:bg-zinc-750">
                 @foreach($paginatedBots as $bot)
-                    <tr class="hover:bg-gray-50 dark:hover:bg-neutral-700">
+                    <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-700">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <flux:checkbox
                                 value="{{ $bot->id }}"
@@ -233,7 +233,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="">
-                                <flux:text class="text-sm font-medium text-gray-900 dark:text-white">
+                                <flux:text class="text-sm font-medium text-zinc-900 dark:text-white">
                                     {{ $bot->name }}
                                 </flux:text>
                                 <flux:text size="sm" class="max-w-xs truncate text-primary-500">{{ $bot->ai_model?? 'no model' }}</flux:text>
@@ -279,7 +279,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
                 @if($paginatedBots->isEmpty())
                     <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                        <td colspan="7" class="px-6 py-4 text-center text-zinc-500 dark:text-zinc-400">
                             {{ __('No bots found matching your criteria.') }}
                         </td>
                     </tr>
@@ -296,7 +296,7 @@ new #[Layout('components.layouts.app')] class extends Component {
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">{{ __('Confirm Delete') }}</flux:heading>
-                <flux:text class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                <flux:text class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
                     {{ __('Are you sure you want to delete these') }} {{ count($selectedBots) }} {{ __('bots? This action cannot be undone.') }}
                 </flux:text>
             </div>

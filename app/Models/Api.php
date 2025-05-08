@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\ApiAuthType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -21,6 +23,7 @@ class Api extends Model
         'user_id',
         'name',
         'url',
+        'website',
         'content_type',
         'auth_type',
         'auth_username',
@@ -40,6 +43,7 @@ class Api extends Model
     {
         return [
             'active' => 'boolean',
+            'auth_type' => ApiAuthType::class,
         ];
     }
 
@@ -73,5 +77,21 @@ class Api extends Model
     public function tools(): HasMany
     {
         return $this->hasMany(ApiTool::class);
+    }
+
+    /**
+     * Get the connected authentications for the API.
+     */
+    public function auth(): HasMany
+    {
+        return $this->hasMany(ApiAuth::class);
+    }
+
+    /**
+     * Get the connected headers for the API.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'api_auth', 'api_id', 'user_id');
     }
 }

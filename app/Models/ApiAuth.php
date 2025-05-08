@@ -27,11 +27,10 @@ class ApiAuth extends Model
         'auth_username',
         'auth_password',
         'auth_token',
-        'auth_query_key',
-        'auth_query_value',
+        'auth_query_value', // stores the value for  case API_KEY = 'api_key'; OR case QUERY_PARAM = 'query_param';
         'active',
     ];
-    
+
     /**
      * The attributes that should be cast.
      *

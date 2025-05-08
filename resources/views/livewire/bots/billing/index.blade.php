@@ -52,8 +52,15 @@ new #[Layout('components.layouts.app')] class extends Component {
     <!-- Header -->
     <div class="mb-8 flex items-center justify-between">
         <div>
-            <flux:heading size="lg">{{ __('Bot Billing Management') }}</flux:heading>
-            <flux:text>{{ __('Manage credits for users of') }} <strong>{{ $bot->name }}</strong></flux:text>
+            <div class="flex items-center space-x-2">
+                <flux:heading size="lg">{{ $bot->name }} {{ __('Billing') }}</flux:heading>
+                @if($bot->credits_per_star > 0)
+                <flux:badge icon="check" size="sm" color="green">{{ __('Enabled') }}</flux:badge>
+                @else
+                <flux:badge icon="x-mark" size="sm" color="red">{{ __('Disabled') }}</flux:badge>
+                @endif
+            </div>
+            <flux:text class="max-w-lg">{{ __('Sell credits using Telegram stars. To enable billing, set a credits per star greater than 0 in the settings.') }}</flux:text>
         </div>
         <div class="flex items-center space-x-2">
             <flux:button size="sm" wire:click="setPage('balances')" :variant="$page === 'balances' ? 'primary' : 'outline'">{{ __('Balances') }}</flux:button>

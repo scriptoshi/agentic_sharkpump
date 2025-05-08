@@ -124,4 +124,18 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Bot::class, 'bot_user', 'user_id', 'bot_id');
     }
+
+    /**
+     * Get the connected APIs for the user.
+     */
+    public function connectedApis(): BelongsToMany
+    {
+        return $this->belongsToMany(Api::class, 'api_user', 'user_id', 'api_id')
+            ->withPivot([
+                'auth_username',
+                'auth_password',
+                'auth_token',
+                'auth_query_value',
+            ]);
+    }
 }

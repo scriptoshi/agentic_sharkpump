@@ -121,7 +121,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <flux:breadcrumbs>
         <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
         <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item>{{$bot->name}}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -142,12 +142,18 @@ new #[Layout('components.layouts.app')] class extends Component {
             </flux:button>
         </div>
     </div>
-    <div class="bg-white dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700 shadow overflow-hidden rounded-lg p-6">
-        <form wire:submit="updateBot" class="space-y-6">
+    <div
+         x-data="{ expanded: false }"
+        class="bg-white dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700 shadow overflow-hidden rounded-lg p-6">
+        <div  @click="expanded = ! expanded" class="py-2 -pt-2 cursor-pointer  flex items-center justify-between">
+            <flux:heading class="p-2 border bg-white dark:bg-zinc-750 border-zinc-200 dark:border-zinc-700 rounded-lg" size="lg"><x-lucide-pencil class="w-4 h-4 inline-flex ml-2" /> {{ __('Edit Bot Settings') }}  </flux:heading>
+            <x-lucide-chevron-down x-bind:class="expanded ? 'rotate-180' : ''" class="w-6 h-6 transition duration-200 ease-in-out"/>
+        </div>
+        <form wire:submit="updateBot" class="space-y-6 mt-4" x-show="expanded" x-collap>
             <div class="grid sm:grid-cols-3 gap-4">
                 <flux:field>
-                    <flux:input label="{{ __('Name (For Internal use)') }}" placeholder="{{ __('Bot Name') }}" wire:model="name"
-                        required />
+                    <flux:input label="{{ __('Name (For Internal use)') }}" placeholder="{{ __('Bot Name') }}"
+                        wire:model="name" required />
                     <flux:error name="name" />
                 </flux:field>
 
@@ -203,11 +209,11 @@ new #[Layout('components.layouts.app')] class extends Component {
                             <flux:switch wire:model="ai_store" />
                             <flux:label>{{ __('AI Store') }}</flux:label>
                             <flux:error name="ai_store" />
-                    </flux:field>
-                    <flux:text>
-                        {{__('Whether to store the ai response at OpenAI.')}}
-                    </flux:text>
-                </div>
+                        </flux:field>
+                        <flux:text>
+                            {{ __('Whether to store the ai response at OpenAI.') }}
+                        </flux:text>
+                    </div>
                 @endif
             </div>
             <flux:field>

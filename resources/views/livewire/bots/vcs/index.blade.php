@@ -199,7 +199,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <flux:heading size="lg">{{ __('Knowledge Base Management') }}</flux:heading>
-            <flux:subheading>
+            <flux:subheading class="max-w-lg">
                 {{ __('A knowledge base allows your bot to use knowledge drawn from pdf, docx, txt and markdown files to respond to users') }}
             </flux:subheading>
         </div>
@@ -440,7 +440,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                 </flux:subheading>
             </div>
             <div>
-                <flux:button href="{{ route('dashboard') }}" icon="arrow-left">
+                <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
                     {{ __('Back to List') }}
                 </flux:button>
             </div>

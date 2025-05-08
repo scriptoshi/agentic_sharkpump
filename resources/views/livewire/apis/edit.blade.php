@@ -4,6 +4,7 @@ use App\Models\Api;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 use Livewire\Volt\Component;
+use App\Enums\ApiAuthType;
 
 new #[Layout('components.layouts.app')] class extends Component {
     use WithPagination;
@@ -14,7 +15,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     public string $name = '';
     public string $url = '';
     public string $content_type = 'application/json';
-    public string $auth_type = 'none';
+    public string $auth_type = ApiAuthType::NONE->value;
     public ?string $auth_username = null;
     public ?string $auth_password = null;
     public ?string $auth_token = null;
@@ -22,6 +23,8 @@ new #[Layout('components.layouts.app')] class extends Component {
     public ?string $auth_query_value = null;
     public bool $active = true;
     public ?string $description = null;
+    public string $is_public = 'private';
+    public ?string $website = null;
 
     // Logs Management
     public string $logsSearchQuery = '';
@@ -35,7 +38,7 @@ new #[Layout('components.layouts.app')] class extends Component {
         $this->name = $api->name;
         $this->url = $api->url;
         $this->content_type = $api->content_type;
-        $this->auth_type = $api->auth_type;
+        $this->auth_type = $api->auth_type->value;
         $this->auth_username = $api->auth_username;
         $this->auth_password = $api->auth_password;
         $this->auth_token = $api->auth_token;
@@ -43,6 +46,8 @@ new #[Layout('components.layouts.app')] class extends Component {
         $this->auth_query_value = $api->auth_query_value;
         $this->active = $api->active;
         $this->description = $api->description;
+        $this->is_public = $api->is_public ? 'public' : 'private';
+        $this->website = $api->website;
     }
 
     // Validation rules for updating API data
@@ -58,6 +63,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             'auth_token' => ['nullable', 'string', 'max:1024'],
             'auth_query_key' => ['nullable', 'string', 'max:1024'],
             'auth_query_value' => ['nullable', 'string', 'max:1024'],
+            'website' => ['nullable', 'string', 'max:2048'],
             'active' => ['boolean'],
             'description' => ['nullable', 'string'],
         ];
@@ -125,17 +131,47 @@ new #[Layout('components.layouts.app')] class extends Component {
             </flux:button>
         </div>
     </div>
-    <div class="bg-white dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700 shadow-sm overflow-hidden rounded-lg p-6">
+    <div
+        class="bg-white dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700 shadow-sm overflow-hidden rounded-lg p-6">
         <form wire:submit="updateApi" class="space-y-6">
+            <div class="grid gap-3 border p-4 rounded">
+                <div class="max-w-xs flex items-center gap-4">
+                    <flux:heading class="mb-2" size="lg">{{ __('Access Level') }}</flux:heading>
+                    @if ($api->is_public)
+                        <flux:badge color="amber">{{ __('Public Access') }}</flux:badge>
+                    @else
+                        <flux:badge color="emerald">{{ __('Private Access') }}</flux:badge>
+                    @endif
+                    @if ($api->active)
+                        <flux:badge color="emerald">{{ __('Active') }}</flux:badge>
+                    @else
+                        <flux:badge color="red">{{ __('Inactive') }}</flux:badge>
+                    @endif
+                </div>
+                @if ($api->is_public)
+                    <flux:text class="max-w-lg">
+                        {{ __('Public apis are accessible to all bot creators and will need review to go live.') }}
+                    </flux:text>
+                @else
+                    <flux:text class="max-w-lg">
+                        {{ __('Private apis are accessible only to you and will not need review.') }}
+                    </flux:text>
+                @endif
+                @if ($api->is_public !== 'private')
+                    <flux:field class="max-w-lg">
+                    <flux:input label="{{ __('Website Url where user can get API key') }}" placeholder="{{ __('https://example.com/') }}"
+                            wire:model="website" />
+                        <flux:error name="website" />
+                    </flux:field>
+                @endif
+            </div>
             <div class="grid sm:grid-cols-3 gap-4">
-                <flux:input label="{{ __('Name') }}" placeholder="{{ __('API Name') }}" wire:model="name" required />
+                <flux:input label="{{ __('Name') }}" placeholder="{{ __('API Name') }}" wire:model="name"
+                    required />
                 <flux:error name="name" />
-
-
                 <flux:input label="{{ __('URL') }}" placeholder="{{ __('https://api.example.com') }}"
                     wire:model="url" required />
                 <flux:error name="url" />
-
                 <flux:input label="{{ __('Content Type') }}" placeholder="{{ __('application/json') }}"
                     wire:model="content_type" required />
                 <flux:error name="content_type" />
@@ -145,28 +181,36 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <option value="none">{{ __('None') }}</option>
                     <option value="basic">{{ __('Basic Auth') }}</option>
                     <option value="bearer">{{ __('Bearer Token') }}</option>
-                    <option value="api_key">{{ __('API Key') }}</option>
+                    <option value="api_key">{{ __('API Key Header') }}</option>
                     <option value="query_param">{{ __('Query Parameter') }}</option>
                 </flux:select>
                 <flux:error name="auth_type" />
-
-                @if ($auth_type === 'basic')
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <flux:input label="{{ __('Username') }}" placeholder="{{ __('Username') }}"
-                            wire:model="auth_username" />
-                        <flux:input label="{{ __('Password') }}" placeholder="{{ __('Password') }}"
-                            wire:model="auth_password" type="password" viewable />
-                    </div>
-                @elseif($auth_type === 'bearer')
-                    <flux:input label="{{ __('Token') }}" placeholder="{{ __('Bearer token') }}"
-                        wire:model="auth_token" />
-                @elseif($auth_type === 'api_key' || $auth_type === 'query_param')
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <flux:input label="{{ __('Key Name') }}" placeholder="{{ __('api_key, x-api-key, etc.') }}"
-                            wire:model="auth_query_key" />
-                        <flux:input label="{{ __('Key Value') }}" placeholder="{{ __('your-api-key-value') }}"
-                            wire:model="auth_query_value" />
-                    </div>
+                @if ($is_public === 'private')
+                    @if ($auth_type === 'basic')
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <flux:input label="{{ __('Username') }}" placeholder="{{ __('Username') }}"
+                                wire:model="auth_username" />
+                            <flux:input label="{{ __('Password') }}" placeholder="{{ __('Password') }}"
+                                wire:model="auth_password" type="password" viewable />
+                        </div>
+                    @elseif($auth_type === 'bearer')
+                        <flux:input label="{{ __('Token') }}" placeholder="{{ __('Bearer token') }}"
+                            wire:model="auth_token" />
+                    @elseif($auth_type === 'api_key' || $auth_type === 'query_param')
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <flux:input label="{{$auth_type === 'query_param' ? __('Query Key') : __('Header Key ( api_key, x-api-key, etc)') }}"
+                                placeholder="{{ __('api_key, x-api-key, etc.') }}" wire:model="auth_query_key" />
+                            <flux:input label="{{ __('Key Value') }}" placeholder="{{ __('your-api-key-value') }}"
+                                wire:model="auth_query_value" />
+                        </div>
+                    @endif
+                @else
+                @if($auth_type === 'api_key' || $auth_type === 'query_param')
+                        <div class="grid grid-cols-1  gap-4">
+                            <flux:input label="{{ $auth_type === 'query_param' ? __('Query Key') : __('Header Key ( api_key, x-api-key, etc)') }}"
+                                placeholder="{{ __('api_key, x-api-key, etc.') }}" wire:model="auth_query_key" />
+                        </div>
+                    @endif
                 @endif
             </div>
             <flux:textarea label="{{ __('Description') }}" placeholder="{{ __('API description and usage notes') }}"
@@ -186,9 +230,9 @@ new #[Layout('components.layouts.app')] class extends Component {
         </form>
     </div>
     <livewire:apis.headers.index :headerable="$api" />
-    
+
     <div class="mt-12 mb-4 flex items-center justify-between">
-        <flux:heading  size="lg">{{ __('Endpoints (Tools)') }}</flux:heading>
+        <flux:heading size="lg">{{ __('Endpoints (Tools)') }}</flux:heading>
         <flux:button href="{{ route('apis.tools.create', $api) }}" icon="plus">
             {{ __('Create New Tool') }}
         </flux:button>

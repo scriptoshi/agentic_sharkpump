@@ -46,16 +46,16 @@ new class extends Component {
 
 <div class="mt-12">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="lg">{{ __('Active Tools for ' . $toolableType . ': ' . $toolable->name) }}
+        <flux:heading size="lg">{{ __('Active Services for ' . $toolableType . ': ' . $toolable->name) }}
         </flux:heading>
         <div>
             @if ($toolableType === 'Bot')
             <flux:button :href="route('bots.tools', $toolable)" icon="pencil">
-                {{ __('Manage Tools') }}
+                {{ __('Connect Services') }}
             </flux:button>
             @else
             <flux:button :href="route('commands.tools', $toolable)" icon="pencil">
-                {{ __('Manage Tools') }}
+                {{ __('Connect Services') }}
             </flux:button>
             @endif
         </div>
@@ -109,7 +109,7 @@ new class extends Component {
                 @empty
                     <tr>
                         <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                            {{ __('No tools found for this ' . $toolableType . '.') }}
+                            {{ __('No services found for this ' . $toolableType . '.') }}
                         </td>
                     </tr>
                 @endforelse

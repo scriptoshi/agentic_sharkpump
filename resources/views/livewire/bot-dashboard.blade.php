@@ -147,7 +147,7 @@ new class extends Component {
                 <div
                     class="w-full rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-700/75 bg-white dark:bg-zinc-800 shadow-xs hover:shadow-md hover:bg-zinc-50 dark:hover:bg-zinc-750 transition cursor-pointer">
                     <div class="p-4">
-                        <div wire:navigate href="{{ route('bots.billing', $bot) }}">
+                        <div wire:navigate href="{{ route('bots.edit', $bot) }}">
                             <div class="flex items-center gap-3 mb-3">
                                 @if ($bot->bot_provider == BotProvider::OPENAI)
                                     <flux:avatar class="w-7 h-7 rounded-full" tooltip="Openai GPT" name="Openai GPT"
@@ -198,8 +198,8 @@ new class extends Component {
                                     MCP Tools</span>
                             </div>
                             <div class="z-10" x-data x-on:click.stop="">
-                                <flux:button wire:navigate icon="cog" size="sm"
-                                    href="{{ route('bots.edit', $bot) }}" variant="ghost">Manage</flux:button>
+                                <flux:button wire:navigate icon="credit-card" size="sm"
+                                    href="{{ route('bots.billing', $bot) }}" variant="ghost">Billing</flux:button>
                             </div>
                         </div>
                     </div>

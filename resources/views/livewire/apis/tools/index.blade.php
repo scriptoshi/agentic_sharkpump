@@ -57,7 +57,7 @@ new class extends Component {
     <!-- Tools search bar -->
     <div class="mb-6">
         <flux:input
-            label="{{ __('Search Tools') }}"
+            label="{{ __('Search Services') }}"
             placeholder="{{ __('Search by name or description') }}"
             wire:model.live.debounce.300ms="toolsSearchQuery"
             icon="magnifying-glass"

@@ -7,6 +7,8 @@ use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\ApiAuthType;
+
 new #[Layout('components.layouts.app')] class extends Component {
     use WithPagination;
 
@@ -107,14 +109,14 @@ new #[Layout('components.layouts.app')] class extends Component {
         return $query;
     }
 
-    public function getAuthTypeBadgeColor(string $authType): string
+    public function getAuthTypeBadgeColor(ApiAuthType $authType): string
     {
         return match($authType) {
-            'none' => 'gray',
-            'basic' => 'blue',
-            'bearer' => 'green',
-            'api_key' => 'purple',
-            'query_param' => 'amber',
+            ApiAuthType::NONE => 'gray',
+            ApiAuthType::BASIC => 'blue',
+            ApiAuthType::BEARER => 'green',
+            ApiAuthType::API_KEY => 'purple',
+            ApiAuthType::QUERY_PARAM => 'amber',
             default => 'gray',
         };
     }
@@ -133,8 +135,8 @@ new #[Layout('components.layouts.app')] class extends Component {
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <flux:heading size="lg">{{ __('Custom API Tools') }}</flux:heading>
-            <flux:subheading>{{ __('Custom APIs allow your bots to connect to an external API via the MCP (Model context protocol) system.') }}</flux:subheading>
+            <flux:heading size="lg">{{ __('Custom API Services') }}</flux:heading>
+            <flux:subheading>{{ __('Custom APIs allow your telegram bots to connect to an external API for data and context.') }}</flux:subheading>
         </div>
         <flux:button href="{{ route('apis.create') }}" icon="plus">
             {{ __('Create New API') }}
@@ -270,7 +272,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <flux:badge color="{{ $this->getAuthTypeBadgeColor($api->auth_type) }}" size="sm">
-                                {{ __(ucfirst(str_replace('_', ' ', $api->auth_type))) }}
+                                {{ $api->auth_type->label() }}
                             </flux:badge>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
