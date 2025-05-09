@@ -5,6 +5,9 @@ use Livewire\Volt\Volt;
 use App\Models\Bot;
 use App\Models\Command;
 use App\Http\Controllers\WebhooksController;
+use App\Http\Controllers\NowPaymentsIpnController;
+use App\Models\Fundraiser;
+use App\Models\Nowpay;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,5 +51,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/telegram/webhook/{bot:webhook_secret}', WebhooksController::class)->name('telegram.webhook');
-
+Route::post('/nowpayments/ipn', NowPaymentsIpnController::class)->name('nowpayments.ipn');
+Route::view('/fundraisers', 'fundraisers')->name('fundraisers');
+Route::get('fundraisers/{fundraiser:uuid}', function (Fundraiser $fundraiser) {
+    return view('fundraiser', compact('fundraiser'));
+})->name('fundraisers.show');
+Route::get('contributions/{payment:uuid}', function (Nowpay $payment) {
+    return view('fundraiser-nowpayments', compact('payment'));
+})->name('fundraisers.contributions');
 require __DIR__ . '/auth.php';

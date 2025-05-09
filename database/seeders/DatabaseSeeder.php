@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             BotCommandSeeder::class,
             VcSeeder::class,
             FileSeeder::class,
+            FundraiserSeeder::class,
         ]);
     }
 }

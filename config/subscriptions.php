@@ -4,7 +4,7 @@ return [
     'packages' => [
         'free' => [
             'name' => 'Free',
-            'description' => 'Perfect for vibecoders',
+            'description' => 'Best for testing',
             'monthly_price' => 0,
             'yearly_price' => 0,
             'features' => [
@@ -32,7 +32,7 @@ return [
         ],
         'pro' => [
             'name' => 'Professional',
-            'description' => 'Perfect for freelancers',
+            'description' => 'Perfect for small communities',
             'monthly_price' => 9,
             'yearly_price' => 69,
             'features' => [
@@ -61,7 +61,7 @@ return [
         ],
         'max' => [
             'name' => 'Enterprise',
-            'description' => 'Best for nano saas startup',
+            'description' => 'Best business bots',
             'monthly_price' => 49.9,
             'yearly_price' => 399,
             'features' => [

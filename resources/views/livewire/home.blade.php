@@ -142,16 +142,16 @@ new class extends Component {
                     <div class="sm:text-center lg:text-left">
                         <flux:heading size="lg"
                             class="text-4xl font-bricolage tracking-tight font-extrabold text-zinc-900 sm:text-5xl md:text-6xl">
-                            <span class="block">Ai Bots For Telegram</span>
+                            <span class="block">Telegram Ai Agents</span>
                             <span class="block font-bold text-primary-500">launch in minutes</span>
                         </flux:heading>
                         <flux:text size="lg" class="mt-3 ">
-                            Launch an advanced Multifunctional A.I Telegram bot in minutes.
+                            Launch an advanced Agentic multifunctional A.I Telegram bot in minutes.
                         </flux:text>
                         <flux:text size="lg"
                             class="mt-3 text-base text-zinc-500 sm:mt-5 sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                            From travel bots to trading bots, connect multiple services, Setup billing and sell
-                            message credits - All the tools you need to launch your AI powered Bot service.
+                            From travel agent bots to trading agent bots, connect multiple services, Setup billing and sell
+                            message access credits - We provide All the tools you need to launch your telegram based AI agent. Powered by solana.
                         </flux:text>
                         <div class="flex mt-5 sm:mt-8 items-center space-x-3">
                             <flux:avatar tooltip="Openai GPT" name="Openai GPT" src="/openai.webp" />
@@ -169,9 +169,9 @@ new class extends Component {
                                 </flux:button>
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-3">
-                                <flux:button href="#features" variant="outline"
+                                <flux:button href="/fundraisers" variant="outline"
                                     class="w-full flex items-center justify-center px-8 py-3 md:py-4 md:text-lg md:px-10">
-                                    Clone a bot
+                                    Join Forever
                                 </flux:button>
                             </div>
                         </div>
@@ -183,7 +183,43 @@ new class extends Component {
             <img class="w-full h-full" src="/hero.png" alt="SaaSKit">
         </div>
     </div>
-
+    <div  class="py-8 bg-white overflow-hidden lg:py-16">
+        <div class="relative max-w-5xl border border-zinc-200 mx-auto text-center p-4 sm:px-6 lg:p-8">
+            <div class="relative">
+                <flux:heading size="lg"
+                    class="text-center text-3xl leading-8 font-extrabold tracking-tight text-zinc-900 sm:text-4xl">
+                   Hate subscriptions?
+                </flux:heading>
+                <flux:text size="lg" class="mt-4 max-w-3xl mx-auto text-center text-xl text-zinc-500">
+                   Me too!. Help us build the best AI agents service on Telegram. We are creating a platform to enable anyone to launch a
+                    crypto telegram agent in minutes. Get our lifetime membership now.
+                </flux:text>
+                <flux:button href="/fundraisers" variant="primary"
+                    class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 sm:w-auto">
+                   Get Lifetime Access
+                </flux:button>
+                <flux:button href="#pricing" variant="outline"
+                    class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 sm:w-auto">
+                  Or Get Monthly
+                </flux:button>
+            </div>
+        </div>
+    </div>
+    <div  class="py-8 bg-gray-50 overflow-hidden lg:py-16">
+        <div class="relative max-w-5xl mx-auto text-center p-4 sm:px-6 lg:p-8">
+            <div class="relative">
+                <flux:heading size="lg"
+                    class="text-center font-bricolage text-3xl leading-8 font-extrabold tracking-tight text-zinc-900 sm:text-4xl">
+                   About BFT Token (ON Solana)
+                </flux:heading>
+                <flux:text size="lg" class="mt-4 max-w-3xl mx-auto text-center text-xl text-zinc-500">
+                   BFT Token is the utility token for AiBotsForTelegram. It will be used to provide liquidity on the Telegram AI agentic Launchpad. 
+                   BFT Token HAS NOT been minted or launched. We are currently working on the tokenomics and will launch it as soon as possible.
+                </flux:text>
+               
+            </div>
+        </div>
+    </div>
     <div id="features" class="py-16 bg-white overflow-hidden lg:py-24">
         <div class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
             <div class="relative">
@@ -192,7 +228,7 @@ new class extends Component {
                     Features
                 </flux:heading>
                 <flux:text size="lg" class="mt-4 max-w-3xl mx-auto text-center text-xl text-zinc-500">
-                    Zero code Intelligent bots. Simply plug and play.
+                    Zero code Intelligent agents. Simply plug and play.
                 </flux:text>
             </div>
 
