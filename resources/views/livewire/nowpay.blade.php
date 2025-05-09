@@ -287,6 +287,7 @@ new class extends Component
                             <x-lucide-loader-2 wire:loading wire:target="selectCurrency({{ $currency['id'] }})" class="w-8 h-8 animate-spin"></x-lucide-loader-2>
                             <img
                                 wire:loading.remove
+                                wire:target="selectCurrency({{ $currency['id'] }})"
                                 src="https://nowpayments.io{{ $currency['logo_url'] }}"
                                 alt="{{ $currency['name'] }}"
                                 class="w-8 h-8 object-contain">
