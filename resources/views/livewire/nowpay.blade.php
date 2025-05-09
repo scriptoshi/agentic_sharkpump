@@ -254,7 +254,9 @@ new class extends Component
                         wire:click="selectCurrency({{ $pay_currency['id'] }})"
                         class="flex  items-center p-3 border rounded-lg transition-colors hover:bg-white dark:hover:bg-gray-750 cursor-pointer border-primary-500 dark:border-primary-600 bg-primary-50 dark:bg-primary-900/30">
                         <div class="flex-shrink-0 mr-3">
+                            <x-lucide-loader-2 wire:loading wire:target="selectCurrency({{ $pay_currency['id'] }})" class="w-8 h-8 animate-spin"></x-lucide-loader-2>
                             <img
+                                wire:loading.remove
                                 src="https://nowpayments.io{{ $pay_currency['logo_url'] }}"
                                 alt="{{ $pay_currency['name'] }}"
                                 class="w-8 h-8 object-contain">
@@ -281,7 +283,10 @@ new class extends Component
                         wire:click="selectCurrency({{ $currency['id'] }})"
                         class="flex items-center p-3 border rounded-lg transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-gray-200 dark:border-gray-700">
                         <div class="flex-shrink-0 mr-3">
+                            {{-- Loading--}}
+                            <x-lucide-loader-2 wire:loading wire:target="selectCurrency({{ $currency['id'] }})" class="w-8 h-8 animate-spin"></x-lucide-loader-2>
                             <img
+                                wire:loading.remove
                                 src="https://nowpayments.io{{ $currency['logo_url'] }}"
                                 alt="{{ $currency['name'] }}"
                                 class="w-8 h-8 object-contain">
