@@ -128,7 +128,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>APIs</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -138,7 +138,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <flux:heading size="lg">{{ __('Custom API Services') }}</flux:heading>
             <flux:subheading>{{ __('Custom APIs allow your telegram bots to connect to an external API for data and context.') }}</flux:subheading>
         </div>
-        <flux:button href="{{ route('apis.create') }}" icon="plus">
+        <flux:button href="{{ route('apis.create', ['launchpad' => \App\Route::launchpad()]) }}" icon="plus">
             {{ __('Create New API') }}
         </flux:button>
     </div>
@@ -291,7 +291,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
-                                <flux:button href="{{ route('apis.edit', $api) }}" size="sm" variant="ghost">
+                                <flux:button href="{{ route('apis.edit', ['api' => $api, 'launchpad' => \App\Route::launchpad()]) }}" size="sm" variant="ghost">
                                     {{ __('Edit') }}
                                 </flux:button>
                             </div>

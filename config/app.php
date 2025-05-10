@@ -53,6 +53,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'main_site' => env('MAIN_SITE', 'https://sharkpump.io'),
 
     /*
     |--------------------------------------------------------------------------

@@ -40,8 +40,8 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     public static function openAiClient(): OpenAI
     {
-        $subscription = app()->make(Subscription::class);
-        $apiKey = $subscription->aiProviderIsUser() ? $this->bot->api_key : config('ai.openai.api_key');
+
+        $apiKey = config('ai.provider') === 'user' ? $this->bot->api_key : config('ai.openai.api_key');
         return OpenAI::client($apiKey);
     }
 
@@ -182,14 +182,14 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     public function viewFiles($vcId): void
     {
-        $this->redirect(route('bots.vcs.files', ['bot' => $this->bot->id, 'vc' => $vcId]));
+        $this->redirect(route('bots.vcs.files', ['bot' => $this->bot, 'vc' => $vcId , 'launchpad' => \App\Route::launchpad()]));
     }
 }; ?>
 
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('bots.edit', $bot) }}">{{ $bot->name }}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">{{ $bot->name }}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Knowledge Base</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -347,7 +347,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div class="flex justify-end space-x-2">
-                            <flux:button href="{{ route('bots.vcs.files', [$bot, $vc]) }}" size="sm"
+                            <flux:button href="{{ route('bots.vcs.files', ['bot' => $bot, 'vc' => $vc, 'launchpad' => \App\Route::launchpad()]) }}" size="sm"
                                 variant="ghost">
                                 {{ __('Manage Files') }}
                             </flux:button>
@@ -440,7 +440,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                 </flux:subheading>
             </div>
             <div>
-                <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
+                <flux:button href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                     {{ __('Back to List') }}
                 </flux:button>
             </div>

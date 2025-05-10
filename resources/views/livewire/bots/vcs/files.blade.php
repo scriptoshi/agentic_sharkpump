@@ -231,9 +231,9 @@ new #[Layout('components.layouts.app')] class extends Component {
 
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('bots.edit', $bot) }}">{{ $bot->name }}</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('bots.vcs', $bot) }}">KB</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">{{ $bot->name }}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('bots.vcs', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">KB</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $vc->vector_name }} Files</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -245,7 +245,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <flux:subheading>{{ __('Manage files for this knowledge base') }} </flux:subheading>
         </div>
         <div>
-            <flux:button href="{{ route('bots.vcs', $bot) }}" icon="arrow-left">
+            <flux:button href="{{ route('bots.vcs', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                 {{ __('Back') }}
             </flux:button>
         </div>

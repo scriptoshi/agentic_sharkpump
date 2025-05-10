@@ -33,7 +33,8 @@ class OpenAiService
         $this->chat = $telegramUpdate->chat;
         $this->command = $telegramUpdate->command;
         $this->command->load(['vc']);
-        $this->client = OpenAI::client($this->bot->api_key);
+        $apiKey = config('ai.provider') === 'user' ? $this->bot->api_key : config('ai.openai.api_key');
+        $this->client = OpenAI::client($apiKey);
     }
 
 

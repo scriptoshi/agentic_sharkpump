@@ -69,7 +69,7 @@
             session()->flash('status', 'Tool created successfully');
             
             // Redirect to the edit page
-            $this->redirect(route('api-tools.edit', ['api' => $this->api, 'tool' => $tool]));
+            $this->redirect(route('api-tools.edit', ['api' => $this->api, 'tool' => $tool, 'launchpad' => \App\Route::launchpad()]));
         }
         
         // JSON Editor methods
@@ -115,9 +115,9 @@
     }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('apis.index') }}">APIs</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('apis.edit', $api) }}">{{ $api->name }}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.index', ['launchpad' => \App\Route::launchpad()]) }}">APIs</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.edit', ['api' => $api, 'launchpad' => \App\Route::launchpad()]) }}">{{ $api->name }}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Create Tool</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -128,7 +128,7 @@
                 <flux:subheading>{{ __('API') }}: {{ $api->name }}</flux:subheading>
             </div>
             <div>
-                <flux:button href="{{ route('apis.edit', $api) }}" icon="arrow-left">
+                <flux:button href="{{ route('apis.edit', ['api' => $api, 'launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                     {{ __('Back to API') }}
                 </flux:button>
             </div>

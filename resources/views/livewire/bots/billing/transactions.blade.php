@@ -73,8 +73,8 @@ new #[Layout('components.layouts.app')] class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">{{__('Dashboard')}}</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">{{__('Bots')}}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">{{__('Dashboard')}}</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">{{__('Bots')}}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ __('Transactions') }}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
@@ -87,7 +87,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                 <flux:heading size="lg">{{ __('Transaction History') }}</flux:heading>
                 <flux:text>{{ __('For') }} <strong>{{ $balance->user->name }}</strong> - {{ __('Current Balance') }}: <strong>{{ number_format($balance->balance, 2) }} {{ __('Credits') }}</strong></flux:text>
             </div>
-            <flux:button href="{{ route('bots.billing',  $balance->bot) }}" variant="ghost" size="sm">
+            <flux:button href="{{ route('bots.billing',  ['bot' => $balance->bot, 'launchpad' => \App\Route::launchpad()]) }}" variant="ghost" size="sm">
                 <flux:icon name="arrow-left" class="-ml-1 mr-1 inline-flex" />
                 {{ __('Back to Billing') }}
             </flux:button>

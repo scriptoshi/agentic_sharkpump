@@ -24,8 +24,13 @@ class Bot extends Model
      */
     protected $fillable = [
         'user_id',
+        'launchpad_id',
         'name',
         'username',
+        'description',
+        'logo',
+        'logo_path',
+        'logo_disk',
         'bot_token',
         'bot_provider',
         'ai_model',
@@ -178,5 +183,13 @@ class Bot extends Model
     public function botUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'bot_user', 'bot_id', 'user_id');
+    }
+
+    /**
+     * Get the commands for the bot.
+     */
+    public function launchpad(): BelongsTo
+    {
+        return $this->belongsTo(Launchpad::class);
     }
 }

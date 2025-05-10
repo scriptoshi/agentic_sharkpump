@@ -1,153 +1,75 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
-    <head>
-        @include('partials.head')
-    </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-850">
-        <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-            <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-                <x-app-logo />
-            </a>
+<head>
+    @include('partials.head')
+</head>
 
-            <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="bolt" :href="route('bots.index')" :current="request()->routeIs('bots.index')" wire:navigate>{{ __('My Bots') }}</flux:navlist.item>
-                    <flux:navlist.item icon="square-3-stack-3d" :href="route('public-apis')" :current="request()->routeIs('public-apis')" wire:navigate>{{ __('Api Services') }}</flux:navlist.item>
-                </flux:navlist.group>
-            </flux:navlist>
+<body class="min-h-screen bg-white dark:bg-zinc-850 dark">
+    <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+        <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <flux:spacer />
+        <a href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}"
+            class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            <x-app-logo />
+        </a>
 
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/aibotsfortelegram" target="_blank">
+        <flux:navlist variant="outline">
+            <flux:navlist.group :heading="__('Platform')" class="grid">
+                <flux:navlist.item icon="home" :href="route('dashboard', ['launchpad' => \App\Route::launchpad()])"
+                    :current="request()->routeIs('dashboard', ['launchpad' => \App\Route::launchpad()])" wire:navigate>
+                    {{ __('Dashboard') }}</flux:navlist.item>
+                <flux:navlist.item icon="bolt" :href="route('bots.index', ['launchpad' => \App\Route::launchpad()])"
+                    :current="request()->routeIs('bots.index', ['launchpad' => \App\Route::launchpad()])" wire:navigate>
+                    {{ __('My Bots') }}</flux:navlist.item>
+                <flux:navlist.item icon="square-3-stack-3d"
+                    :href="route('public-apis', ['launchpad' => \App\Route::launchpad()])"
+                    :current="request()->routeIs('public-apis', ['launchpad' => \App\Route::launchpad()])"
+                    wire:navigate>{{ __('Api Services') }}
+                </flux:navlist.item>
+
+                <flux:navlist.item icon="globe-alt"
+                    :href="route('apis.index', ['launchpad' => \App\Route::launchpad()])"
+                    :current="request()->routeIs('apis.index', ['launchpad' => \App\Route::launchpad()])" wire:navigate>
+                    {{ __('Custom APIs') }}</flux:navlist.item>
+            </flux:navlist.group>
+        </flux:navlist>
+        <div class="mt-4">
+            <x-primary-button href="{{ config('app.main_site')}}/launchpad/{{\App\Route::launchpad()}}">
+                <x-lucide-arrow-left class="w-4 h-4 mr-2 -ml-1" />
+                Launchpad
+            </x-primary-button>
+        </div>
+        <flux:spacer />
+
+        <flux:navlist class="mb-6" variant="outline">
+            <flux:navlist.item icon="folder-git-2" href="https://github.com/aibotsfortelegram" target="_blank">
                 {{ __('Repository') }}
-                </flux:navlist.item>
+            </flux:navlist.item>
 
-                <flux:navlist.item icon="book-open-text" href="https://docs.aibotsfortelegram.com" target="_blank">
+            <flux:navlist.item icon="book-open-text" href="https://docs.aibotsfortelegram.com" target="_blank">
                 {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
+            </flux:navlist.item>
+        </flux:navlist>
+    </flux:sidebar>
 
-            <!-- Desktop User Menu -->
-            <flux:dropdown position="bottom" align="start">
-                <flux:profile
-                    :name="auth()->user()->name"
-                    :initials="auth()->user()->initials()"
-                    icon-trailing="chevrons-up-down"
-                />
+    <flux:header class="flex justify-between">
+         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+        <div class="hidden lg:flex">
+            {{ $breadcrumbs ?? null }}
+        </div>
+        <flux:navbar>
+            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                @csrf
+                <x-profile type="submit" :name="auth()->user()->name" :initials="auth()->user()->initials()" icon-trailing="power" />
 
-                <flux:menu class="w-[220px]">
-                    <flux:menu.radio.group>
-                        <div class="p-0 text-sm font-normal">
-                            <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                                <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
-                                        {{ auth()->user()->initials() }}
-                                    </span>
-                                </span>
+            </form>
+        </flux:navbar>
+    </flux:header>
 
-                                <div class="grid flex-1 text-start text-sm leading-tight">
-                                    <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
-                                    <span class="truncate text-xs">{{ auth()->user()->email }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </flux:menu.radio.group>
+    {{ $slot }}
 
-                    <flux:menu.separator />
+    @fluxScripts
+</body>
 
-                    <flux:menu.radio.group>
-                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
-                        <flux:menu.item :href="route('settings.billing')" iconVariant="outline" icon="credit-card" wire:navigate>{{ __('Billing') }}</flux:menu.item>
-                        <flux:menu.item :href="route('apis.index')" iconVariant="outline" icon="globe-alt" wire:navigate>{{ __('Custom APIs') }}</flux:menu.item>
-                        
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator />
-
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
-                        @csrf
-                        <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                            {{ __('Log Out') }}
-                        </flux:menu.item>
-                    </form>
-                </flux:menu>
-            </flux:dropdown>
-        </flux:sidebar>
-
-        <!-- Mobile User Menu -->
-        <flux:header class="lg:hidden">
-            <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
-
-            <flux:spacer />
-
-            <flux:dropdown position="top" align="end">
-                <flux:profile
-                    :initials="auth()->user()->initials()"
-                    icon-trailing="chevron-down"
-                />
-
-                <flux:menu>
-                    <flux:menu.radio.group>
-                        <div class="p-0 text-sm font-normal">
-                            <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                                <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
-                                        {{ auth()->user()->initials() }}
-                                    </span>
-                                </span>
-
-                                <div class="grid flex-1 text-start text-sm leading-tight">
-                                    <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
-                                    <span class="truncate text-xs">{{ auth()->user()->email }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator />
-
-                    <flux:menu.radio.group>
-                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
-                        <flux:menu.item :href="route('settings.billing')" iconVariant="outline" icon="credit-card" wire:navigate>{{ __('Billing') }}</flux:menu.item>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator />
-
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
-                        @csrf
-                        <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                            {{ __('Log Out') }}
-                        </flux:menu.item>
-                    </form>
-                </flux:menu>
-            </flux:dropdown>
-        </flux:header>
-        <flux:header class="hidden lg:flex lg:justify-between">
-            <div>
-                {{$breadcrumbs??null}}
-            </div>
-             <flux:navbar>
-                <flux:tooltip :content="__('Theme')" position="bottom">
-                    <livewire:dark-switch />
-                </flux:tooltip>
-               <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <flux:navbar.item as="button" type="submit" icon="power" class="rounded-full cursor-pointer"/>
-                  
-                </form>
-             </flux:navbar>
-        </flux:header>
-
-        {{ $slot }}
-
-        @fluxScripts
-    </body>
 </html>

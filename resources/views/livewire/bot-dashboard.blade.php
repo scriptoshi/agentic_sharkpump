@@ -7,11 +7,12 @@ use App\Enums\BotProvider;
 
 new class extends Component {
     public $search = '';
-    public function bots()
+    public $bots;
+    public function mount()
     {
-        return Auth::user()
+        $this->bots = Auth::user()
             ->bots()
-            ->with(['botUsers', 'messages', 'chats', 'payments'])
+            ->with(['botUsers', 'messages', 'chats', 'payments','launchpad'])
             ->withCount(['tools', 'botUsers', 'messages', 'chats'])
             ->when($this->search, function ($query) {
                 return $query->where('name', 'like', '%' . $this->search . '%')->orWhere('bot_provider', 'like', '%' . $this->search . '%');
@@ -68,7 +69,7 @@ new class extends Component {
     <div class="flex items-center justify-between">
         <div>
             <flux:heading size="lg">Howdy {{ Auth::user()->name }}</flux:heading>
-            <flux:text>Manage your telegram bots</flux:text>
+            <flux:text>Manage your telegram bots for your token <strong class="text-primary">{{$bots->first()->launchpad->name}}</strong></flux:text>
         </div>
         <flux:field class="w-full max-w-xs">
             <flux:input icon="magnifying-glass" wire:model.live.debounce.400ms="search" placeholder="Search bots..." />
@@ -80,40 +81,40 @@ new class extends Component {
             class="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-zinc-800 p-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @php
-                    $totalBots = $this->bots()->count();
-                    $activeBots = $this->bots()->where('is_active', true)->count();
-                    $totalMessages = $this->bots()->sum(function ($bot) {
+                    $totalBots = $bots->count();
+                    $activeBots = $bots->where('is_active', true)->count();
+                    $totalMessages = $bots->sum(function ($bot) {
                         return $bot->messages->count();
                     });
-                    $totalUsers = $this->bots()->sum(function ($bot) {
+                    $totalUsers = $bots->sum(function ($bot) {
                         return $bot->botUsers->count();
                     });
                 @endphp
 
                 <div class="p-4 flex items-center gap-4 rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
-                    <div class="text-2xl font-bold">{{ $totalBots }}</div>
+                    <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-100">{{ $totalBots }}</div>
                     <div class="text-sm text-zinc-500 dark:text-zinc-400">Total Bots</div>
                 </div>
 
                 <div class="p-4 flex items-center gap-4  rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
-                    <div class="text-2xl font-bold">{{ $activeBots }}</div>
+                    <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-100">{{ $activeBots }}</div>
                     <div class="text-sm text-zinc-500 dark:text-zinc-400">Active Bots</div>
                 </div>
 
                 <div class="p-4 flex items-center gap-4  rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
-                    <div class="text-2xl font-bold">{{ $this->formatNumber($totalMessages) }}</div>
+                    <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-100">{{ $this->formatNumber($totalMessages) }}</div>
                     <div class="text-sm text-zinc-500 dark:text-zinc-400">Total Messages</div>
                 </div>
 
                 <div class="p-4 flex items-center gap-4  rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
-                    <div class="text-2xl font-bold">{{ $this->formatNumber($totalUsers) }}</div>
+                    <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-100">{{ $this->formatNumber($totalUsers) }}</div>
                     <div class="text-sm text-zinc-500 dark:text-zinc-400">Total Bot Users</div>
                 </div>
 
             </div>
         </div>
     </div>
-    @if ($this->bots()->isEmpty())
+    @if ($bots->isEmpty())
         <div
             class="flex flex-col items-center justify-center p-10 bg-white dark:bg-zinc-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <div class="mb-4 p-4 bg-zinc-100 dark:bg-zinc-900 rounded-full">
@@ -136,7 +137,7 @@ new class extends Component {
         </div>
     @else
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            @foreach ($this->bots() as $bot)
+            @foreach ($bots as $bot)
                 @php
                     $iconData = $this->getBotIcon($bot);
                     $messagesCount = $bot->messages->count();
@@ -147,9 +148,12 @@ new class extends Component {
                 <div
                     class="w-full rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-700/75 bg-white dark:bg-zinc-800 shadow-xs hover:shadow-md hover:bg-zinc-50 dark:hover:bg-zinc-750 transition cursor-pointer">
                     <div class="p-4">
-                        <div wire:navigate href="{{ route('bots.edit', $bot) }}">
+                        <div wire:navigate href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">
                             <div class="flex items-center gap-3 mb-3">
-                                @if ($bot->bot_provider == BotProvider::OPENAI)
+                                @if($bot->logo??$bot->launchpad->logo)
+                                    <flux:avatar class="w-7 h-7 rounded-full" :tooltip="$bot->name" :name="$bot->name"
+                                        :src="$bot->logo??$bot->launchpad->logo" />
+                                @elseif ($bot->bot_provider == BotProvider::OPENAI)
                                     <flux:avatar class="w-7 h-7 rounded-full" tooltip="Openai GPT" name="Openai GPT"
                                         src="/openai.webp" />
                                 @elseif ($bot->bot_provider == BotProvider::GEMINI)
@@ -159,26 +163,26 @@ new class extends Component {
                                     <flux:avatar class="w-7 h-7 rounded-full" tooltip="Anthropic Claude"
                                         name="Anthropic Claude" src="/claude.png" />
                                 @endif
-                                <div class="text-lg font-semibold">{{ $bot->name }}</div>
+                                <flux:text size="lg" class="text-lg font-semibold">{{ $bot->name }}</flux:text>
                                 @if ($bot->is_active)
-                                    <flux:icon.check-badge size="sm" class="ml-1" />
+                                    <flux:icon.check-badge size="sm" class="ml-1 text-zinc-700 dark:text-zinc-300" />
                                 @endif
                             </div>
                             <!-- Stats Grid -->
                             <div class="grid grid-cols-3 gap-2 mb-4">
                                 <div class="flex flex-col items-center p-2 bg-zinc-100 dark:bg-zinc-700/50 rounded-lg">
                                     <span
-                                        class="text-lg font-bold">{{ $this->formatNumber($bot->messages_count ?? 0) }}</span>
+                                        class="text-lg font-bold  text-zinc-700 dark:text-zinc-100">{{ $this->formatNumber($bot->messages_count ?? 0) }}</span>
                                     <span class="text-xs text-zinc-500 dark:text-zinc-400">Messages</span>
                                 </div>
                                 <div class="flex flex-col items-center p-2 bg-zinc-100 dark:bg-zinc-700/50 rounded-lg">
                                     <span
-                                        class="text-lg font-bold">{{ $this->formatNumber($bot->botUsers_count ?? 0) }}</span>
+                                        class="text-lg font-bold  text-zinc-700 dark:text-zinc-100">{{ $this->formatNumber($bot->botUsers_count ?? 0) }}</span>
                                     <span class="text-xs text-zinc-500 dark:text-zinc-400">Users</span>
                                 </div>
                                 <div class="flex flex-col items-center p-2 bg-zinc-100 dark:bg-zinc-700/50 rounded-lg">
                                     <span
-                                        class="text-lg font-bold">{{ $this->formatNumber($bot->chats_count ?? 0) }}</span>
+                                        class="text-lg font-bold  text-zinc-700 dark:text-zinc-100">{{ $this->formatNumber($bot->chats_count ?? 0) }}</span>
                                     <span class="text-xs text-zinc-500 dark:text-zinc-400">Chats</span>
                                 </div>
                             </div>
@@ -199,7 +203,7 @@ new class extends Component {
                             </div>
                             <div class="z-10" x-data x-on:click.stop="">
                                 <flux:button wire:navigate icon="credit-card" size="sm"
-                                    href="{{ route('bots.billing', $bot) }}" variant="ghost">Billing</flux:button>
+                                    href="{{ route('bots.billing', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" variant="ghost">Billing</flux:button>
                             </div>
                         </div>
                     </div>
@@ -208,11 +212,11 @@ new class extends Component {
             @endforeach
             <div
                 class="w-full rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-700/75 bg-white dark:bg-zinc-750 shadow-xs cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700 hover:shadow-md transition">
-                <a href="{{ route('bots.create') }}" wire:navigate>
+                <a href="{{ route('bots.create', ['launchpad' => \App\Route::launchpad()]) }}" wire:navigate>
                     <div class="p-4 h-full flex items-center justify-center">
                         <div class="flex flex-col items-center gap-2">
                             <flux:icon.plus-circle class="text-primary-500 size-12" />
-                            <div class="text-lg font-semibold">Create New Bot</div>
+                            <div class="text-lg font-semibold text-zinc-700 dark:text-zinc-100">Create New Bot</div>
                         </div>
                     </div>
                 </a>

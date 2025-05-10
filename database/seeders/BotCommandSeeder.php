@@ -7,6 +7,7 @@ use App\Models\Bot;
 use App\Models\Command;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BotCommandSeeder extends Seeder
@@ -28,18 +29,69 @@ class BotCommandSeeder extends Seeder
             ]);
         }
 
+        $launchpadId = $this->createLaunchpad();
         // Create realistic bots
-        $this->createBots($admin);
+        $this->createBots($admin, $launchpadId);
+    }
+
+    private function createLaunchpad(): int
+    {
+        $factoryId = DB::table('factories')->insertGetId([
+            'version' => '1',
+            'chainId' => '11155111',
+            'foundry' => $this->generateRandomAddress(),
+            'contract' => $this->generateRandomAddress(),
+            'lock' => $this->generateRandomAddress(),
+            'lock_abi' => json_encode([]),
+            'factory_abi' => json_encode([]),
+            'abi' => json_encode([]),
+            'active' => true,
+        ]);
+        return  DB::table('launchpads')->insertGetId([
+            'user_id' => 1,
+            'factory_id' => $factoryId,
+            'contract' => '0x91F708a8D27F2BCcCe8c00A5f812e59B1A5e48E6',
+            'token' => $this->generateRandomAddress(),
+            'name' => 'Sample Token',
+            'symbol' => 'SMPL',
+            'description' => 'This is a sample token for testing purposes with innovative tokenomics and strong community focus.',
+            'chainId' => '11155111',
+            'twitter' => 'https://twitter.com/sampletoken',
+            'discord' => 'https://discord.gg/sampletoken',
+            'telegram' => 'https://t.me/sampletoken',
+            'website' => 'https://sampletoken.io',
+            'status' => 'bonding',
+            'logo' => 'https://s2.coinmarketcap.com/static/img/coins/64x64/30126.png',
+            'featured' => true,
+            'kingofthehill' => false,
+            'active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    private function generateRandomAddress(): string
+    {
+        // Ethereum addresses are 20 bytes (40 hex characters) long, prefixed with '0x'
+        $characters = '0123456789abcdef';
+        $randomHex = '';
+
+        for ($i = 0; $i < 40; $i++) {
+            $randomHex .= $characters[random_int(0, 15)];
+        }
+
+        return '0x' . $randomHex;
     }
 
     /**
      * Create realistic bots with associated commands
      */
-    private function createBots(User $admin): void
+    private function createBots(User $admin, int $launchpadId): void
     {
         // 1. Create an Anthropic-powered assistant bot
         $claudeBot = Bot::create([
             'user_id' => $admin->id,
+            'launchpad_id' => $launchpadId,
             'name' => 'Claude Assistant',
             'username' => 'claude_assistant_bot',
             'bot_token' => 'bot' . Str::random(40),
@@ -62,6 +114,7 @@ class BotCommandSeeder extends Seeder
         // 2. Create a customer support bot
         $supportBot = Bot::create([
             'user_id' => $admin->id,
+            'launchpad_id' => $launchpadId,
             'name' => 'Customer Support',
             'username' => 'support_helper_bot',
             'bot_token' => 'bot' . Str::random(40),
@@ -84,6 +137,7 @@ class BotCommandSeeder extends Seeder
         // 3. Create a weather bot
         $weatherBot = Bot::create([
             'user_id' => $admin->id,
+            'launchpad_id' => $launchpadId,
             'name' => 'Weather Forecast',
             'username' => 'weather_forecast_bot',
             'bot_token' => 'bot' . Str::random(40),
@@ -106,6 +160,7 @@ class BotCommandSeeder extends Seeder
         // 4. Create a language translation bot (inactive)
         $translationBot = Bot::create([
             'user_id' => $admin->id,
+            'launchpad_id' => $launchpadId,
             'name' => 'Language Translator',
             'username' => 'translate_master_bot',
             'bot_token' => 'bot' . Str::random(40),

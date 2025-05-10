@@ -32,7 +32,7 @@ class AuthController extends Controller
 
             Auth::login($user);
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('dashboard', ['launchpad' => \App\Route::launchpad()]));
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', 'Something went wrong with Google login');
         }

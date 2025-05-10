@@ -27,10 +27,9 @@ class DatabaseSeeder extends Seeder
         // Call the seeders to generate dummy data
         $this->call([
             ApiSeeder::class,
-            BotCommandSeeder::class,
+            //BotCommandSeeder::class,
             VcSeeder::class,
             FileSeeder::class,
-            FundraiserSeeder::class,
         ]);
     }
 }

@@ -7,10 +7,10 @@ on:
 
 # Define environment variables for easier configuration
 env:
-    SITE_DIR: ${{ vars.SITE_DIR || 'aibotsfortelegram.com' }}
-    REPO_NAME: ${{ vars.REPO_NAME || 'aibotsfortelegram' }}
-    GIT_REMOTE: ${{ vars.GIT_REMOTE || 'github-aibotsfortelegram:scriptoshi/aibotsfortelegram.git' }}
-    ENV_SOURCE: ${{ vars.ENV_SOURCE || 'envs/.aibotsfortelegram' }}
+    SITE_DIR: ${{ vars.SITE_DIR || 'agentic.sharkpump.io' }}
+    REPO_NAME: ${{ vars.REPO_NAME || 'agentic_sharkpump' }}
+    GIT_REMOTE: ${{ vars.GIT_REMOTE || 'github-agentic-sharkpump:scriptoshi/agentic_sharkpump.git' }}
+    ENV_SOURCE: ${{ vars.ENV_SOURCE || 'envs/.agentic_sharkpump' }}
     WWW_DIR: ${{ vars.WWW_DIR || '/var/www' }}
 
 jobs:

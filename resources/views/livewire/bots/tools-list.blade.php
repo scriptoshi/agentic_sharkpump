@@ -50,11 +50,11 @@ new class extends Component {
         </flux:heading>
         <div>
             @if ($toolableType === 'Bot')
-            <flux:button :href="route('bots.tools', $toolable)" icon="pencil">
+            <flux:button :href="route('bots.tools', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()])" icon="pencil">
                 {{ __('Connect Services') }}
             </flux:button>
             @else
-            <flux:button :href="route('commands.tools', $toolable)" icon="pencil">
+            <flux:button :href="route('commands.tools', ['command' => $command, 'launchpad' => \App\Route::launchpad()])" icon="pencil">
                 {{ __('Connect Services') }}
             </flux:button>
             @endif

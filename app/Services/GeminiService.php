@@ -36,7 +36,7 @@ class GeminiService
         $this->bot = $telegramUpdate->bot;
         $this->chat = $telegramUpdate->chat;
         $this->command = $telegramUpdate->command;
-        $this->apiKey = $this->bot->api_key;
+        $this->apiKey = config('ai.provider') === 'user' ? $this->bot->api_key : config('ai.gemini.api_key');
         $this->timeout = $this->bot->ai_request_timeout ?? 60; // Default timeout 60 seconds
     }
 

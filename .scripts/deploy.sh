@@ -2,11 +2,10 @@
 set -e
 
 # Default values for environment variables
-SITE_DIR=${SITE_DIR:-"aibotsfortelegram.com"}
-REPO_NAME=${REPO_NAME:-"aibotsfortelegram"}
+SITE_DIR=${SITE_DIR:-"agentic.sharkpump.io"}
+REPO_NAME=${REPO_NAME:-"agentic_sharkpump"}
 WWW_DIR=${WWW_DIR:-"/var/www"}
-# allow composer to run as root
-export COMPOSER_ALLOW_SUPERUSER=1
+
 echo "Deployment started ..."
 echo "Deploying to site directory: $SITE_DIR"
 
@@ -14,7 +13,6 @@ echo "# Checkout main version of the app"
 cd $WWW_DIR/$REPO_NAME && git checkout main
 
 echo "# Install composer dependencies"
-composer config --no-interaction allow-plugins.composer/installers true
 composer update --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 echo "# Install & Compile npm assets"
@@ -22,8 +20,7 @@ npm i && npm run build
 echo "Build complete!"
 
 echo "# Run fresh database migrations"
-#php artisan migrate --force
-php artisan migrate:fresh  --force
+php artisan migrate --force
 echo "# seeding the database"
 php artisan db:seed
 

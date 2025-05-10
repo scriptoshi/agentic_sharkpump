@@ -40,8 +40,8 @@ new class extends Component
             
             // Create checkout session and redirect to Stripe
             $checkout = $user->newSubscription('default', $priceId)->checkout([
-                'success_url' => route('dashboard') . '?checkout=success',
-                'cancel_url' => route('dashboard') . '?checkout=cancelled',
+                'success_url' => route('dashboard', ['launchpad' => \App\Route::launchpad()]) . '?checkout=success',
+                'cancel_url' => route('dashboard', ['launchpad' => \App\Route::launchpad()]) . '?checkout=cancelled',
             ]);
             
             return redirect($checkout->url);

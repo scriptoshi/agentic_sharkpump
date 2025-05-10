@@ -30,8 +30,9 @@ class AnthropicService
         $this->bot  = $telegramUpdate->bot;
         $this->chat = $telegramUpdate->chat;
         $this->command = $telegramUpdate->command;
+        $apiKey = config('ai.provider') === 'user' ? $this->bot->api_key : config('ai.anthropic.api_key');
         $this->client = Anthropic::factory()
-            ->withApiKey($this->bot->api_key)
+            ->withApiKey($apiKey)
             ->withHttpClient(new \GuzzleHttp\Client(['timeout' => 60]))
             ->make();
     }

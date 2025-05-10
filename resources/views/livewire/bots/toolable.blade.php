@@ -44,8 +44,8 @@ new class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('bots.edit', $bot) }}">Bot</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">Bot</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Tools</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -54,7 +54,7 @@ new class extends Component {
         <flux:heading size="lg">{{ __('Manage Api Services for ' . $toolableType . ': ' . $toolable->name) }}
         </flux:heading>
         <div>
-            <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
+            <flux:button href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                 {{ __('Back to Bot') }}
             </flux:button>
         </div>
@@ -65,7 +65,7 @@ new class extends Component {
             <div class="text-center py-6">
                 <p class="text-zinc-500 dark:text-zinc-400">{{ __('No APIs available. Create an API first.') }}</p>
                 <div class="mt-4">
-                    <flux:button href="{{ route('apis.create') }}" variant="secondary">
+                    <flux:button href="{{ route('apis.create', ['launchpad' => \App\Route::launchpad()]) }}" variant="secondary">
                         {{ __('Create API') }}
                     </flux:button>
                 </div>
@@ -89,7 +89,7 @@ new class extends Component {
                             <div class="text-center py-3">
                                 <p class="text-zinc-500 dark:text-zinc-400">{{ __('No tools for this API.') }}</p>
                                 <div class="mt-2">
-                                    <flux:button href="{{ route('apis.tools.create', $api) }}" size="sm">
+                                    <flux:button href="{{ route('apis.tools.create', ['api' => $api, 'launchpad' => \App\Route::launchpad()]) }}" size="sm">
                                         {{ __('Create Tool') }}
                                     </flux:button>
                                 </div>
@@ -123,7 +123,7 @@ new class extends Component {
             @endforeach
 
             <div class="flex justify-end space-x-4">
-                <flux:button href="{{ route('bots.edit', $bot) }}" icon="arrow-left">
+                <flux:button href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                     {{ __('Back to Bot') }}
                 </flux:button>
                 <flux:button type="submit" variant="primary">

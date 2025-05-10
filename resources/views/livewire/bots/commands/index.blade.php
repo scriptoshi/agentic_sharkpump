@@ -24,7 +24,7 @@ new class extends Component {
     // Add delete confirmation modal properties
     public bool $showDeleteModal = false;
     public ?int $command_to_delete = null;
-    public ?float $credits_per_message = 0;
+    public ?float $credits_per_message = 1;
 
 
     // Mount the component and load data
@@ -143,7 +143,7 @@ new class extends Component {
         $this->command_text = '';
         $this->command_name = '';
         $this->command_description = '';
-        $this->credits_per_message = 0;
+        $this->credits_per_message = 1;
         $this->system_prompt_override = '';
         $this->is_active = true;
         $this->showCommandModal = false;
@@ -183,7 +183,7 @@ new class extends Component {
                     </div>
                 </div>
                 <div>
-                    <flux:input label="{{ __('Cost (Credits per Message)') }}" placeholder="{{ __('Credits per Message') }}"
+                    <flux:input label="{{ __('Cost (Credits per Message Token)') }}" placeholder="{{ __('Credits per Message') }}"
                         wire:model="credits_per_message" />
                     <flux:error name="credits_per_message" />
                     <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
@@ -250,7 +250,7 @@ new class extends Component {
                     </div>
                 </div>
                 <div>
-                <flux:input label="{{ __('Cost (Credits per Message)') }}" placeholder="{{ __('Credits per Message') }}"
+                <flux:input label="{{ __('Cost (Credits per Message Token)') }}" placeholder="{{ __('Credits per Message') }}"
                         wire:model="credits_per_message" />
                     <flux:error name="credits_per_message" />
                     <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
@@ -386,8 +386,8 @@ new class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
-                                <flux:button href="{{ route('commands.tools', $command) }}" size="sm" variant="ghost">
-                                    {{ __('Tools') }}
+                                <flux:button href="{{ route('commands.tools', ['command' =>  $command, 'launchpad'=>\App\Route::launchpad()]) }}" size="sm" variant="ghost">
+                                    {{ __('Services') }}
                                 </flux:button>
                                 <flux:button wire:click="editCommand({{ $command->id }})" variant="ghost"
                                     size="sm">
@@ -402,7 +402,7 @@ new class extends Component {
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                             {{ __('No commands found for this bot.') }}
                         </td>
                     </tr>

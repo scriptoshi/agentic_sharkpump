@@ -88,7 +88,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
         // auth()->user()->impersonate($this->userToImpersonate);
 
         // Redirect to dashboard as impersonated user
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard', ['launchpad' => \App\Route::launchpad()]);
     }
 
     public function confirmDelete(): void

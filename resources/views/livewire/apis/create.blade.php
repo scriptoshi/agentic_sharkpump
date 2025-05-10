@@ -57,13 +57,13 @@ new #[Layout('components.layouts.app')] class extends Component {
         $this->dispatch('api-created', name: $api->name);
 
         // Redirect to the edit page
-        $this->redirect(route('apis.edit', $api));
+        $this->redirect(route('apis.edit', ['api' => $api, 'launchpad' => \App\Route::launchpad()]));
     }
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('apis.index') }}">APIs</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.index', ['launchpad' => \App\Route::launchpad()]) }}">APIs</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Create</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -71,7 +71,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <div class="mb-6 flex items-center justify-between">
         <flux:heading size="lg">{{ __('Create New API') }}</flux:heading>
         <div>
-            <flux:button href="{{ route('apis.index') }}" icon="arrow-left">
+            <flux:button href="{{ route('apis.index', ['launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                 {{ __('Back to List') }}
             </flux:button>
         </div>

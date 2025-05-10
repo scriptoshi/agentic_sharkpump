@@ -117,8 +117,8 @@ new #[Layout('components.layouts.app')] class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('apis.index') }}">APIs</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('apis.index', ['launchpad' => \App\Route::launchpad()]) }}">APIs</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $api->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -126,7 +126,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <div class="mb-6 flex items-center justify-between">
         <flux:heading size="lg">{{ __('Edit API') }}: {{ $api->name }}</flux:heading>
         <div>
-            <flux:button href="{{ route('apis.index') }}" icon="arrow-left">
+            <flux:button href="{{ route('apis.index', ['launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                 {{ __('Back to List') }}
             </flux:button>
         </div>
@@ -233,7 +233,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     <div class="mt-12 mb-4 flex items-center justify-between">
         <flux:heading size="lg">{{ __('Endpoints (Tools)') }}</flux:heading>
-        <flux:button href="{{ route('apis.tools.create', $api) }}" icon="plus">
+        <flux:button href="{{ route('apis.tools.create', ['api' => $api, 'launchpad' => \App\Route::launchpad()]) }}" icon="plus">
             {{ __('Create New Tool') }}
         </flux:button>
     </div>

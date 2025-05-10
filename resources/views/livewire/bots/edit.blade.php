@@ -28,6 +28,8 @@ new #[Layout('components.layouts.app')] class extends Component {
     public ?float $ai_temperature = 0.7;
     public ?int $ai_max_tokens = 2048;
     public ?bool $ai_store = false;
+    public ?string $logo = null;
+    public ?string $description = null;
 
     // Commands Management
     public string $commandsSearchQuery = '';
@@ -38,6 +40,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     {
         $this->authorize('update', $bot);
         $this->bot = $bot;
+        $this->bot->load('launchpad');
         $this->name = $bot->name;
         $this->username = $bot->username;
         $this->bot_token = $bot->bot_token;
@@ -50,6 +53,8 @@ new #[Layout('components.layouts.app')] class extends Component {
         $this->ai_temperature = $bot->ai_temperature;
         $this->ai_max_tokens = $bot->ai_max_tokens;
         $this->ai_store = $bot->ai_store;
+        $this->logo = $bot->logo;
+        $this->description = $bot->description;
     }
 
     // Validation rules for updating Bot data
@@ -70,6 +75,8 @@ new #[Layout('components.layouts.app')] class extends Component {
             'ai_temperature' => ['required_if:bot_provider,openai', 'numeric'],
             'ai_max_tokens' => ['required_if:bot_provider,openai', 'integer'],
             'ai_store' => ['required_if:bot_provider,openai', 'boolean'],
+            'logo' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
         ];
     }
 
@@ -119,25 +126,25 @@ new #[Layout('components.layouts.app')] class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Bots</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <flux:heading size="lg">{{ __('Configure Bot') }}: {{ $bot->name }}</flux:heading>
+            <flux:heading size="lg">{{ __('Configure Bot') }} :  {{ $bot->name }} ({{ $bot->launchpad->symbol }})</flux:heading>
             <flux:text>{{ __('Edit bot settings, commands and MCP tools') }}</flux:text>
         </div>
         <div class="flex items-center space-x-2">
-            <flux:button size="sm" href="{{ route('dashboard') }}" icon="arrow-left">
+            <flux:button size="sm" href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                 {{ __('Bots') }}
             </flux:button>
-            <flux:button size="sm" href="{{ route('bots.billing', $bot) }}" icon="wallet">
+            <flux:button size="sm" href="{{ route('bots.billing', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="wallet">
                 {{ __('Billing') }}
             </flux:button>
-            <flux:button size="sm" href="{{ route('bots.vcs', $bot) }}" icon="book-open">
+            <flux:button size="sm" href="{{ route('bots.vcs', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="book-open">
                 {{ __('Knowledge base') }}
             </flux:button>
         </div>
@@ -169,7 +176,13 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <flux:error name="bot_token" />
                 </flux:field>
             </div>
-
+             <div class="flex items-center gap-2">
+                <livewire:file-uploader wire:model="logo" />
+                <div>
+                    <flux:heading size="xs">{{ __('Upload a square bot logo') }}</flux:heading>
+                    <flux:text>Max 512KB | 512x512px</flux:text>
+                </div>
+            </div>
             <div class="grid sm:grid-cols-3 gap-4">
                 <flux:field>
                     <flux:select label="{{ __('AI Provider') }}" wire:model.live="bot_provider" required>
@@ -221,19 +234,22 @@ new #[Layout('components.layouts.app')] class extends Component {
                     wire:model="api_key" />
                 <flux:error name="api_key" />
             </flux:field>
-            <flux:heading size="md">{{ __('Payments') }}</flux:heading>
+            <div>
+                <flux:heading size="md">{{ __('Payments') }}</flux:heading>
+                <flux:text>Leaving Credits per AI tokens as one will mean one {{$bot->launchpad->symbol}} is equal to one AI token</flux:text>
+            </div>
             <div class="grid sm:grid-cols-2 gap-4">
                 <flux:field>
-                    <flux:input label="{{ __('Credits per Message') }}" placeholder="{{ __('Credits per Message') }}"
+                    <flux:input label="{{ __('Credits per AI tokens') }}" placeholder="{{ __('Credits per Message') }}"
                         wire:model="credits_per_message" />
                     <flux:error name="credits_per_message" />
                     <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
                 </flux:field>
                 <flux:field>
-                    <flux:input label="{{ __('Credits per Star') }}" placeholder="{{ __('Credits per Star') }}"
+                    <flux:input label="{{ __('Credits per :star', ['star' => $bot->launchpad->symbol]) }}" placeholder="{{ __('Credits per Star') }}"
                         wire:model="credits_per_star" />
                     <flux:error name="credits_per_star" />
-                    <flux:text>{{ __('The price users pay for credit topups in telegram stars.') }}</flux:text>
+                    <flux:text>{{ __('The price users pay for credit topups in :token', ['token'=> $bot->launchpad->symbol]) }}</flux:text>
                 </flux:field>
             </div>
 
@@ -243,7 +259,12 @@ new #[Layout('components.layouts.app')] class extends Component {
                     rows="3" />
                 <flux:error name="system_prompt" />
             </div>
-
+            <flux:field>
+                 <flux:textarea label="{{ __('Description') }}"
+                    placeholder="{{ __('Bot Description') }}" wire:model="description"
+                    rows="3" />
+                <flux:error name="description" />
+            </flux:field>
             <flux:field variant="inline">
                 <flux:checkbox label="{{ __('Active') }}" wire:model="is_active" />
                 <!-- Changed from 'active' to 'is_active' -->

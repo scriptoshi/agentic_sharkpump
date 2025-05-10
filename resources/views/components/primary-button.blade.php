@@ -27,7 +27,7 @@
         $secondary && $outlined => 'bg-transparent border-gray-600 text-gray-300 hover:bg-gray-750 hover:text-white focus:ring-gray-400',
         $secondary => 'bg-gray-700 text-gray-200 hover:text-white border-transparent hover:bg-gray-600 active:bg-gray-750 focus:ring-gray-400',
         $outlined => 'bg-transparent border-primary text-primary hover:bg-primary hover:text-black focus:ring-primary',
-        default => 'bg-primary text-white border-transparent hover:bg-primary-dark focus:ring-primary'
+        default => 'bg-primary text-zinc-900 border-transparent hover:bg-primary-dark focus:ring-primary'
     };
 
     $tag = $link || $url || $href ? 'a' : 'button';

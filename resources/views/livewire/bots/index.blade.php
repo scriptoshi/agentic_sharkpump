@@ -114,7 +114,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Bots</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -125,7 +125,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             <flux:subheading>{{ __('Manage Telegram bots registered in the system.') }}</flux:subheading>
         </div>
         <div>
-            <x-primary-button href="{{ route('bots.create') }}">
+            <x-primary-button href="{{ route('bots.create', ['launchpad' => \App\Route::launchpad()]) }}" wire:navigate>
                 <x-lucide-plus class="w-4 h-4 -ml-1 mr-1" />
                 {{ __('Add New Bot') }}
             </x-primary-button>
@@ -263,13 +263,13 @@ new #[Layout('components.layouts.app')] class extends Component {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
-                                <flux:button href="{{ route('bots.vcs', $bot) }}" size="sm" variant="subtle">
+                                <flux:button href="{{ route('bots.vcs', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" size="sm" variant="subtle">
                                     {{ __('Knowledge Base') }}
                                 </flux:button>
-                                <flux:button href="{{ route('bots.billing', $bot) }}" size="sm" variant="ghost">
+                                <flux:button href="{{ route('bots.billing', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" size="sm" variant="ghost">
                                     {{ __('Billing') }}
                                 </flux:button>
-                                <flux:button href="{{ route('bots.edit', $bot) }}" size="sm" variant="ghost">
+                                <flux:button href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" size="sm" variant="ghost">
                                     {{ __('Manage') }}
                                 </flux:button>
                             </div>

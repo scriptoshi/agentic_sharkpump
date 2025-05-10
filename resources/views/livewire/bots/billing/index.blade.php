@@ -42,8 +42,8 @@ new #[Layout('components.layouts.app')] class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Bots</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ __('Billing') }}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
@@ -60,13 +60,13 @@ new #[Layout('components.layouts.app')] class extends Component {
                 <flux:badge icon="x-mark" size="sm" color="red">{{ __('Disabled') }}</flux:badge>
                 @endif
             </div>
-            <flux:text class="max-w-lg">{{ __('Sell credits using Telegram stars. To enable billing, set a credits per star greater than 0 in the settings.') }}</flux:text>
+            <flux:text class="max-w-lg">{{ __('Sell credits using your token. To disable billing, set the credits per message equal to 0 in the settings.') }}</flux:text>
         </div>
         <div class="flex items-center space-x-2">
             <flux:button size="sm" wire:click="setPage('balances')" :variant="$page === 'balances' ? 'primary' : 'outline'">{{ __('Balances') }}</flux:button>
             <flux:button size="sm" wire:click="setPage('payments')" :variant="$page === 'payments' ? 'primary' : 'outline'">{{ __('Payments') }}</flux:button>
             <flux:button size="sm" wire:click="setPage('refunds')" :variant="$page === 'refunds' ? 'primary' : 'outline'">{{ __('Refunds') }}</flux:button>
-            <flux:button icon="cog" size="sm" href="{{ route('bots.edit', $bot) }}" variant="filled">{{ __('Manage') }}</flux:button>
+            <flux:button icon="cog" size="sm" href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" variant="filled">{{ __('Manage') }}</flux:button>
 
         </div>
     </div>

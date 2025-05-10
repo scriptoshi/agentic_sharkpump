@@ -149,10 +149,10 @@ new #[Layout('components.layouts.admin')] class extends Component {
                     <flux:text>{{ __('The number of credits users spend to send a message.') }}</flux:text>
                 </flux:field>
                 <flux:field>
-                    <flux:input label="{{ __('Credits per Star') }}" placeholder="{{ __('Credits per Star') }}"
+                    <flux:input label="{{ __('Credits per Token') }}" placeholder="{{ __('Credits per Token') }}"
                         wire:model="credits_per_star" />
                     <flux:error name="credits_per_star" />
-                    <flux:text>{{ __('The price users pay for credit topups in telegram stars.') }}</flux:text>
+                    <flux:text>{{ __('The price users pay for credit topups in bot tokens.') }}</flux:text>
                 </flux:field>
             </div>
 

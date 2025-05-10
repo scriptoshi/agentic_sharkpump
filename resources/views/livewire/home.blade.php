@@ -9,7 +9,7 @@ new class extends Component {
     public $showMobileMenu = false;
 
     // Features data remains the same as it wasn't linked to the subscriptions config
-    public $features = [['title' => 'Zero code', 'description' => 'Get a bot token, connect your ai service, choose a data provider and boom! You have an expert bot', 'icon' => 'rocket-launch'], ['title' => 'Intelligient', 'description' => 'The chat bot utilizes chatgpt / gemini / claude to understand users. No more boring menus and keyboards.', 'icon' => 'shield-check'], ['title' => 'Inbuilt Billing', 'description' => 'Sell message credits via Telegram stars from within the the bot. Set price per message, users are billed as they chat.', 'icon' => 'credit-card'], ['title' => 'Admin Dashboard', 'description' => 'Simple , extremely extendible admin panel with inbuilt user management integrated', 'icon' => 'chart-bar']];
+    public $features = [['title' => 'Zero code', 'description' => 'Get a bot token, connect your ai service, choose a data provider and boom! You have an expert bot', 'icon' => 'rocket-launch'], ['title' => 'Intelligient', 'description' => 'The chat bot utilizes chatgpt / gemini / claude to understand users. No more boring menus and keyboards.', 'icon' => 'shield-check'], ['title' => 'Inbuilt Billing', 'description' => 'Sell message credits using your token from within the the bot. Set price per message, users are billed as they chat.', 'icon' => 'credit-card'], ['title' => 'Admin Dashboard', 'description' => 'Simple , extremely extendible admin panel with inbuilt user management integrated', 'icon' => 'chart-bar']];
 
     // Initialize pricingTiers as an empty array
     public $pricingTiers = [];

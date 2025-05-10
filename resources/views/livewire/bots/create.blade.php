@@ -7,6 +7,7 @@ use App\Enums\BotProvider;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\Attributes\Computed;
 use App\Services\Subscription;
+use App\Models\Launchpad;
 
 new #[Layout('components.layouts.app')] class extends Component {
     // Bot Properties
@@ -18,17 +19,18 @@ new #[Layout('components.layouts.app')] class extends Component {
     public ?string $api_key = null;
     public ?string $system_prompt = null;
     public ?array $settings = null;
-    public ?float $credits_per_message = 0;
-    public ?int $credits_per_star = 0;
+    public ?float $credits_per_message = 1;
+    public ?int $credits_per_star = 1;
     public ?string $ai_model = null;
     public ?float $ai_temperature = 0.7;
     public ?int $ai_max_tokens = 2048;
     public ?bool $ai_store = false;
+    public ?bool $is_cloneable = false;
+    public ?string $logo = '';
 
     // Validation rules for creating Bot data
     public function rules(): array
     {
-        $subscription = app()->make(Subscription::class);
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
@@ -36,8 +38,9 @@ new #[Layout('components.layouts.app')] class extends Component {
             'is_active' => ['boolean'],
             'system_prompt' => ['nullable', 'string'],
             'settings' => ['nullable', 'array'],
+            'logo' => ['url', 'string', 'required'],
         ];
-        if ($subscription->aiProviderIsUser()) {
+        if (config('ai.provider') === 'user') {
             $rules['bot_provider'] = ['required', 'string', new Enum(BotProvider::class)];
             $rules['api_key'] = ['nullable', 'string'];
             $rules['ai_model'] = ['nullable', 'string'];
@@ -45,26 +48,27 @@ new #[Layout('components.layouts.app')] class extends Component {
             $rules['ai_max_tokens'] = ['nullable', 'integer'];
             $rules['ai_store'] = ['nullable', 'boolean'];
         }
-        if ($subscription->supportsBotBilling()) {
-            $rules['credits_per_message'] = ['nullable', 'numeric'];
-            $rules['credits_per_star'] = ['nullable', 'integer'];
-        }
+        $rules['credits_per_message'] = ['nullable', 'numeric'];
+        $rules['credits_per_star'] = ['nullable', 'integer'];
         return $rules;
     }
 
     // Create the Bot
     public function createBot(): void
     {
+        $launchpadContract = \App\Route::launchpad();
+        $launchpad = Launchpad::where('contract', $launchpadContract)->first();
         $this->authorize('create', Bot::class);
         $validatedData = $this->validate();
         // Create the new bot
-        $subscription = app()->make(Subscription::class);
         $bot = new Bot();
         $bot->user_id = auth()->id();
+        $bot->launchpad_id = $launchpad->id;
         $bot->name = $this->name;
         $bot->username = $this->username;
         $bot->bot_token = $this->bot_token;
-        if ($subscription->aiProviderIsUser()) {
+        $bot->logo = $this->logo;
+        if (config('ai.provider') === 'user') {
             $bot->bot_provider = $this->bot_provider;
             $bot->ai_model = $this->ai_model;
             $bot->api_key = $this->api_key;
@@ -76,16 +80,14 @@ new #[Layout('components.layouts.app')] class extends Component {
         $bot->is_active = $this->is_active;
         $bot->is_cloneable = $this->is_cloneable;
         $bot->settings = $this->settings;
-        if ($subscription->supportsBotBilling()) {
-            $bot->credits_per_message = $this->credits_per_message;
-            $bot->credits_per_star = $this->credits_per_star;
-        }
-        $bot->last_active_at = $this->last_active_at;
+        $bot->credits_per_message = $this->credits_per_message;
+        $bot->credits_per_star = $this->credits_per_star;
+        $bot->last_active_at = now();
         $bot->save();
         // Dispatch an event
         $this->dispatch('bot-created', name: $this->name);
         // Redirect to the edit page for the newly created bot
-        $this->redirect(route('bots.edit', $this->bot));
+        $this->redirect(route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]));
     }
 
     #[Computed]
@@ -94,13 +96,12 @@ new #[Layout('components.layouts.app')] class extends Component {
         return config('models.' . $this->bot_provider->value);
     }
 }; ?>
-@php
-    $subscription = app()->make(Subscription::class);
-@endphp
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('dashboard') }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard
+        </flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Bots
+        </flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Create</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -108,7 +109,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <div class="mb-6 flex items-center justify-between">
         <flux:heading size="lg">{{ __('Create New Bot') }}</flux:heading>
         <div>
-            <flux:button href="{{ route('dashboard') }}" icon="arrow-left">
+            <flux:button href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                 {{ __('Back to List') }}
             </flux:button>
         </div>
@@ -134,7 +135,14 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <flux:error name="bot_token" />
                 </flux:field>
             </div>
-            @if ($subscription->aiProviderIsUser())
+            <div class="flex items-center gap-2">
+                <livewire:file-uploader wire:model="logo" />
+                <div>
+                    <flux:heading size="xs">{{ __('Upload a square bot logo') }}</flux:heading>
+                    <flux:text>Max 512KB | 512x512px</flux:text>
+                </div>
+            </div>
+            @if (config('ai.provider') === 'user')
                 <div class="grid sm:grid-cols-3 gap-4">
                     <flux:field>
                         <flux:select label="{{ __('AI Provider') }}" wire:model.live="bot_provider" required>
@@ -189,7 +197,6 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <flux:error name="api_key" />
                 </flux:field>
             @endif
-            @if ($subscription->supportsBotBilling())
             <flux:heading size="md">{{ __('Payments') }}</flux:heading>
             <div class="grid sm:grid-cols-2 gap-4">
                 <flux:field>
@@ -205,12 +212,17 @@ new #[Layout('components.layouts.app')] class extends Component {
                     <flux:text>{{ __('The price users pay for credit topups in telegram stars.') }}</flux:text>
                 </flux:field>
             </div>
-            @endif
             <div class="grid sm:grid-cols-1 gap-4">
                 <flux:textarea label="{{ __('System Prompt') }}"
                     placeholder="{{ __('Default system prompt for the bot') }}" wire:model="system_prompt"
                     rows="3" />
                 <flux:error name="system_prompt" />
+            </div>
+            <div class="grid sm:grid-cols-1 gap-4">
+                <flux:textarea label="{{ __('Description') }}"
+                    placeholder="{{ __('Tell users about your bot, what it does, and how to use it.') }}"
+                    wire:model="description" rows="2" />
+                <flux:error name="description" />
             </div>
 
             <flux:field variant="inline">
