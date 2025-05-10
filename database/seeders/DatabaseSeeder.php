@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@sharktitl.es',
                 'password' => '*sharkTitles123#',
                 'is_admin' => true,
-                'address' => '0x91F708a8D27F2BCcCe8c00A5f812e59B1A5e48E6',
+                'address' => '0x781a793bb5390bc7DA0879d9b626985D13c61501',
             ]);
         }
 
