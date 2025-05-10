@@ -24,6 +24,7 @@ class ApiSeeder extends Seeder
                 'email' => 'admin@example.com',
                 'password' => Hash::make('password'),
                 'is_admin' => true,
+                'address' => '0x7f0374480b9Ca09144F6cBd16774FDf1da1ae528',
                 'email_verified_at' => now(),
             ]);
         }
@@ -37,6 +38,7 @@ class ApiSeeder extends Seeder
                 'email' => 'user@example.com',
                 'password' => Hash::make('password'),
                 'is_admin' => false,
+                'address' => '0xf0C742ec7C801a6aFC99F9D41c92c06EBef2Cf91',
                 'email_verified_at' => now(),
             ]);
         }
