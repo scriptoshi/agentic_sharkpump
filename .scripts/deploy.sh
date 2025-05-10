@@ -6,6 +6,9 @@ SITE_DIR=${SITE_DIR:-"agentic.sharkpump.io"}
 REPO_NAME=${REPO_NAME:-"agentic_sharkpump"}
 WWW_DIR=${WWW_DIR:-"/var/www"}
 
+#run composer as root
+export COMPOSER_ALLOW_SUPERUSER=1
+
 echo "Deployment started ..."
 echo "Deploying to site directory: $SITE_DIR"
 
