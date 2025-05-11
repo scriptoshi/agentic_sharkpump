@@ -45,4 +45,7 @@ if (app()->isLocal()) {
 } else {
     Route::post('logout', App\Livewire\Actions\Logout::class)
         ->name('logout');
+    Route::get('login', function () {
+        return redirect(config('app.main_site'));
+    })->name('login');
 }
