@@ -16,7 +16,7 @@ class Logout
 
         Session::invalidate();
         Session::regenerateToken();
-
-        return redirect('/');
+        $to = app()->isLocal() ? '/' : config('app.main_site');
+        return redirect($to);
     }
 }

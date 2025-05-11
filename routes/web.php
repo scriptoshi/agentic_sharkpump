@@ -6,10 +6,10 @@ use App\Models\Bot;
 use App\Models\Command;
 use App\Http\Controllers\WebhooksController;
 use App\Http\Controllers\NowPaymentsIpnController;
-use App\Models\Launchpad;
 
 Route::get('/', function () {
-    return view('welcome');
+    $to = app()->isLocal() ? route('login') : config('app.main_site');
+    return redirect($to);
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->prefix('/{launchpad:contract}')->group(function () {
@@ -40,4 +40,9 @@ Route::middleware(['auth', 'verified'])->prefix('/{launchpad:contract}')->group(
 });
 Route::post('/telegram/webhook/{bot:webhook_secret}', WebhooksController::class)->name('telegram.webhook');
 Route::post('/nowpayments/ipn', NowPaymentsIpnController::class)->name('nowpayments.ipn');
-require __DIR__ . '/auth.php';
+if (app()->isLocal()) {
+    require __DIR__ . '/auth.php';
+} else {
+    Route::post('logout', App\Livewire\Actions\Logout::class)
+        ->name('logout');
+}
