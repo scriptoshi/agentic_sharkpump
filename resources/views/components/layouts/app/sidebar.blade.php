@@ -35,7 +35,7 @@
             </flux:navlist.group>
         </flux:navlist>
         <div class="mt-4">
-            <x-primary-button href="{{ config('app.main_site')}}/launchpad/{{\App\Route::launchpad()}}">
+            <x-primary-button href="{{ config('app.main_site')}}/{{\App\Route::launchpad()}}">
                 <x-lucide-arrow-left class="w-4 h-4 mr-2 -ml-1" />
                 Launchpad
             </x-primary-button>
