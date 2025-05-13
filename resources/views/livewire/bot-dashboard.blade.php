@@ -72,10 +72,10 @@ new class extends Component {
     <div class="flex items-center justify-between">
         <div>
             <flux:heading size="lg">Howdy {{ Auth::user()->name }}</flux:heading>
-            <flux:text>Manage your telegram bots for your token <strong class="text-primary">{{$launchpad->name}}</strong></flux:text>
+            <flux:text>Manage your telegram agents for your token <strong class="text-primary">{{$launchpad->name}}</strong></flux:text>
         </div>
         <flux:field class="w-full max-w-xs">
-            <flux:input icon="magnifying-glass" wire:model.live.debounce.400ms="search" placeholder="Search bots..." />
+            <flux:input icon="magnifying-glass" wire:model.live.debounce.400ms="search" placeholder="Search agents..." />
         </flux:field>
     </div>
 
@@ -96,12 +96,12 @@ new class extends Component {
 
                 <div class="p-4 flex items-center gap-4 rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
                     <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-100">{{ $totalBots }}</div>
-                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Total Bots</div>
+                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Total Agents</div>
                 </div>
 
                 <div class="p-4 flex items-center gap-4  rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
                     <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-100">{{ $activeBots }}</div>
-                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Active Bots</div>
+                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Active Agents</div>
                 </div>
 
                 <div class="p-4 flex items-center gap-4  rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
@@ -111,7 +111,7 @@ new class extends Component {
 
                 <div class="p-4 flex items-center gap-4  rounded-lg bg-zinc-100 dark:bg-zinc-700/30">
                     <div class="text-2xl font-bold text-zinc-700 dark:text-zinc-100">{{ $this->formatNumber($totalUsers) }}</div>
-                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Total Bot Users</div>
+                    <div class="text-sm text-zinc-500 dark:text-zinc-400">Total Agent Users</div>
                 </div>
 
             </div>
@@ -131,11 +131,11 @@ new class extends Component {
                     <line x1="16" y1="16" x2="16" y2="16" />
                 </svg>
             </div>
-            <h2 class="text-xl text-zinc-700 dark:text-zinc-100 font-medium mb-2">No Bots Yet</h2>
-            <p class="text-zinc-500 dark:text-zinc-400 mb-4 text-center">Create your first bot to start interacting with
+            <h2 class="text-xl text-zinc-700 dark:text-zinc-100 font-medium mb-2">{{$launchpad->name}} has no agent yet</h2>
+            <p class="text-zinc-500 dark:text-zinc-400 mb-4 text-center">Connect  {{$launchpad->name}} to its first agent to start interacting with
                 users</p>
-            <a href="#" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700">
-                Create Your First Bot
+            <a href="{{ route('bots.create', ['launchpad' => \App\Route::launchpad()]) }}" wire:navigate class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700">
+                Create {{ $launchpad->symbol }} First Agent
             </a>
         </div>
     @else
@@ -219,7 +219,7 @@ new class extends Component {
                     <div class="p-4 h-full flex items-center justify-center">
                         <div class="flex flex-col items-center gap-2">
                             <flux:icon.plus-circle class="text-primary-500 size-12" />
-                            <div class="text-lg font-semibold text-zinc-700 dark:text-zinc-100">Create New Bot</div>
+                            <div class="text-lg font-semibold text-zinc-700 dark:text-zinc-100">Create New Agent</div>
                         </div>
                     </div>
                 </a>

@@ -115,19 +115,19 @@ new #[Layout('components.layouts.app')] class extends Component {
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
         <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item>Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>Agents</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <flux:heading size="lg">{{ __('Telegram Bots Management') }}</flux:heading>
-            <flux:subheading>{{ __('Manage Telegram bots registered in the system.') }}</flux:subheading>
+            <flux:heading size="lg">{{ __('Telegram Agents Management') }}</flux:heading>
+            <flux:subheading>{{ __('Manage Telegram agents registered in the system.') }}</flux:subheading>
         </div>
         <div>
             <x-primary-button href="{{ route('bots.create', ['launchpad' => \App\Route::launchpad()]) }}" wire:navigate>
                 <x-lucide-plus class="w-4 h-4 -ml-1 mr-1" />
-                {{ __('Add New Bot') }}
+                {{ __('Add New Agent') }}
             </x-primary-button>
         </div>
     </div>
@@ -156,7 +156,7 @@ new #[Layout('components.layouts.app')] class extends Component {
                 </flux:button>
             @else
                 <flux:text size="sm" class="text-zinc-500 dark:text-zinc-400">
-                    {{ $paginatedBots->total() }} {{ __('Bots total') }}
+                    {{ $paginatedBots->total() }} {{ __('Agents total') }}
                 </flux:text>
             @endif
         </div>

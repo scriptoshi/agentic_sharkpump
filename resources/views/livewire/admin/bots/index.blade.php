@@ -116,8 +116,8 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 ">
-        <flux:heading size="lg">{{ __('Telegram Bots Management') }}</flux:heading>
-        <flux:subheading>{{ __('Manage Telegram bots registered in the system.') }}</flux:subheading>
+        <flux:heading size="lg">{{ __('Telegram Agents Management') }}</flux:heading>
+        <flux:subheading>{{ __('Manage Telegram agents registered in the system.') }}</flux:subheading>
     </div>
    
     <div class="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -144,7 +144,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
                 </flux:button>
             @else
                 <flux:text size="sm" class="text-gray-500 dark:text-gray-400">
-                    {{ $paginatedBots->total() }} {{ __('Bots total') }}
+                    {{ $paginatedBots->total() }} {{ __('Agents total') }}
                 </flux:text>
             @endif
         </div>
@@ -160,7 +160,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
                         />
                     </th>
                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium  tracking-wider text-gray-500 dark:text-gray-400">
-                        {{__('Bot Owner')}}
+                        {{__('Agent Owner')}}
                      </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         <button wire:click="sortBy('name')" class="group inline-flex cursor-pointer items-center">
@@ -281,7 +281,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
                 @if($paginatedBots->isEmpty())
                     <tr>
                         <td colspan="7" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                            {{ __('No bots found matching your criteria.') }}
+                            {{ __('No agents found matching your criteria.') }}
                         </td>
                     </tr>
                 @endif
@@ -298,7 +298,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             <div>
                 <flux:heading size="lg">{{ __('Confirm Delete') }}</flux:heading>
                 <flux:text class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    {{ __('Are you sure you want to delete these') }} {{ count($selectedBots) }} {{ __('bots? This action cannot be undone.') }}
+                    {{ __('Are you sure you want to delete these') }} {{ count($selectedBots) }} {{ __('agents? This action cannot be undone.') }}
                 </flux:text>
             </div>
             <div class="flex justify-end space-x-3">

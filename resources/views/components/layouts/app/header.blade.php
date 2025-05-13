@@ -22,7 +22,7 @@
                     {{ __('API Tools') }}
                 </flux:navbar.item>
                 <flux:navbar.item icon="bolt"  class="data-current:text-primary-dark data-current:dark:text-primary data-current:dark:bg-zinc-750  data-current:bg-zinc-100 data-current:after:!h-0" :current="request()->routeIs('admin.bots.*')"  :href="route('admin.bots.index')"  wire:navigate>
-                    {{ __('Bots') }}
+                    {{ __('Agents') }}
                 </flux:navbar.item>
             </flux:navbar>
 
@@ -106,7 +106,7 @@
                     {{ __('API Tools') }}
                     </flux:navlist.item>
                     <flux:navlist.item icon="bolt" class="data-current:text-primary-dark data-current:dark:text-primary" :href="route('admin.bots.index')" :current="request()->routeIs('admin.bots.index')" wire:navigate>
-                    {{ __('Bots') }}
+                    {{ __('Agents') }}
                     </flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>

@@ -127,19 +127,19 @@ new #[Layout('components.layouts.app')] class extends Component {
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
         <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Bots</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Agents</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <flux:heading size="lg">{{ __('Configure Bot') }} :  {{ $bot->name }} ({{ $bot->launchpad->symbol }})</flux:heading>
+            <flux:heading size="lg">{{ __('Configure Agent') }} :  {{ $bot->name }} ({{ $bot->launchpad->symbol }})</flux:heading>
             <flux:text>{{ __('Edit bot settings, commands and MCP tools') }}</flux:text>
         </div>
         <div class="flex items-center space-x-2">
             <flux:button size="sm" href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
-                {{ __('Bots') }}
+                {{ __('Agents') }}
             </flux:button>
             <flux:button size="sm" href="{{ route('bots.billing', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="wallet">
                 {{ __('Billing') }}
@@ -153,25 +153,25 @@ new #[Layout('components.layouts.app')] class extends Component {
          x-data="{ expanded: false }"
         class="bg-white dark:bg-neutral-800 border border-zinc-200 dark:border-zinc-700 shadow overflow-hidden rounded-lg p-6">
         <div  @click="expanded = ! expanded" class="py-2 -pt-2 cursor-pointer  flex items-center justify-between">
-            <flux:heading class="p-2 border bg-white dark:bg-zinc-750 border-zinc-200 dark:border-zinc-700 rounded-lg" size="lg"><x-lucide-pencil class="w-4 h-4 inline-flex ml-2" /> {{ __('Edit Bot Settings') }}  </flux:heading>
+            <flux:heading class="p-2 border bg-white dark:bg-zinc-750 border-zinc-200 dark:border-zinc-700 rounded-lg" size="lg"><x-lucide-pencil class="w-4 h-4 inline-flex ml-2" /> {{ __('Edit Agent Settings') }}  </flux:heading>
             <x-lucide-chevron-down x-bind:class="expanded ? 'rotate-180' : ''" class="w-6 h-6 transition duration-200 ease-in-out"/>
         </div>
         <form wire:submit="updateBot" class="space-y-6 mt-4" x-show="expanded" x-collap>
             <div class="grid sm:grid-cols-3 gap-4">
                 <flux:field>
-                    <flux:input label="{{ __('Name (For Internal use)') }}" placeholder="{{ __('Bot Name') }}"
+                    <flux:input label="{{ __('Name (For Internal use)') }}" placeholder="{{ __('Agent Name') }}"
                         wire:model="name" required />
                     <flux:error name="name" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:input label="{{ __('Username') }}" placeholder="{{ __('@bot_username') }}"
+                    <flux:input label="{{ __('Telegram Bot Username') }}" placeholder="{{ __('@bot_username') }}"
                         wire:model="username" required />
                     <flux:error name="username" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:input label="{{ __('Token') }}" placeholder="{{ __('Bot API Token') }}"
+                    <flux:input label="{{ __('Token') }}" placeholder="{{ __('Telegram Bot API Token') }}"
                         wire:model="bot_token" required />
                     <flux:error name="bot_token" />
                 </flux:field>
@@ -261,7 +261,7 @@ new #[Layout('components.layouts.app')] class extends Component {
             </div>
             <flux:field>
                  <flux:textarea label="{{ __('Description') }}"
-                    placeholder="{{ __('Bot Description') }}" wire:model="description"
+                    placeholder="{{ __('Agent Description') }}" wire:model="description"
                     rows="3" />
                 <flux:error name="description" />
             </flux:field>

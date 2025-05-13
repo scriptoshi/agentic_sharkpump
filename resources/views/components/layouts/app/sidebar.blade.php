@@ -21,7 +21,7 @@
                     {{ __('Dashboard') }}</flux:navlist.item>
                 <flux:navlist.item icon="bolt" :href="route('bots.index', ['launchpad' => \App\Route::launchpad()])"
                     :current="request()->routeIs('bots.index', ['launchpad' => \App\Route::launchpad()])" wire:navigate>
-                    {{ __('My Bots') }}</flux:navlist.item>
+                    {{ __('My Agents') }}</flux:navlist.item>
                 <flux:navlist.item icon="square-3-stack-3d"
                     :href="route('public-apis', ['launchpad' => \App\Route::launchpad()])"
                     :current="request()->routeIs('public-apis', ['launchpad' => \App\Route::launchpad()])"

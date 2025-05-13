@@ -17,7 +17,7 @@ new class extends Component {
     public function mount(Model $toolable): void
     {
         $this->toolable = $toolable;
-        $this->toolableType = $toolable instanceof Bot ? 'Bot' : 'Command';
+        $this->toolableType = $toolable instanceof Bot ? 'Agent' : 'Command';
         $this->bot = $toolable instanceof Bot ? $toolable : $toolable->bot;
 
         // Get the IDs of tools currently associated with the toolable
@@ -45,7 +45,7 @@ new class extends Component {
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
         <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">Bot</flux:breadcrumbs.item>
+    <flux:breadcrumbs.item href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">Agent</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Tools</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
@@ -55,7 +55,7 @@ new class extends Component {
         </flux:heading>
         <div>
             <flux:button href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
-                {{ __('Back to Bot') }}
+                {{ __('Back to Agent') }}
             </flux:button>
         </div>
     </div>
@@ -124,7 +124,7 @@ new class extends Component {
 
             <div class="flex justify-end space-x-4">
                 <flux:button href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
-                    {{ __('Back to Bot') }}
+                    {{ __('Back to Agent') }}
                 </flux:button>
                 <flux:button type="submit" variant="primary">
                     {{ __('Save Service Selections') }}

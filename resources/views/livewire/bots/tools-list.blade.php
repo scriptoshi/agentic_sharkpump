@@ -17,7 +17,7 @@ new class extends Component {
     public function mount(Model $toolable): void
     {
         $this->toolable = $toolable;
-        $this->toolableType = $toolable instanceof Bot ? 'Bot' : 'Command';
+        $this->toolableType = $toolable instanceof Bot ? 'Agent' : 'Command';
         $this->bot = $toolable instanceof Bot ? $toolable : $toolable->bot;
         $this->tools = $toolable->tools;
  
@@ -49,7 +49,7 @@ new class extends Component {
         <flux:heading size="lg">{{ __('Active Services for ' . $toolableType . ': ' . $toolable->name) }}
         </flux:heading>
         <div>
-            @if ($toolableType === 'Bot')
+            @if ($toolableType === 'Agent')
             <flux:button :href="route('bots.tools', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()])" icon="pencil">
                 {{ __('Connect Services') }}
             </flux:button>

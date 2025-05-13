@@ -102,7 +102,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="lg">{{ __('Edit Bot') }}: {{ $bot->name }}</flux:heading>
+        <flux:heading size="lg">{{ __('Edit Agent') }}: {{ $bot->name }}</flux:heading>
         <div>
             <flux:button href="{{ route('admin.bots.index') }}" icon="arrow-left">
                 {{ __('Back to List') }}
@@ -112,14 +112,14 @@ new #[Layout('components.layouts.admin')] class extends Component {
     <div class="bg-white dark:bg-neutral-800 shadow overflow-hidden rounded-lg p-6">
         <form wire:submit="updateBot" class="space-y-6">
             <div class="grid sm:grid-cols-3 gap-4">
-                <flux:input label="{{ __('Name') }}" placeholder="{{ __('Bot Name') }}" wire:model="name" required />
+                <flux:input label="{{ __('Name') }}" placeholder="{{ __('Agent Name') }}" wire:model="name" required />
                 <flux:error name="name" />
 
-                <flux:input label="{{ __('Username') }}" placeholder="{{ __('@bot_username') }}"
+                <flux:input label="{{ __('Telegram Bot Username') }}" placeholder="{{ __('@bot_username') }}"
                     wire:model="username" required />
                 <flux:error name="username" />
 
-                <flux:input label="{{ __('Token') }}" placeholder="{{ __('Bot API Token') }}"
+                <flux:input label="{{ __('Token') }}" placeholder="{{ __('Telegram Bot API Token') }}"
                     wire:model="bot_token" required />
                 <flux:error name="bot_token" />
             </div>
@@ -127,7 +127,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
             <div class="grid sm:grid-cols-2 gap-4">
 
                 <flux:field>
-                    <flux:select label="{{ __('Bot Provider') }}" wire:model="bot_provider" required>
+                    <flux:select label="{{ __('AI Provider') }}" wire:model="bot_provider" required>
                         @foreach (BotProvider::cases() as $provider)
                             <option value="{{ $provider->value }}">{{ $provider->description() }}</option>
                         @endforeach

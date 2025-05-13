@@ -100,14 +100,14 @@ new #[Layout('components.layouts.app')] class extends Component {
     <flux:breadcrumbs>
         <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard
         </flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Bots
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Agents
         </flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Create</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 flex items-center justify-between">
-        <flux:heading size="lg">{{ __('Create New Bot') }}</flux:heading>
+        <flux:heading size="lg">{{ __('Create New Agent') }}</flux:heading>
         <div>
             <flux:button href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}" icon="arrow-left">
                 {{ __('Back to List') }}
@@ -232,7 +232,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
             <div class="flex justify-end">
                 <flux:button type="submit" variant="primary">
-                    {{ __('Create Bot') }}
+                    {{ __('Create Agent') }}
                 </flux:button>
             </div>
         </form>

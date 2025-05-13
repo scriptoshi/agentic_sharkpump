@@ -219,7 +219,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <flux:heading size="lg">{{ __('Connect to a service provider') }}</flux:heading>
-            <flux:text>{{ __('Add Your API credentials in order for your Bot to connect to and use Data from these services.') }}</flux:text>
+            <flux:text>{{ __('Add Your API credentials in order for your agent to connect to and use Data from these services.') }}</flux:text>
         </div>
     </div>
 

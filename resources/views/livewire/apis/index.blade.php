@@ -136,7 +136,7 @@ new #[Layout('components.layouts.app')] class extends Component {
     <div class="mb-6 flex items-center justify-between">
         <div>
             <flux:heading size="lg">{{ __('Custom API Services') }}</flux:heading>
-            <flux:subheading>{{ __('Custom APIs allow your telegram bots to connect to an external API for data and context.') }}</flux:subheading>
+            <flux:subheading>{{ __('Custom APIs allow your telegram agents to connect to an external API for data and context.') }}</flux:subheading>
         </div>
         <flux:button href="{{ route('apis.create', ['launchpad' => \App\Route::launchpad()]) }}" icon="plus">
             {{ __('Create New API') }}

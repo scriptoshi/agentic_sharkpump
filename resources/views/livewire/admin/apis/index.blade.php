@@ -130,7 +130,7 @@ new #[Layout('components.layouts.admin')] class extends Component {
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6 ">
         <flux:heading size="lg">{{ __('API Tools Management') }}</flux:heading>
-         <flux:subheading>{{ __('Api tools allow bots to access external API via the MCP tools protocol.') }}</flux:subheading>
+         <flux:subheading>{{ __('Api tools allow agents to access external API via the MCP tools protocol.') }}</flux:subheading>
     </div>
    
     <div class="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
