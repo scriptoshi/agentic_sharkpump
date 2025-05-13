@@ -139,4 +139,14 @@ class User extends Authenticatable
                 'auth_query_value',
             ]);
     }
+
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
+
+    public function hasPermission($permission)
+    {
+        return false;
+    }
 }

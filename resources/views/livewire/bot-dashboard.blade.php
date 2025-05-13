@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Bot;
+use App\Models\Launchpad;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\BotProvider;
@@ -8,10 +9,12 @@ use App\Enums\BotProvider;
 new class extends Component {
     public $search = '';
     public $bots;
-    public function mount()
+    public $launchpad;
+    public function mount( string $launchpad)
     {
-        $this->bots = Auth::user()
-            ->bots()
+        $this->launchpad = Launchpad::where('contract', $launchpad)->first();
+        $this->authorize('update', $this->launchpad);
+        $this->bots = $this->launchpad->bots()
             ->with(['botUsers', 'messages', 'chats', 'payments','launchpad'])
             ->withCount(['tools', 'botUsers', 'messages', 'chats'])
             ->when($this->search, function ($query) {
@@ -69,7 +72,7 @@ new class extends Component {
     <div class="flex items-center justify-between">
         <div>
             <flux:heading size="lg">Howdy {{ Auth::user()->name }}</flux:heading>
-            <flux:text>Manage your telegram bots for your token <strong class="text-primary">{{$bots->first()->launchpad->name}}</strong></flux:text>
+            <flux:text>Manage your telegram bots for your token <strong class="text-primary">{{$launchpad->name}}</strong></flux:text>
         </div>
         <flux:field class="w-full max-w-xs">
             <flux:input icon="magnifying-glass" wire:model.live.debounce.400ms="search" placeholder="Search bots..." />
