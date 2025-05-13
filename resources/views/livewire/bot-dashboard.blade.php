@@ -131,7 +131,7 @@ new class extends Component {
                     <line x1="16" y1="16" x2="16" y2="16" />
                 </svg>
             </div>
-            <h2 class="text-xl font-medium mb-2">No Bots Yet</h2>
+            <h2 class="text-xl text-zinc-700 dark:text-zinc-100 font-medium mb-2">No Bots Yet</h2>
             <p class="text-zinc-500 dark:text-zinc-400 mb-4 text-center">Create your first bot to start interacting with
                 users</p>
             <a href="#" class="px-4 py-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700">
