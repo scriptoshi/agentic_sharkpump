@@ -65,7 +65,7 @@ new class extends Component {
 
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item>Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item>{{ \App\Route::lpd() }}</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 </x-slot:breadcrumbs>
 <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">

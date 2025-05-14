@@ -44,7 +44,7 @@ new class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">{{ \App\Route::lpd() }}</flux:breadcrumbs.item>
     <flux:breadcrumbs.item href="{{ route('bots.edit', ['bot' => $bot, 'launchpad' => \App\Route::launchpad()]) }}">Agent</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>Tools</flux:breadcrumbs.item>
     </flux:breadcrumbs>

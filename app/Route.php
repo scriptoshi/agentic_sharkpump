@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Support\Facades\Route as RouteFacade;
+use App\Models\Launchpad;
 
 class Route
 {
@@ -14,6 +15,15 @@ class Route
         if (($session && $launchpad) && $session !== $launchpad) session(['launchpad' => $launchpad]);
         return  $launchpad ?? $session;
     }
+
+    public static function lpd(): ?string
+    {
+        $address = self::launchpad();
+        $lpd = Launchpad::where('contract', $address)->first();
+        return $lpd->symbol ?? __('xxDashboard');
+    }
+
+
 
     public static function parameter($name)
     {

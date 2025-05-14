@@ -42,7 +42,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 }; ?>
 <x-slot:breadcrumbs>
     <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Dashboard</flux:breadcrumbs.item>
+        <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">{{ \App\Route::lpd() }}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item href="{{ route('dashboard', ['launchpad' => \App\Route::launchpad()]) }}">Agents</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ __('Billing') }}</flux:breadcrumbs.item>
         <flux:breadcrumbs.item>{{ $bot->name }}</flux:breadcrumbs.item>
